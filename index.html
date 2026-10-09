@@ -458,13 +458,14 @@ function architectReply(q){
   return fall[(S.intercomLog?.length||0)%fall.length];
 }
 
-function setScreen(x){screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0}
+function janusPaywall(){return shell(`<main style="min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px 18px;gap:18px"><div class="kicker" style="color:#d4af37">JANUS PROTOCOL // ACCESS RESTRICTED</div><h1 style="color:#e5c476;letter-spacing:3px">TRIAL V — LOCKED</h1><p style="max-width:330px;color:#c4b9a6">You have survived four trials. The truth lies deeper.</p><p style="max-width:330px">Unlock Trials V–XII, branching endings and hidden content with one purchase.</p><strong style="font-size:28px;color:#d4af37">R49.99</strong><div class="small">Proposed price • Google Play checkout coming soon</div><button class="btn" onclick="Game.purchaseJanus()">UNLOCK FULL PROTOCOL</button><button class="btn" onclick="Game.restoreJanus()">RESTORE PURCHASE</button><button class="back" onclick="Game.goCorridor()">← RETURN TO CORRIDOR</button></main>`)}
+function setScreen(x){if(/^(trial|arrival)([5-9]|1[0-3])$/.test(x))x='paywall';screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0}
 function render(){
   let old=document.querySelector('.screen'), keepScroll=old?old.scrollTop:0;
   clearInterval(window.__waterTimer);clearTimeout(window.__cctvTimer);
   document.body.dataset.screen=screen;
   const a=document.getElementById('app');
-  a.innerHTML = screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='settings'?settings():screen==='archive'?archiveScreen():screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
+  a.innerHTML = screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='settings'?settings():screen==='archive'?archiveScreen():screen==='paywall'?janusPaywall():screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
   bind();
   let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
 }
@@ -666,6 +667,8 @@ return `<div class="screen zero-screen"><main class="wrap">${body}</main></div>`
 
 function arrival(n){let x=ARR[n]||ARR[1];let narration=x[1]+"\n\n"+x[2];return `<div class="screen arrival"><div class="arrival-card"><div class="arrival-title">${x[0]}</div><div class="arrival-door-stage"><div id="arrivalDoor" class="arrival-door"><div class="plate"><strong>${String(n).padStart(2,'0')}</strong><span>CONDITION SEALED</span></div></div></div><div class="arrival-copy typewrite" data-type="${esc(narration)}" data-reveal="doorHold"></div><div class="arrival-brief"><b>${esc(S.difficulty||'MEDIUM')} // TRIAL BRIEFING</b>${esc(trialBrief(n))}</div><button id="doorHold" class="btn hold-btn reveal-after-type" onpointerdown="Game.holdDoorStart(${n},this)" onpointerup="Game.holdDoorEnd(${n},this)" onpointercancel="Game.holdDoorEnd(${n},this)" onpointerleave="Game.holdDoorEnd(${n},this)"><span class="holdfill"></span><span>HOLD // OPEN CHAMBER</span></button></div></div>`}
 window.Game={
+purchaseJanus(){toast('GOOGLE PLAY BILLING NOT YET CONNECTED — NO CHARGE MADE')},
+restoreJanus(){toast('PURCHASE RESTORATION AVAILABLE AFTER BILLING INTEGRATION')},
 toggleAudio(){S.settings.ambience=!S.settings.ambience;save();S.settings.ambience?startAmbience():stopAmbience();render()},
 openArchive(){setScreen('archive')},
 
