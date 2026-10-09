@@ -1,0 +1,8 @@
+{
+  "appId": "com.continuance.janus",
+  "appName": "CONTINUANCE",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
