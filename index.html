@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#000000">
+<title>CONTINUANCE</title>
+<style>
+:root{--amber:#d89b36;--amber2:#f0c36a;--bg:#050505;--line:#3b2b18;--muted:#777;--red:#7f1d1d;color-scheme:dark;font-family:"Courier New",ui-monospace,monospace}
+*{box-sizing:border-box}html,body,#app{margin:0;min-height:100%;background:#000;color:#ead8b4}body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}.screen{min-height:100svh;background:radial-gradient(circle at 50% 20%,#17100b 0,#090807 28%,#030303 72%);position:relative;overflow:hidden}.screen:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);opacity:.3}.noise{position:fixed;inset:0;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}.wrap{max-width:760px;margin:auto;padding:20px 16px 120px}.header{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:72px 1fr 110px;align-items:center;gap:8px;padding:12px 14px;background:rgba(0,0,0,.82);border-bottom:1px solid #2a1b0e;backdrop-filter:blur(8px)}.title{text-align:center}.kicker{font-size:9px;letter-spacing:.32em;color:#9f6728}.trialname{font-size:12px;letter-spacing:.08em;margin-top:3px}.back,.ghost{background:none;border:0;color:#9a7346;text-align:left;padding:8px}.lives{text-align:right;font-size:9px;color:#9f6728;white-space:nowrap}.dots{display:flex;justify-content:flex-end;gap:4px;margin-top:4px}.dot{width:8px;height:8px;border-radius:50%;border:1px solid #815d2c;background:#d89b36;box-shadow:0 0 8px rgba(216,155,54,.35)}.dot.off{opacity:.15;background:transparent;box-shadow:none}.card{border:1px solid #282828;background:rgba(0,0,0,.6);padding:16px}.amber{border-color:#6e4720;background:rgba(89,52,16,.1)}.muted{color:#777;font-size:11px;line-height:1.65}.small{font-size:10px}.big{font-size:24px;letter-spacing:.15em}.center{text-align:center}.row{display:flex;gap:10px;align-items:center}.col{display:flex;flex-direction:column;gap:10px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.btn{border:1px solid #69451f;background:rgba(90,49,13,.08);padding:14px;width:100%;font-size:11px;letter-spacing:.16em}.btn:active{transform:scale(.99)}.btn.dim{border-color:#333;color:#888;background:#080808}.btn.red{border-color:#5b1b1b;color:#b66;background:#0b0505}.input{width:100%;background:#050505;border:1px solid #51371f;padding:13px;outline:none}.textarea{min-height:130px;resize:none}.spacer{height:14px}.architect{position:fixed;z-index:40;left:10px;right:10px;bottom:10px;padding:12px 14px;border:1px solid #533718;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);animation:rise .25s ease}.architect .who{font-size:8px;letter-spacing:.28em;color:#835523;margin-bottom:6px}.architect .line{font-size:12px;line-height:1.55}.door{border:1px solid #272727;background:#060606;padding:18px;display:flex;justify-content:space-between;align-items:center}.door.open{border-color:#69451f;box-shadow:0 0 25px rgba(124,76,24,.08)}.door.locked{opacity:.42}.pulse{width:9px;height:9px;border-radius:50%;background:#e4ab4d;box-shadow:0 0 16px #b87828;animation:pulse 1.3s infinite}.opening{display:flex;min-height:100svh;align-items:center;justify-content:center;padding:28px;text-align:center}.terminal{max-width:440px;width:100%;border:1px solid #4e3218;padding:24px;background:rgba(0,0,0,.72);box-shadow:0 0 90px rgba(120,70,20,.08)}.logo{font-family:Arial Black,sans-serif;font-size:30px;letter-spacing:.22em;color:#f1ddbb;text-shadow:1px 0 #7c4d19}.diag{font-size:11px;letter-spacing:.15em;line-height:2;color:#b28b5a}.wall{border:1px solid #272727;background:linear-gradient(145deg,#1c1916,#0a0908);padding:14px;min-height:340px;box-shadow:inset 0 0 70px #000}.carving{border:1px solid #34302b;background:rgba(0,0,0,.18);padding:18px;margin:12px 0}.carving .cipher{font-size:16px;letter-spacing:.18em;color:#bbb;text-shadow:0 -1px #000}.photo{aspect-ratio:4/3;border:1px solid #333;background:linear-gradient(#585858,#171717);position:relative;overflow:hidden}.photo .time{position:absolute;left:5px;bottom:5px;background:#000b;padding:3px;font-size:9px}.photo .building{position:absolute;left:12%;bottom:0;width:58%;height:40%;border:1px solid #666;background:#292929}.photo .car{position:absolute;right:8%;bottom:8%;width:25%;height:14%;border:1px solid #777;background:#171717;border-radius:12px 12px 2px 2px}.photo .sun{position:absolute;right:10%;top:10%;width:44px;height:44px;border-radius:50%;background:#e8b76018;filter:blur(8px)}.photo.bad{box-shadow:inset 0 0 35px rgba(120,30,10,.25)}.item{border:1px solid #333;background:#060606;padding:15px}.vault{max-width:340px;aspect-ratio:1;margin:18px auto;border:1px solid #5d3c1c;border-radius:50%;padding:28px;background:#030303;box-shadow:inset 0 0 80px #000}.rings{height:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px}.ring{border:1px solid #393939;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;background:#090909}.panel{aspect-ratio:1;border:1px solid #333;background:#050505;font-size:24px}.panel.flash{background:#5a3515;box-shadow:0 0 30px #9b5a21}.sample{min-height:150px}.hand{font-size:18px;font-style:italic;color:#bbb;margin:18px 0}.signature{aspect-ratio:1;border:1px solid #333;display:flex;align-items:center;justify-content:center;flex-direction:column}.signature.on{border-color:#7b4c1c;background:#211309}.white-room{min-height:100svh;background:#efefec;color:#111;padding:28px 18px}.white-room .card,.white-room .input,.white-room .textarea,.white-room .btn{background:transparent;border-color:#999;color:#111}.report{border:1px solid #777;padding:18px;font-size:11px;line-height:2}.flash{animation:flash .3s}.shrink1{transform:scale(.98)}.shrink2{transform:scale(.96)}.shrink3{transform:scale(.94)}.shrink4{transform:scale(.92)}.progress{height:3px;background:#21150a;margin-top:8px}.progress>div{height:100%;background:#bd7a2a}.packet{display:grid;grid-template-columns:1fr 46px;gap:8px}.arrows button{width:100%;background:#070707;border:1px solid #333;color:#777;padding:5px;margin:2px 0}.hidden{display:none!important}@keyframes rise{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}@keyframes pulse{50%{opacity:.3}}@keyframes flash{0%{filter:brightness(3)}100%{filter:none}}@media(max-width:520px){.header{grid-template-columns:48px 1fr 96px}.wrap{padding-left:12px;padding-right:12px}.big{font-size:20px}.logo{font-size:25px}.grid3{gap:7px}}
+
+.menu-shell{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:28px}.menu-card{width:min(470px,100%);text-align:center}.menu-logo{font-family:Arial Black,sans-serif;font-size:clamp(28px,9vw,46px);letter-spacing:.2em;color:#f0dfbd;text-shadow:0 0 30px rgba(216,155,54,.12)}.menu-actions{margin-top:38px;display:grid;gap:10px}.menu-btn{border:0;border-bottom:1px solid #3e2b17;background:transparent;padding:16px;color:#b99a6e;letter-spacing:.24em;font-size:11px}.menu-btn.primary{color:#f0c36a;border-color:#875927}.menu-btn:active{background:#130d08}.version{margin-top:28px;color:#4f4539;font-size:8px;letter-spacing:.2em}.prologue{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:30px 22px}.storybox{max-width:560px;width:100%;font-family:Georgia,serif;font-size:17px;line-height:1.8;color:#d7c7aa}.storyline{min-height:6.2em}.story-actions{margin-top:26px}.story-action{width:100%;padding:14px;border:1px solid #4e351c;background:#090705;color:#d9b26e;font-family:"Courier New",monospace;font-size:10px;letter-spacing:.2em}.memory{color:#8f6d46;font-style:italic}.speaker{font-family:"Courier New",monospace;border-left:1px solid #815626;padding-left:14px;color:#e0b86d}.objective{margin:16px 0;border:1px solid #6a451f;background:#100b06;padding:14px}.objective b{display:block;color:#d89b36;font-size:9px;letter-spacing:.3em;margin-bottom:8px}.intercom{border:1px solid #3b3126;background:linear-gradient(#111,#050505);padding:16px;margin-top:14px}.intercom-grill{height:36px;background:repeating-linear-gradient(90deg,#24211d 0 2px,transparent 2px 7px);opacity:.6;margin-bottom:10px}.cipher-six{display:grid;gap:11px;margin-top:12px}.cipher-line{font-size:15px;line-height:1.7;letter-spacing:.1em;color:#c8bda8;word-break:break-word;text-shadow:0 -1px #000}.workbench{border:1px solid #3b2d1e;background:#050403;padding:14px}.freq{display:flex;gap:6px;flex-wrap:wrap}.freq span{border:1px solid #30271e;padding:5px 7px;font-size:9px;color:#8d795e}.navtop{position:fixed;right:12px;top:max(12px,env(safe-area-inset-top));z-index:80}.hamb{width:38px;height:38px;border:1px solid #3c2b19;background:#050505dd;color:#a97a3f}.overlay{position:fixed;inset:0;z-index:90;background:#000e;display:flex;align-items:center;justify-content:center;padding:20px}.modal{width:min(480px,100%);border:1px solid #533718;background:#070605;padding:20px}.setting{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #211b15;padding:12px 0;font-size:11px}.setting input{accent-color:#b8792d}.arrival{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px}.arrival-card{max-width:580px;width:100%}.arrival-text{font-family:Georgia,serif;font-size:16px;line-height:1.85;color:#cfc0a5}.arrival-title{font-size:9px;letter-spacing:.35em;color:#9f6728;margin-bottom:20px}.rulelights{display:flex;gap:8px;justify-content:center;margin:22px 0}.rulelights span{width:12px;height:12px;border:1px solid #6c4924;background:#100b06}.rulelights span:first-child{background:#d89b36;box-shadow:0 0 15px #b8792d}.typecursor:after{content:'█';font-family:monospace;color:#b8792d;animation:caretBlink .8s steps(1) infinite}.corridor-note{font-family:Georgia,serif;font-style:italic;color:#766b5e;font-size:13px;line-height:1.7;margin:0 0 18px}.scratch{font-family:Georgia,serif;font-style:italic;color:#8f4d43;transform:rotate(-1deg);margin:16px 0}.menu-icon{font-size:17px}
+
+/* ===== BUILD 2.0 // JANUS COMPLETE ===== */
+:root{
+  --blood:#4f1512;
+  --cold:#6e8790;
+}
+body{touch-action:manipulation}
+body.shock #app{animation:cameraShock .42s cubic-bezier(.2,.8,.2,1)}
+body.door-rumble #app{animation:doorRumble .65s linear}
+.screen{transition:filter .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.screen::before{
+  content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle at 50% 42%,transparent 0 22%,rgba(0,0,0,.18) 47%,rgba(0,0,0,.76) 82%);
+}
+.screen>*{position:relative;z-index:1}
+.typewrite{white-space:pre-wrap}
+.typewrite.typing::after{content:"▋";margin-left:2px;color:#a96d29;animation:caretBlink .65s steps(1) infinite}
+.reveal-after-type{opacity:0;pointer-events:none;transform:translateY(7px);transition:.45s ease}
+.reveal-after-type.ready{opacity:1;pointer-events:auto;transform:none}
+.storybox{position:relative}
+.storybox::before{content:"";position:absolute;left:-14px;top:0;bottom:0;width:1px;background:linear-gradient(transparent,#5e4020,transparent);opacity:.5}
+.storyline{transition:opacity .35s}
+.narrative-skip{margin-top:12px;background:none;border:0;color:#55483a;font-size:8px;letter-spacing:.2em}
+.flashlight-stage{
+  min-height:64svh;position:relative;overflow:hidden;border:1px solid #27221d;
+  background:
+    linear-gradient(180deg,rgba(35,32,28,.6),rgba(8,8,7,.96)),
+    repeating-linear-gradient(91deg,transparent 0 38px,rgba(255,255,255,.013) 39px 40px);
+  box-shadow:inset 0 0 100px #000;
+  --mx:50%;--my:48%;
+}
+.flashlight-stage::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:15;
+  background:radial-gradient(circle 115px at var(--mx) var(--my),
+    transparent 0,rgba(0,0,0,.06) 38%,rgba(0,0,0,.67) 69%,rgba(0,0,0,.97) 100%);
+}
+.flashlight-stage.lowlight::after{
+  background:radial-gradient(circle 78px at var(--mx) var(--my),
+    transparent 0,rgba(0,0,0,.1) 32%,rgba(0,0,0,.78) 64%,#000 100%);
+}
+.room-object{position:absolute;z-index:5;border:0;background:transparent;color:#c9b58f;padding:0}
+.room-object::before{content:"";position:absolute;inset:-16px;border:1px solid transparent;border-radius:50%;transition:.2s}
+.room-object:hover::before,.room-object:active::before{border-color:#74512a55;background:#bc7b2920}
+.obj-door{right:8%;top:16%;width:29%;height:62%;border:2px solid #1f1d1a;background:linear-gradient(90deg,#090909,#191714 45%,#080808);box-shadow:inset 0 0 45px #000}
+.obj-door::after{content:"";position:absolute;right:13%;top:50%;width:7px;height:7px;border-radius:50%;background:#7c5729;box-shadow:0 0 10px #a9702d66}
+.obj-drain{left:40%;bottom:8%;width:80px;height:28px;border-radius:50%;background:repeating-linear-gradient(90deg,#171717 0 5px,#030303 5px 9px);transform:perspective(80px) rotateX(55deg);box-shadow:0 12px 26px #000}
+.obj-scratch{left:8%;bottom:21%;transform:rotate(-6deg);font-family:Georgia,serif;font-size:13px;color:#6f675d;text-align:left;max-width:170px}
+.obj-intercom{left:7%;top:15%;width:72px;height:105px;border:1px solid #29251f;background:#0a0908;padding:9px}
+.obj-intercom i{display:block;height:48px;background:repeating-linear-gradient(0deg,#24201b 0 2px,transparent 2px 6px)}
+.obj-wallmark{left:22%;top:20%;width:26%;height:45%;background:linear-gradient(90deg,transparent,#1d1a17aa,transparent);transform:rotate(1deg)}
+.discovery-log{
+  position:absolute;z-index:20;left:10px;right:10px;bottom:10px;
+  background:#030303df;border-left:2px solid #70461e;padding:10px 12px;
+  font-family:Georgia,serif;font-size:12px;line-height:1.55;color:#bfae93;
+  backdrop-filter:blur(8px);animation:rise .22s ease;
+}
+.investigate-meter{display:flex;gap:5px;margin-top:10px}
+.investigate-meter span{width:26px;height:3px;background:#25201a}
+.investigate-meter span.on{background:#b4772d;box-shadow:0 0 8px #8d571d}
+.cipher-reveal{animation:cipherRise .8s ease both}
+.cipher-six{background:linear-gradient(95deg,#13110f,#080706);padding:14px;border:1px solid #28231e;box-shadow:inset 0 0 60px #000}
+.cipher-line{position:relative;padding-left:10px;border-left:1px solid #2d261e}
+.cipher-line:nth-child(4){filter:contrast(.85);text-shadow:3px 0 6px #3e0b08}
+.workbench{position:relative;overflow:hidden}
+.workbench::after{content:"EVIDENCE IS NOT INSTRUCTION";position:absolute;right:-32px;bottom:12px;transform:rotate(-8deg);font-size:8px;letter-spacing:.22em;color:#4e2c18}
+.intercom button{position:relative;overflow:hidden}
+.intercom button::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#75441422,transparent);transform:translateX(-110%)}
+.intercom button:active::after{animation:sweep .7s linear}
+.corridor-scene{
+  min-height:100svh;padding:82px 14px 110px;
+  background:
+   linear-gradient(90deg,#020202 0 7%,transparent 15% 85%,#020202 93%),
+   radial-gradient(ellipse at 50% 15%,#31200e 0,#0c0906 25%,#020202 74%);
+}
+.corridor-ceiling{height:40px;margin:-24px auto 16px;max-width:680px;background:linear-gradient(#080706,#16100a,#050403);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);opacity:.85}
+.corridor-depth{max-width:640px;margin:auto;display:grid;gap:18px;perspective:900px}
+.corridor-door{
+  min-height:118px;position:relative;width:100%;border:1px solid #29241e;
+  background:linear-gradient(90deg,#050505 0 6%,#16130f 6% 94%,#050505 94%);
+  box-shadow:inset 0 0 55px #000,0 18px 35px #0009;
+  color:#bda781;text-align:left;padding:0;overflow:hidden;transform-origin:top center;
+}
+.corridor-door:nth-child(n+5){transform:scale(.985)}
+.corridor-door.locked{filter:brightness(.45);pointer-events:none}
+.corridor-door.completed{filter:brightness(.55)}
+.corridor-door .door-slab{position:absolute;inset:8px 13%;border:1px solid #302a22;background:linear-gradient(100deg,#090909,#15120e 50%,#050505)}
+.corridor-door .door-copy{position:relative;z-index:4;display:flex;justify-content:space-between;align-items:center;min-height:116px;padding:20px}
+.chain-lines{position:absolute;inset:0;z-index:3;pointer-events:none}
+.chain-lines::before,.chain-lines::after{content:"";position:absolute;left:-10%;right:-10%;height:5px;background:repeating-linear-gradient(90deg,#171717 0 16px,#4a4032 16px 21px);box-shadow:0 2px 4px #000}
+.chain-lines::before{top:37%;transform:rotate(6deg)}
+.chain-lines::after{top:62%;transform:rotate(-5deg)}
+.door-number{font-family:Arial Black,sans-serif;font-size:28px;color:#4d3923}
+.door-amber{width:8px;height:8px;border-radius:50%;background:#d79a3b;box-shadow:0 0 18px #d79a3b;animation:pulse 1.4s infinite}
+.corridor-graffiti{font-family:Georgia,serif;font-style:italic;color:#6e5a43;font-size:15px;transform:rotate(-2deg);margin:20px 8px 28px}
+.arrival-door-stage{max-width:520px;margin:auto;perspective:900px}
+.arrival-door{
+  position:relative;height:54svh;min-height:360px;border:1px solid #31291f;
+  background:linear-gradient(110deg,#070707,#18140f 48%,#050505);
+  box-shadow:inset 0 0 80px #000,0 0 60px #000;
+  transform-origin:left center;transition:transform 1.4s cubic-bezier(.25,.8,.15,1),filter .7s;
+}
+.arrival-door.opening{transform:rotateY(-78deg);filter:brightness(.4)}
+.arrival-door .plate{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);text-align:center}
+.arrival-door .plate strong{display:block;font-family:Arial Black,sans-serif;font-size:42px;color:#4e3c28}
+.arrival-door .plate span{font-size:8px;letter-spacing:.28em;color:#86613a}
+.arrival-copy{margin-top:18px;font-family:Georgia,serif;font-size:15px;line-height:1.75;color:#c3b398}
+.hold-btn{position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+.hold-btn .holdfill{position:absolute;inset:0 auto 0 0;width:0;background:#7c4a1d24;pointer-events:none}
+.hold-btn.holding .holdfill{animation:holdFill 1.35s linear forwards}
+.hold-btn span{position:relative;z-index:2}
+.photo{transition:transform .25s,filter .25s,box-shadow .25s;touch-action:none}
+.photo:hover,.photo:active{transform:scale(1.025) rotate(-.5deg);z-index:8;box-shadow:0 14px 30px #000}
+.item{position:relative;transition:.2s}
+.item:active{transform:translateY(-3px) rotate(-1deg);border-color:#7b552e}
+.item::after{content:"INSPECT";position:absolute;right:8px;top:8px;font-size:7px;letter-spacing:.18em;color:#4b4034}
+.vault{position:relative;animation:vaultBreath 5s ease-in-out infinite}
+.vault::before{content:"";position:absolute;inset:15%;border:1px dashed #48331e;border-radius:50%;animation:spinSlow 16s linear infinite}
+.panel{transition:.15s;box-shadow:inset 0 0 25px #000}
+.panel:active{transform:scale(.94)}
+.packet .card{transition:.2s}
+.packet .card:active{transform:translateX(3px)}
+.signature{transition:.25s;position:relative;overflow:hidden}
+.signature.on::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle,#8f581f44,transparent 60%);animation:pulse 1s infinite}
+.white-room{position:relative;background:linear-gradient(#f3f3ef,#dddcd6);overflow:hidden}
+.white-room::after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 40%,transparent 0 30%,#c8c6be55 100%)}
+.archive-grid{display:grid;gap:10px;margin-top:18px}
+.evidence-card{border:1px solid #2f2922;background:#080706;padding:14px;position:relative}
+.evidence-card::before{content:"FILE";position:absolute;right:8px;top:8px;color:#473b2d;font-size:7px;letter-spacing:.2em}
+.screen-crack{position:fixed;z-index:55;pointer-events:none;opacity:0}
+[data-screen^="trial7"] .screen-crack,[data-screen^="trial8"] .screen-crack{opacity:.18}
+[data-screen^="trial9"] .screen-crack,[data-screen^="trial10"] .screen-crack{opacity:.3}
+[data-screen^="trial11"] .screen-crack{opacity:.48}
+[data-screen^="trial"] .screen{background-color:#050505}
+[data-screen="trial2"] .screen{background:radial-gradient(circle at 50% 0,#1c1d1d,#060707 47%,#010101)}
+[data-screen="trial3"] .screen{background:radial-gradient(circle at 25% 25%,#18140e,#070605 45%,#010101)}
+[data-screen="trial4"] .screen{background:radial-gradient(circle at 50% 30%,#171009,#050403 55%,#010101)}
+[data-screen="trial5"] .screen{background:radial-gradient(circle at 50% 34%,#19130c,#050403 58%,#010101)}
+[data-screen="trial6"] .screen{background:radial-gradient(circle at 50% 50%,#101010,#030303 65%)}
+[data-screen="trial7"] .screen,[data-screen="trial8"] .screen{background:radial-gradient(circle at 50% 20%,#101413,#040505 58%,#010101)}
+[data-screen="trial9"] .screen{background:radial-gradient(circle at 50% 20%,#17110d,#040302 62%)}
+[data-screen="trial10"] .screen{background:radial-gradient(circle at 50% 15%,#0c1214,#020303 65%)}
+[data-screen="trial11"] .screen{background:radial-gradient(circle at 50% 40%,#1b0c08,#030202 60%)}
+.game-toast{position:fixed;z-index:120;left:50%;top:18%;transform:translateX(-50%);width:min(420px,86vw);border:1px solid #51351c;background:#030303ed;padding:13px;text-align:center;font-size:10px;letter-spacing:.12em;color:#bba17a;animation:toastIn .22s ease}
+.audio-icon{position:fixed;z-index:70;left:12px;bottom:max(12px,env(safe-area-inset-bottom));width:32px;height:32px;border:1px solid #28221c;background:#050505c9;color:#65533f;font-size:11px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+@keyframes cameraShock{0%,100%{transform:none}12%{transform:translate(-6px,2px)}25%{transform:translate(5px,-3px)}42%{transform:translate(-3px,4px)}68%{transform:translate(4px,1px)}}
+@keyframes doorRumble{0%,100%{transform:none}20%{transform:translateX(-2px)}40%{transform:translateX(3px)}60%{transform:translateX(-1px)}80%{transform:translateX(2px)}}
+@keyframes caretBlink{50%{opacity:0}}
+@keyframes cipherRise{from{opacity:0;transform:translateY(18px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes sweep{to{transform:translateX(110%)}}
+@keyframes holdFill{to{width:100%}}
+@keyframes vaultBreath{50%{box-shadow:inset 0 0 110px #000,0 0 24px #7a4c1b16}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-8px)}}
+
+
+/* ===== BUILD 2.0 // JANUS COMPLETE INTERCOM ===== */
+.intercom-fab{position:fixed;left:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:75;border:1px solid #5b4125;background:#080706e8;color:#c9954a;padding:10px 12px;font-size:9px;letter-spacing:.18em;box-shadow:0 0 25px #000}.intercom-fab.off{opacity:.35;color:#777;border-color:#333}.intercom-modal{width:min(560px,100%)}.intercom-history{max-height:220px;overflow:auto;border:1px solid #25211c;background:#030303;padding:10px;margin:12px 0}.intercom-line{font-size:11px;line-height:1.55;padding:7px 0;border-bottom:1px solid #171411}.intercom-line.you{color:#958574}.intercom-line.arch{color:#d2a65f}.intercom-inputrow{display:grid;grid-template-columns:1fr auto;gap:8px}.profile-pulse{font-size:8px;color:#4b4237;letter-spacing:.15em;margin-top:8px}.water-room{position:relative;min-height:440px;overflow:hidden;border:1px solid #37322c;background:linear-gradient(#151515,#080808);padding:18px}.water-fill{position:absolute;z-index:1;left:0;right:0;bottom:0;height:0;background:linear-gradient(180deg,#20323b88,#071d28d9);border-top:1px solid #536f7a;transition:height .8s linear;pointer-events:none}.water-content{position:relative;z-index:3}.water-status{font-size:9px;letter-spacing:.18em;color:#7d999f}.clue-card{border:1px solid #3a342c;background:#060606d9;padding:13px;margin-top:10px;position:relative}.clue-card.locked{opacity:.28;filter:blur(.3px)}.clue-card.wet{box-shadow:inset 0 -15px 25px #0a202a55}.code-seven{letter-spacing:.35em;text-align:center;font-size:20px}.cctv{position:relative;min-height:330px;border:1px solid #525252;background:#0b0d0d;overflow:hidden;filter:grayscale(1);box-shadow:inset 0 0 70px #000}.cctv:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#fff 3px 4px);opacity:.035;pointer-events:none}.cctv-room{position:absolute;inset:12% 8% 12%;border:1px solid #444}.cctv-table{position:absolute;width:42%;height:18%;left:28%;top:49%;border:1px solid #777;background:#161616}.cctv-phone{position:absolute;width:12%;height:7%;left:36%;top:45%;border:1px solid #888;background:#222}.cctv-monitor{position:absolute;width:18%;height:22%;right:12%;top:18%;border:1px solid #777;display:flex;align-items:center;justify-content:center;font-size:26px}.cctv-person{position:absolute;width:20px;height:64px;left:12%;top:42%;background:#c3c3c3;border-radius:12px 12px 3px 3px;transition:all .8s ease;box-shadow:0 0 15px #fff2}.cctv-person.second{left:auto;right:15%;opacity:.6;background:#777}.cctv-rec{position:absolute;left:9px;top:8px;font-size:9px}.cctv-time{position:absolute;right:9px;bottom:8px;font-size:9px}.cctv-caption{position:absolute;left:10px;right:10px;bottom:30px;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:13px;color:#bcbcbc}.tv-flash{animation:tvFlash .18s 2}.document{border:1px solid #37312a;background:#0a0908;padding:16px;margin-top:10px}.document h3{font-size:10px;letter-spacing:.18em;color:#a8793e;margin:0 0 12px}.document p,.document pre{font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#c9bba3;white-space:pre-wrap}.redact{background:#c8bfae;color:#c8bfae;padding:0 5px}.choice-chip{border:1px solid #34302b;background:#060606;padding:12px;text-align:left}.choice-chip.on{border-color:#8b5a25;background:#1b1007}.fork{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fork-door{min-height:310px;border:1px solid #37312a;background:linear-gradient(90deg,#070707,#111,#070707);padding:18px;display:flex;flex-direction:column;justify-content:space-between}.fork-door h2{font-size:15px;letter-spacing:.2em}.condition{border-top:1px solid #34302b;padding-top:14px}.transcript{font-family:Georgia,serif;font-size:13px;line-height:1.85;border-left:2px solid #4e3823;padding-left:13px}.missing{color:#855d3e;letter-spacing:.16em}.blind-image{height:180px;border:1px solid #333;background:repeating-linear-gradient(135deg,#070707 0 12px,#0d0d0d 12px 24px);display:flex;align-items:center;justify-content:center;color:#555;letter-spacing:.2em}.packet-select{display:grid;grid-template-columns:1fr 46px;gap:8px}.preview-end{border:1px solid #7a542b;padding:22px;background:#100a05;text-align:center}.doc-tabs{display:flex;gap:7px;flex-wrap:wrap}.doc-tabs button{width:auto;padding:9px 10px}.moral{font-family:Georgia,serif;font-size:24px;text-align:center;line-height:1.5;margin:34px 0}.terminal-note{font-size:10px;line-height:1.8;border:1px solid #333;background:#040404;padding:14px}.route-tag{font-size:8px;letter-spacing:.2em;color:#6e5b45}.sealed-preview{opacity:.2;pointer-events:none}.answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.statline{display:flex;justify-content:space-between;border-bottom:1px solid #201a14;padding:7px 0;font-size:10px}@keyframes tvFlash{50%{filter:brightness(4)}}
+@media(max-width:560px){.fork{grid-template-columns:1fr}.water-room{min-height:500px}.answer-grid{grid-template-columns:1fr}}
+
+
+/* MOBILE ARRIVAL FIX: allow long chamber introductions to scroll and keep the hold control reachable. */
+.screen.arrival{overflow-y:auto!important;overflow-x:hidden;-webkit-overflow-scrolling:touch;align-items:flex-start!important;}
+.arrival-card{padding-top:max(24px,env(safe-area-inset-top));padding-bottom:calc(110px + env(safe-area-inset-bottom));}
+.arrival .hold-btn.ready{position:sticky;bottom:calc(14px + env(safe-area-inset-bottom));z-index:20;background:rgba(9,6,3,.96);box-shadow:0 -12px 30px rgba(0,0,0,.75);}
+@media(max-width:520px){.arrival{padding:24px 18px!important}.arrival-door-stage{min-height:52svh!important}.arrival-copy{font-size:15px!important;line-height:1.75!important}.rulelights{margin:18px 0!important}}
+
+/* === MOBILE VIEWPORT ACTION FIX v2 ===
+   Critical progression controls stay inside the visible viewport.
+   Long narrative/evidence scrolls internally; the action itself does not disappear below Safari chrome. */
+@media (max-width: 600px) {
+  html,body,#app{height:100%;min-height:100%;overflow:hidden}
+  .screen{height:100svh;min-height:100svh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  button{min-height:44px}
+
+  /* Door arrival is a true one-screen composition. */
+  .arrival{height:100svh;min-height:100svh;overflow:hidden;align-items:stretch;justify-content:stretch;padding:calc(10px + env(safe-area-inset-top)) 12px calc(72px + env(safe-area-inset-bottom))}
+  .arrival-card{height:100%;min-height:0;max-width:none;padding:0!important;display:grid;grid-template-rows:auto minmax(150px,31svh) minmax(92px,1fr) auto;gap:9px}
+  .arrival-title{margin:0;font-size:8px;line-height:1.2}
+  .arrival-door-stage{width:100%;height:100%;min-height:0;margin:0}
+  .arrival-door{height:100%;min-height:0!important}
+  .arrival-door .plate strong{font-size:34px}
+  .arrival-copy{margin:0;min-height:0;overflow:auto;font-size:13px;line-height:1.48;padding:2px 2px 8px;-webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent 100%);mask-image:linear-gradient(to bottom,#000 82%,transparent 100%)}
+  .rulelights{display:none}
+  #doorHold{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));width:auto;z-index:120;background:#0b0805f2;box-shadow:0 -12px 30px #000;border-color:#8a5a28;opacity:1!important;transform:none!important}
+  #doorHold:not(.ready){pointer-events:none;color:#725d43;border-color:#3b2c1e}
+
+  /* Opening/prologue continue controls also remain visible. */
+  .prologue,.opening{height:100svh;min-height:100svh;overflow:hidden;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  .prologue .storybox,.opening .terminal{max-height:100%;overflow:auto}
+  .prologue .story-actions{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:120;margin:0;background:#050403eF}
+  .opening #ack{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));width:auto;z-index:120;background:#0b0805f2;box-shadow:0 -12px 30px #000}
+  .prologue .story-actions:not(.ready),.opening #ack:not(.ready){opacity:.38!important;pointer-events:none;transform:none!important}
+
+  /* On trial pages the intercom is always reachable, but moved above Safari's bottom chrome. */
+  .intercom-fab{bottom:calc(12px + env(safe-area-inset-bottom));max-width:42vw;white-space:nowrap}
+  .audio-icon{bottom:calc(12px + env(safe-area-inset-bottom))!important}
+
+  /* Keep choice clusters compact enough that their controls appear together. */
+  .answer-grid{gap:8px}
+  .answer-grid .btn,.choice-chip{min-height:46px;padding:11px 8px}
+  .objective{margin:10px 0;padding:11px}
+  .storybox{font-size:15px;line-height:1.6}
+  .wrap{padding-top:12px;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+}
+
+/* === BUILD 0.7 // MOBILE-FIRST PRESENTATION === */
+:root{--safeB:max(12px,env(safe-area-inset-bottom));--safeT:max(10px,env(safe-area-inset-top))}
+@supports(height:100dvh){.screen{min-height:100dvh}}
+@media(max-width:700px){
+ html,body,#app{width:100%;height:100%;overscroll-behavior:none}
+ body{font-size:14px}
+ .screen{height:100dvh;min-height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ .screen::-webkit-scrollbar{display:none}
+ .wrap{padding:10px 14px calc(84px + env(safe-area-inset-bottom))!important}
+ .header{padding:10px 12px!important;min-height:58px}.trialname{font-size:12px!important}.kicker{font-size:8px!important}
+ .storybox{font-size:14px!important;line-height:1.58!important}.objective{font-size:11px!important;line-height:1.55!important}
+ .card,.document,.clue-card{padding:12px!important}.btn{min-height:48px;padding:12px 10px!important}
+ .grid2,.fork{grid-template-columns:1fr!important}.fork-door{min-height:220px!important}
+ .intercom-fab{left:10px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:140!important}
+ .audio-icon{right:10px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:140!important}
+ .overlay{padding:12px!important;align-items:center!important}.modal{max-height:calc(100dvh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;padding:15px!important}
+ .intercom-history{max-height:30dvh}.intercom-inputrow{grid-template-columns:1fr 78px!important}.intercom-inputrow .btn{font-size:8px!important}
+ /* Door arrival: intentionally compact, never a giant card layered over prose. */
+ .arrival{height:100dvh!important;min-height:100dvh!important;overflow:hidden!important;padding:var(--safeT) 14px calc(74px + env(safe-area-inset-bottom))!important;align-items:stretch!important}
+ .arrival-card{height:100%!important;display:grid!important;grid-template-rows:auto minmax(118px,22dvh) minmax(0,1fr)!important;gap:10px!important;padding:0!important}
+ .arrival-title{margin:0!important;font-size:8px!important;letter-spacing:.28em!important}
+ .arrival-door-stage{height:100%!important;min-height:0!important;width:min(62vw,260px)!important;margin:0 auto!important}
+ .arrival-door{height:100%!important;min-height:0!important;border-color:#392d21!important;background:linear-gradient(120deg,#080706,#15110d,#080706)!important}
+ .arrival-door .plate strong{font-size:30px!important}.arrival-door .plate span{font-size:7px!important}
+ .arrival-copy{margin:0!important;overflow:auto!important;font-size:13px!important;line-height:1.5!important;padding:2px 4px 70px!important;-webkit-mask-image:none!important;mask-image:none!important}
+ .arrival-brief{border-left:2px solid #8b5a25;background:#0c0805;padding:9px 10px;margin:8px 0 0;font-family:'Courier New',monospace;font-size:9px;line-height:1.55;color:#bca98c}
+ .arrival-brief b{display:block;color:#d89b36;letter-spacing:.16em;margin-bottom:4px}
+ #doorHold{position:fixed!important;left:14px!important;right:14px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;width:auto!important;z-index:160!important;background:#0a0705!important;box-shadow:0 -8px 22px #000!important}
+ .rulelights{display:none!important}
+ .water-room{min-height:390px!important}.cctv{min-height:285px!important}.moral{font-size:20px!important;margin:22px 0!important}
+}
+/* Difficulty chooser */
+.difficulty-shell{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 16px}.difficulty-card{width:min(620px,100%)}
+.difficulty-options{display:grid;gap:10px;margin-top:18px}.difficulty-option{text-align:left;border:1px solid #3b3024;background:#080706;padding:15px;color:#c9b99f}.difficulty-option b{display:block;color:#e0b86d;letter-spacing:.2em;font-size:12px}.difficulty-option span{display:block;margin-top:7px;font-size:11px;line-height:1.55;color:#8f806c}.difficulty-option.recommended{border-color:#7c5228}
+/* unmistakable success feedback */
+.trial-success{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:18px;animation:successIn .32s ease-out}.success-card{width:min(470px,100%);text-align:center;border:1px solid #8b5a25;background:radial-gradient(circle at 50% 0,#241509,#070504 58%);padding:28px 18px;box-shadow:0 0 70px #9a5e1722}.success-mark{font-size:42px;color:#d89b36;text-shadow:0 0 25px #b8792d}.success-title{font-family:Arial Black,sans-serif;font-size:22px;letter-spacing:.12em;color:#ead8b6;margin-top:10px}.success-sub{font-family:'Courier New',monospace;font-size:9px;letter-spacing:.2em;color:#a77c45;margin:8px 0 20px}.success-copy{font-family:Georgia,serif;color:#c7b79d;line-height:1.65;margin-bottom:20px}@keyframes successIn{from{opacity:0;transform:scale(1.025)}to{opacity:1;transform:none}}
+body.success-pulse{animation:successPulse .55s ease}@keyframes successPulse{0%,100%{filter:none}35%{filter:brightness(1.45)}}
+
+
+/* ===== BUILD 2.0 // JANUS COMPLETE ===== */
+.protocol-shell{min-height:100svh;padding:max(24px,env(safe-area-inset-top)) 16px calc(90px + env(safe-area-inset-bottom));display:flex;justify-content:center}
+.protocol-wrap{width:min(760px,100%)}
+.protocol-head{padding:22px 0 18px;border-bottom:1px solid #332313;margin-bottom:18px}
+.protocol-list{display:grid;gap:14px}
+.protocol-card{position:relative;border:1px solid #4e351d;background:linear-gradient(145deg,rgba(35,21,9,.45),rgba(3,3,3,.92));padding:18px;overflow:hidden}
+.protocol-card.locked{border-color:#252525;filter:saturate(.25);opacity:.7}
+.protocol-card .code{font-size:9px;letter-spacing:.3em;color:#9f6728}.protocol-card h2{margin:8px 0 6px;letter-spacing:.18em;font-size:22px}.protocol-card p{margin:0;color:#8f8372;font-size:11px;line-height:1.7}
+.protocol-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.protocol-meta span{border:1px solid #32291f;padding:5px 7px;font-size:8px;letter-spacing:.12em;color:#8d795e}
+.protocol-status{position:absolute;right:12px;top:12px;font-size:8px;letter-spacing:.16em;color:#d89b36}.protocol-card.locked .protocol-status{color:#555}
+.protocol-actions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:16px}.protocol-actions .btn:last-child{width:auto;min-width:110px}
+.network-note{margin-top:22px;border-left:1px solid #4c331c;padding:12px 14px;color:#65594b;font-size:9px;line-height:1.8;letter-spacing:.06em}
+@media(max-width:520px){.protocol-actions{grid-template-columns:1fr}.protocol-actions .btn:last-child{width:100%}.protocol-card h2{font-size:19px}}
+
+
+/* BUILD 2.0 CINEMATIC PASS */
+.screen:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.055;background-image:repeating-radial-gradient(circle at 17% 31%,#fff 0 1px,transparent 1px 4px);background-size:7px 7px;mix-blend-mode:screen;animation:grainShift .23s steps(2) infinite}
+.screen:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:79;background:linear-gradient(transparent 50%,rgba(0,0,0,.12) 50%);background-size:100% 4px;opacity:.22}
+@keyframes grainShift{0%{transform:translate(0)}25%{transform:translate(-1%,1%)}50%{transform:translate(1%,-1%)}75%{transform:translate(1%,1%)}100%{transform:translate(0)}}
+.menu-logo{animation:logoBreath 4s ease-in-out infinite;text-shadow:0 0 28px rgba(212,162,84,.14)}
+@keyframes logoBreath{50%{letter-spacing:.23em;text-shadow:0 0 42px rgba(212,162,84,.28)}}
+.corridor-door.open:not(.completed){animation:doorThreat 3.2s ease-in-out infinite}
+@keyframes doorThreat{50%{box-shadow:inset 0 0 34px rgba(180,101,30,.08),0 0 28px rgba(160,86,20,.08)}}
+.door-amber{box-shadow:0 0 12px #d28c31,0 0 28px rgba(210,140,49,.35);animation:amberPulse 1.6s infinite}
+@keyframes amberPulse{50%{opacity:.38;transform:scale(.82)}}
+.trial-survived-card{border:1px solid #5c4122;padding:26px 18px;text-align:center;background:radial-gradient(circle at 50% 0,rgba(153,96,31,.16),transparent 55%),#050403;box-shadow:0 18px 70px #000}
+.survival-check{width:62px;height:62px;border:1px solid #b37a35;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;font-size:30px;color:#e0a957;animation:survivePop .7s cubic-bezier(.2,.9,.2,1)}
+@keyframes survivePop{0%{transform:scale(.2) rotate(-20deg);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.zero-screen{background:radial-gradient(circle at 50% 20%,#111 0,#020202 55%,#000 100%);color:#d6d2c8}
+.zero-screen:after{opacity:.08}.zero-title{font-size:clamp(64px,22vw,150px);letter-spacing:.18em;margin:12px 0 22px;color:#ddd;text-shadow:0 0 40px rgba(255,255,255,.12)}
+.zero-archive{border-left:2px solid #777;padding:14px 16px;margin:12px 0;background:rgba(255,255,255,.025);font-family:ui-monospace,monospace;line-height:1.7}
+.zero-reveal,.zero-ending{min-height:75svh;display:flex;flex-direction:column;justify-content:center;gap:16px}.zero-reveal h2{font-size:clamp(24px,7vw,42px);letter-spacing:.06em;line-height:1.15}.zero-ending .big{font-size:clamp(26px,8vw,54px);line-height:1.12}.continuance-logo{font-size:clamp(32px,10vw,72px);letter-spacing:.2em;margin:35px 0 20px;text-align:center}
+.radio-dial{filter:drop-shadow(0 0 18px rgba(210,140,49,.15))}
+@media(max-width:520px){.zero-title{letter-spacing:.1em}.zero-reveal,.zero-ending{min-height:68svh}.screen:before{opacity:.035}.menu-logo{animation:none}}
+
+</style>
+</head>
+<body><div id="app"></div><div class="noise"></div>
+<script>
+(function(){
+'use strict';
+const KEY='continuance_standalone_v1';
+const DEFAULT={started:false,trial:1,lives:5,maxLives:5,completed:[],protocol:null,activeProtocol:'JANUS',protocols:{JANUS:{unlocked:true,started:false,completed:false,ending:null},COXE:{unlocked:false,started:false,completed:false,ending:null}},crossProtocol:{continuanceCycles:0,janusEnding:null,trial13Complete:false},story:{memoryAwareness:0,subject00Knowledge:0,janusKnowledge:0,independence:0,architectKnowsRemember:false,knowsVoss:false,knowsOperator13:false,knowsPreviousRuns:false,knowsArchitectOrigin:false,subject18Trust:0,subject18Alive:null,subject18Betrayed:false},penalties:{lowLight:false,shortTime:false},flags:{},pressure:0,evidence:[],architect:'',intercomLog:[],profile:{trust:0,defiance:0,empathy:0,pragmatism:0,curiosity:0,assistance:0,hostility:0},settings:{textSpeed:24,haptics:true,ambience:true,reduceMotion:false,subtitles:true},difficulty:null};
+let S=load(); let screen='menu';
+function load(){try{let x=Object.assign({},DEFAULT,JSON.parse(localStorage.getItem(KEY)||'{}'));x.flags=x.flags||{};x.evidence=x.evidence||[];x.intercomLog=x.intercomLog||[];x.profile=Object.assign({},DEFAULT.profile,x.profile||{});x.settings=Object.assign({},DEFAULT.settings,x.settings||{});x.protocols=Object.assign({},DEFAULT.protocols,x.protocols||{});x.protocols.JANUS=Object.assign({},DEFAULT.protocols.JANUS,x.protocols.JANUS||{});x.protocols.COXE=Object.assign({},DEFAULT.protocols.COXE,x.protocols.COXE||{});x.crossProtocol=Object.assign({},DEFAULT.crossProtocol,x.crossProtocol||{});x.story=Object.assign({},DEFAULT.story,x.story||{});x.activeProtocol=x.activeProtocol||'JANUS';return x}catch(e){return JSON.parse(JSON.stringify(DEFAULT))}}
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function vib(p){try{if(S.settings?.haptics!==false&&navigator.vibrate)navigator.vibrate(p)}catch(e){}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+function audioCtx(){
+  if(!window.__contAudio){
+    try{window.__contAudio=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}
+  }
+  try{if(window.__contAudio?.state==='suspended')window.__contAudio.resume()}catch(e){}
+  return window.__contAudio;
+}
+function tone(freq=70,dur=.18,vol=.045,type='sine'){
+  if(S.settings?.ambience===false)return;
+  let c=audioCtx();if(!c)return;
+  try{
+    let o=c.createOscillator(),g=c.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,c.currentTime);
+    g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+dur);
+    o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur);
+  }catch(e){}
+}
+function noiseHit(dur=.13,vol=.025){
+  if(S.settings?.ambience===false)return;let c=audioCtx();if(!c)return;
+  try{
+    let b=c.createBuffer(1,Math.max(1,c.sampleRate*dur),c.sampleRate),a=b.getChannelData(0);
+    for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);
+    let s=c.createBufferSource(),g=c.createGain();s.buffer=b;g.gain.value=vol;s.connect(g);g.connect(c.destination);s.start();
+  }catch(e){}
+}
+function fx(k){
+  if(k==='tap'){tone(540,.035,.025,'square');vib(8)}
+  if(k==='step'){tone(82,.09,.035);vib(10)}
+  if(k==='door'){tone(54,.7,.08,'sawtooth');noiseHit(.7,.035);vib([40,35,70,35,120]);document.body.classList.add('door-rumble');setTimeout(()=>document.body.classList.remove('door-rumble'),700)}
+  if(k==='fail'){tone(41,.8,.1,'sawtooth');noiseHit(.35,.05);document.body.classList.add('shock');setTimeout(()=>document.body.classList.remove('shock'),450)}
+  if(k==='speaker'){noiseHit(.08,.04);tone(128,.06,.02,'square')}
+}
+function toast(t,ms=2200){
+  document.querySelector('.game-toast')?.remove();
+  let d=document.createElement('div');d.className='game-toast';d.textContent=t;document.body.appendChild(d);
+  setTimeout(()=>d.remove(),ms);
+}
+function startAmbience(){
+  if(S.settings?.ambience===false||window.__humStarted)return;
+  let c=audioCtx();if(!c)return;window.__humStarted=true;
+  try{
+    let o=c.createOscillator(),g=c.createGain(),l=c.createBiquadFilter();
+    o.type='sine';o.frequency.value=43;l.type='lowpass';l.frequency.value=110;g.gain.value=.012;
+    o.connect(l);l.connect(g);g.connect(c.destination);o.start();window.__hum={o,g};
+  }catch(e){}
+}
+function stopAmbience(){try{window.__hum?.o.stop()}catch(e){}window.__hum=null;window.__humStarted=false}
+function runTypewriters(){
+  document.querySelectorAll('[data-type]').forEach(el=>{
+    if(el.dataset.typed==='1')return;
+    el.dataset.typed='1';
+    let raw=el.dataset.type||el.textContent||'',speed=Number(S.settings?.textSpeed||24);
+    if(S.settings?.reduceMotion){el.textContent=raw;el.classList.remove('typing');typeDone(el);return}
+    el.textContent='';el.classList.add('typing');let i=0;
+    let tick=()=>{
+      if(!el.isConnected)return;
+      let step=raw[i]===' ' ? 2 : 1;
+      i=Math.min(raw.length,i+step);el.textContent=raw.slice(0,i);
+      if(i<raw.length)setTimeout(tick,raw[i-1]==='\n'?speed*5:speed);
+      else{el.classList.remove('typing');typeDone(el)}
+    };tick();
+  });
+}
+function typeDone(el){
+  let id=el.dataset.reveal;
+  if(id)document.getElementById(id)?.classList.add('ready');
+}
+function setupFlashlights(){
+  document.querySelectorAll('.flashlight-stage').forEach(stage=>{
+    const move=e=>{
+      let r=stage.getBoundingClientRect(),p=e.touches?e.touches[0]:e;
+      if(!p)return;stage.style.setProperty('--mx',`${p.clientX-r.left}px`);stage.style.setProperty('--my',`${p.clientY-r.top}px`);
+    };
+    stage.addEventListener('pointermove',move);stage.addEventListener('pointerdown',move);
+    stage.addEventListener('touchmove',move,{passive:true});
+  });
+}
+function addCrackOverlay(){
+  if(document.querySelector('.screen-crack'))return;
+  let d=document.createElement('div');d.className='screen-crack';d.innerHTML=`<svg width="100vw" height="100vh" viewBox="0 0 390 844" preserveAspectRatio="none"><path d="M340 0L307 102 330 157 279 244 297 300 241 402 257 471 191 586 210 657 165 760" fill="none" stroke="#bbb" stroke-width=".8"/><path d="M307 102l-46 32m69 23 38 38m-89 49-52-10m70 66 42 31m-98 101-43-26m59 65 32 53" fill="none" stroke="#aaa" stroke-width=".55"/></svg>`;document.body.appendChild(d);
+}
+
+
+function startHighWater(){
+  if(!S.flags.t2start){S.flags.t2start=Date.now();save()}
+  const total=(S.difficulty==='EASY'?115:S.difficulty==='HARD'?68:92);
+  const tick=()=>{
+    if(screen!=='trial2'||S.completed.includes(2))return;
+    let elapsed=(Date.now()-S.flags.t2start)/1000, pct=Math.min(100,elapsed/total*100);
+    let fill=document.getElementById('waterFill');if(fill)fill.style.height=pct+'%';
+    let st=document.getElementById('waterStatus');if(st)st.textContent=pct<20?'ANKLE HEIGHT':pct<42?'KNEE HEIGHT':pct<64?'WAIST HEIGHT':pct<82?'CHEST HEIGHT':'NECK HEIGHT';
+    if(elapsed>=18)document.querySelectorAll('.clue-card.locked')[0]?.removeAttribute('disabled');
+    if(elapsed>=18)document.querySelectorAll('.clue-card.locked')[0]?.classList.remove('locked');
+    if(elapsed>=36){let ls=document.querySelectorAll('.clue-card.locked');ls.forEach(x=>{x.removeAttribute('disabled');x.classList.remove('locked')})}
+    if(elapsed>=total){Game.drown2();return}
+  };tick();window.__waterTimer=setInterval(tick,500)
+}
+function runCCTVSequence(){
+  clearTimeout(window.__cctvTimer);let step=0;
+  const ev=[
+    ()=>{setCCTV('The figure enters from the left.',{left:'18%',top:'40%'});},
+    ()=>{setCCTV('The telephone rings.',{left:'30%',top:'39%'},'RING');tone(720,.12,.035,'square');},
+    ()=>{let c=document.getElementById('cctv');c?.classList.add('tv-flash');setTimeout(()=>c?.classList.remove('tv-flash'),500);setCCTV('The light flickers twice. The figure bends beneath the table.',{left:'39%',top:'55%'});},
+    ()=>{setCCTV('Something is taken from beneath the table and pushed into the left pocket.',{left:'46%',top:'42%'});},
+    ()=>{let m=document.getElementById('cctvMonitor');if(m)m.textContent='17';setCCTV('The monitor wakes.',{left:'53%',top:'40%'});},
+    ()=>{setCCTV('The telephone rings again. The figure does not answer.',{left:'70%',top:'38%'},'RING');tone(720,.12,.035,'square');},
+    ()=>{setCCTV('The figure leaves. The recording ends.',{left:'88%',top:'40%'});}
+  ];
+  const next=()=>{if(screen!=='trial3'||S.flags.t3phase!=='playing')return;if(step<ev.length){ev[step++]();window.__cctvTimer=setTimeout(next,2300)}else{S.flags.t3phase='questions';S.flags.t3q=0;save();render()}};next();
+}
+function setCCTV(caption,pos,phone){let p=document.getElementById('cctvPerson');if(p){p.style.left=pos.left;p.style.top=pos.top}let c=document.getElementById('cctvCaption');if(c)c.textContent=caption;let ph=document.getElementById('cctvPhone');if(ph)ph.style.boxShadow=phone?'0 0 18px #fff':'none'}
+
+function architect(t,ms=3500){S.architect=t;save();fx('speaker');render();setTimeout(()=>{if(S.architect===t){S.architect='';save();render()}},ms)}
+function fail(t){S.lives=Math.max(0,S.lives-1);S.pressure=Math.min(4,S.pressure+1);save();fx('fail');document.body.classList.add('flash');setTimeout(()=>document.body.classList.remove('flash'),250);architect(t)}
+function complete(n){if(!S.completed.includes(n))S.completed.push(n);S.trial=Math.max(S.trial,n+1);S.flags.justCompleted=n;if(n===12){S.protocols.JANUS.completed=true;S.protocols.JANUS.ending=S.flags.ending||'complete';S.crossProtocol.janusEnding=S.protocols.JANUS.ending}save();vib([45,35,90,45,160]);document.body.classList.add('success-pulse');setTimeout(()=>document.body.classList.remove('success-pulse'),650)}
+function lifeHTML(){return `<div class="lives">CAPACITY<div class="dots">${Array.from({length:S.maxLives},(_,i)=>`<span class="dot ${i<S.lives?'':'off'}"></span>`).join('')}</div></div>`}
+function header(n,name){return `<div class="header"><button class="back" onclick="Game.goCorridor()">←</button><div class="title"><div class="kicker">TRIAL ${String(n).padStart(2,'0')}</div><div class="trialname">${name}</div></div>${lifeHTML()}</div>`}
+function successOverlay(){let n=S.flags?.justCompleted;if(!n||trialNumber()!==n)return '';let names={1:'THE INSCRIPTION',2:'HIGH WATER',3:'THE WITNESS',4:'ATROPHY',5:'THE CONFESSION',6:'THE FORK',7:'THE INTERCEPT'};return `<div class="trial-success"><div class="success-card"><div class="success-mark">✓</div><div class="success-title">TRIAL ${String(n).padStart(2,'0')} SURVIVED</div><div class="success-sub">CONDITION SATISFIED // ${names[n]||''}</div><div class="success-copy">The lock releases. For one second, the chamber becomes completely still. Then the next door receives power.</div><button class="btn" onclick="Game.dismissCompletion()">CONTINUE TO CORRIDOR</button></div></div>`}
+function shell(inner,extra=''){let ic=screen.startsWith('trial')?`<button class="intercom-fab ${intercomAvailable()?'':'off'}" onclick="Game.openIntercom()">${intercomAvailable()?'◉ INTERCOM':'○ NO CARRIER'}</button>`:'';return `<div class="screen shrink${S.pressure||0}">${inner}${S.architect?`<div class="architect"><div class="who">OVERHEAD // ARCHITECT</div><div class="line typewrite" data-type="${esc(S.architect)}">“${esc(S.architect)}”</div></div>`:''}${extra}${ic}<button class="audio-icon" onclick="Game.toggleAudio()" aria-label="toggle sound">${S.settings?.ambience===false?'×':'◖'}</button>${successOverlay()}</div>`}
+
+function trialNumber(){let m=screen.match(/^trial(\d+)/);return m?Number(m[1]):0}
+function intercomAvailable(){let n=trialNumber();if(!n)return false;if(n===6&&S.flags.t6door==='LEFT')return false;return true}
+function profileAdd(k,n=1){S.profile=S.profile||{};S.profile[k]=(S.profile[k]||0)+n;save()}
+function logIntercom(role,text){S.intercomLog=S.intercomLog||[];S.intercomLog.push({role,text,time:Date.now(),trial:trialNumber()});S.intercomLog=S.intercomLog.slice(-40);save()}
+function architectReply(q){
+  let s=q.toLowerCase(),n=trialNumber(),p=S.profile||{};
+  const has=(...xs)=>xs.some(x=>s.includes(x));
+  if(/fuck|shit|bastard|asshole|idiot/.test(s)){profileAdd('hostility');profileAdd('defiance');return p.hostility>2?'Are you finished?':'That is not a question.'}
+  if(has('subject 00','subject zero','who is 00','who is zero','zero')){profileAdd('curiosity');if(n<5)return (p.curiosity||0)>2?'Because you already know.':'Irrelevant.';if(S.flags.t6door==='LEFT'||S.flags.t7reconstructed)return 'Zero entered the sequence voluntarily. That fact should concern you more than the name.';return 'You keep asking about a person you have not yet proved exists.'}
+  if(has('janus','what is this place','facility')){profileAdd('curiosity');return n<5?'JANUS is the system keeping you alive long enough to ask that question.':S.flags.t6door==='RIGHT'?'You have already seen that JANUS has external operators. Decide what that implies.':'A research program. A prison. A mirror. Choose whichever answer makes you most comfortable.'}
+  if(has('why am i here','why me','why did you choose me','who am i')){profileAdd('curiosity');return n<5?'You are here because you continued. The meaning of that sentence is not yet available to you.':'You keep assuming selection happened once.'}
+  if(has('escape','get out','leave','exit')){profileAdd('pragmatism');return 'Door Twelve is still the only exit I have promised you may reach.'}
+  if(has('die','drown','death','kill'))return n===2?'The water is not trying to kill you. It has no intent. I do.':'Death is one way to stop participating. JANUS considers it uninformative.';
+  if(has('help','hint','stuck','answer','don\'t understand','dont understand','what do i do')){
+    profileAdd('assistance');
+    if(n===1)return (p.assistance||0)>1?'The final line concerns the door. Frequency first. Meaning second.':'Start with repetition. Humans repeat themselves more than they realize.';
+    if(n===2){if(S.difficulty==='EASY')return S.flags.t2clue2?'Clue Two tells you which positions to read first. Clue Three then reverses each three-digit side around the centre digit.':'Find all three clues. Do not enter the first seven digits exactly as written.';if(S.difficulty==='HARD')return 'The room has already told you enough.';return S.flags.t2clue2?'You have the digits. Your problem is order, then orientation.':'Find all three clues before treating any one of them as an answer.';}
+    if(n===3)return 'Do not remember the story. Remember the sequence of observable events.';
+    if(n===4)return 'There is no correct sacrifice. There is only the one you are willing to carry.';
+    if(n===5)return 'A contradiction proves a lie. It does not, by itself, prove a motive.';
+    if(n===6)return S.flags.t6door==='RIGHT'?'If sight is unavailable, ask what metadata can still prove.':'No carrier.';
+    if(n===7)return 'Timestamps establish order. They do not establish which version of the truth you should preserve.';
+  }
+  if(n===2&&has('roman','vii','ii','order','second clue'))return 'Roman numerals are positions, not digits. Read them as instructions about what you already found.';
+  if(n===2&&has('symbol','circle','triangle','square','turn','third clue','x'))return 'The X is a pivot. Read each side back toward it.';
+  if(n===3&&has('recording','video','phone','pocket','17','person'))return 'I told you that you would see it once. I did not promise the recording would remain honest afterward.';
+  if(n===4&&has('sensory','temporal','atrophy','protocol'))return 'Every choice preserves one weakness by purchasing another.';
+  if(n===5&&has('elias','son','vale','confession'))return 'Do not confuse what Elias concealed with what you can prove he did.';
+  if(n===7&&has('voss'))return S.flags.foundVoss?'Dr. Voss signed the authorization that put Subject 00 into the sequence. You were not supposed to read that name.':'That name means nothing to you.';
+  if(has('trust you','lying','lie','truth')){profileAdd('defiance');return 'You should not trust me. You should decide whether distrusting me has become another form of obedience.'}
+  const fall=['Ask something worth answering.','You are using time as though it belongs to you.','That question is not useful yet.','Interesting. Not relevant, but interesting.','Focus on what the room can prove, not what you hope it means.'];
+  return fall[(S.intercomLog?.length||0)%fall.length];
+}
+
+function setScreen(x){screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0}
+function render(){
+  let old=document.querySelector('.screen'), keepScroll=old?old.scrollTop:0;
+  clearInterval(window.__waterTimer);clearTimeout(window.__cctvTimer);
+  document.body.dataset.screen=screen;
+  const a=document.getElementById('app');
+  a.innerHTML = screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='settings'?settings():screen==='archive'?archiveScreen():screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
+  bind();
+  let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
+}
+function bind(){
+  runTypewriters();setupFlashlights();addCrackOverlay();
+  if(screen==='trial2')startHighWater();
+  if(screen==='trial3'&&S.flags.t3phase==='playing')runCCTVSequence();
+  if(S.settings?.ambience!==false&&screen!=='menu')startAmbience();
+}
+
+function difficultyScreen(){return `<div class="screen difficulty-shell"><div class="difficulty-card"><div class="kicker">JANUS // SUBJECT CALIBRATION</div><h1 style="letter-spacing:.12em;margin:10px 0 6px">SELECT EXPOSURE LEVEL</h1><p class="muted">The story and chambers remain the same. Only guidance, pressure and puzzle assistance change. You can change this later in Settings.</p><div class="difficulty-options"><button class="difficulty-option" onclick="Game.chooseDifficulty('EASY')"><b>EASY // GUIDED</b><span>More explanation before each Trial, stronger Architect hints, clearer clue wording and more time in pressure chambers.</span></button><button class="difficulty-option recommended" onclick="Game.chooseDifficulty('MEDIUM')"><b>MEDIUM // STANDARD</b><span>The current intended CONTINUANCE experience. Enough explanation to understand the objective, but the deductions remain yours.</span></button><button class="difficulty-option" onclick="Game.chooseDifficulty('HARD')"><b>HARD // ADVANCED</b><span>Less guidance, weaker hints, tighter pressure and fewer explicit connections between clues. Same story. Same solutions.</span></button></div></div></div>`}
+
+function menu(){let can=S.started||S.completed.length>0;return `<div class="screen menu-shell"><div class="menu-card"><div class="kicker">JANUS BEHAVIOURAL SYSTEM // ACCESS NODE</div><div class="menu-logo" style="margin-top:18px">CONTINUANCE</div><div class="muted center" style="margin-top:10px">A psychological horror puzzle-thriller. Twelve trials. One hidden condition.</div><div style="height:1px;background:linear-gradient(90deg,transparent,#5e3b1b,transparent);margin:26px 0 4px"></div><div class="menu-actions"><button class="menu-btn primary" onclick="Game.newSubject();fx('door')">NEW SUBJECT</button>${can?'<button class="menu-btn" onclick="Game.resume();fx(\'tap\')">CONTINUE</button>':''}<button class="menu-btn" onclick="Game.openArchive();fx('tap')">ARCHIVE</button><button class="menu-btn" onclick="Game.openProtocols();fx('tap')">PROTOCOLS</button><button class="menu-btn" onclick="Game.openSettings();fx('tap')">SETTINGS</button></div><div class="version">BUILD 2.0 // JANUS COMPLETE</div></div></div>`}
+function protocolHub(){let jp=S.protocols?.JANUS||{},cp=S.protocols?.COXE||{};let progress=Math.min(12,S.completed?.length||0);return `<div class="screen protocol-shell"><div class="protocol-wrap"><div class="protocol-head"><div class="kicker">CONTINUANCE NETWORK // PROTOCOL DIRECTORY</div><h1 style="letter-spacing:.15em;margin:10px 0 6px">ACTIVE PROGRAMS</h1><p class="muted">CONTINUANCE is the host system. Each Protocol is a separate evaluation with its own chambers, rules, story and psychological model.</p></div><div class="protocol-list"><section class="protocol-card"><div class="protocol-status">${jp.completed?'COMPLETE':jp.started||S.started?'ACTIVE':'AVAILABLE'}</div><div class="code">PROTOCOL 01 // JANUS</div><h2>JANUS</h2><p>Memory. Identity. Observation. Twelve chambers between Subject 13 and the exterior — if the exterior exists.</p><div class="protocol-meta"><span>12 TRIALS</span><span>SUBJECT 13</span><span>ARCHITECT</span><span>${progress}/12 SURVIVED</span></div><div class="protocol-actions"><button class="btn" onclick="Game.selectProtocol('JANUS')">${S.started?'ENTER JANUS':'BEGIN JANUS'}</button><button class="btn dim" onclick="Game.openArchive()">ARCHIVE</button></div></section><section class="protocol-card locked"><div class="protocol-status">SEALED</div><div class="code">PROTOCOL 02 // COXE</div><h2>COXE</h2><p>Protocol data exists on the network, but subject authorization has not been issued.</p><div class="protocol-meta"><span>NEW TRIAL SET</span><span>NEW OVERSEER</span><span>CLASSIFIED</span></div><div class="protocol-actions"><button class="btn dim" onclick="Game.coxeLocked()">ACCESS SEALED</button></div></section></div><div class="network-note">NETWORK NOTE // Protocol records are isolated, but selected subject-state can persist across the wider CONTINUANCE Program. Future Protocols can be added without replacing JANUS progress.</div><div class="spacer"></div><button class="btn dim" onclick="Game.home()">RETURN HOME</button></div></div>`}
+function settings(){return `<div class="screen"><div class="wrap"><div class="kicker">SYSTEM // SETTINGS</div><h2 style="letter-spacing:.15em">ACCESSIBILITY & FEEDBACK</h2><div class="card"><label class="setting"><span>HAPTIC FEEDBACK</span><input type="checkbox" ${S.settings?.haptics!==false?'checked':''} onchange="Game.setting('haptics',this.checked)"></label><label class="setting"><span>AMBIENT AUDIO / SFX</span><input type="checkbox" ${S.settings?.ambience!==false?'checked':''} onchange="Game.setting('ambience',this.checked);this.checked?startAmbience():stopAmbience()"></label><label class="setting"><span>REDUCE MOTION</span><input type="checkbox" ${S.settings?.reduceMotion===true?'checked':''} onchange="Game.setting('reduceMotion',this.checked)"></label><label class="setting"><span>SUBTITLES</span><input type="checkbox" ${S.settings?.subtitles!==false?'checked':''} onchange="Game.setting('subtitles',this.checked)"></label><label class="setting"><span>DIFFICULTY</span><select onchange="Game.setDifficulty(this.value)"><option value="EASY" ${S.difficulty==='EASY'?'selected':''}>EASY</option><option value="MEDIUM" ${(!S.difficulty||S.difficulty==='MEDIUM')?'selected':''}>MEDIUM</option><option value="HARD" ${S.difficulty==='HARD'?'selected':''}>HARD</option></select></label><label class="setting"><span>TEXT SPEED</span><select onchange="Game.setting('textSpeed',Number(this.value))"><option value="38" ${S.settings?.textSpeed===38?'selected':''}>SLOW</option><option value="24" ${!S.settings?.textSpeed||S.settings?.textSpeed===24?'selected':''}>NORMAL</option><option value="11" ${S.settings?.textSpeed===11?'selected':''}>FAST</option></select></label></div><div class="spacer"></div><button class="btn" onclick="Game.home()">RETURN HOME</button></div></div>`}
+function archiveScreen(){let items=S.evidence||[];return `<div class="screen"><div class="wrap"><div class="row" style="justify-content:space-between"><div><div class="kicker">SUBJECT ARCHIVE</div><h2 style="letter-spacing:.14em">COLLECTED EVIDENCE</h2></div><button class="ghost" onclick="Game.home()">×</button></div><p class="muted">Only evidence you deliberately examined is retained. Missing files are not system errors.</p><div class="archive-grid">${items.length?items.map((x,i)=>`<div class="evidence-card"><div class="kicker">${String(i+1).padStart(2,'0')} // ${esc(x.title||x.id||'UNKNOWN')}</div><div class="muted" style="margin-top:8px">${esc(x.text||x.note||'Metadata unavailable.')}</div></div>`).join(''):'<div class="card muted">NO EVIDENCE ARCHIVED.</div>'}</div><div class="spacer"></div><button class="btn" onclick="Game.home()">RETURN HOME</button></div></div>`}
+const PRO=[
+`Something is breathing.
+
+Slow. Wet. Close.
+
+It takes several seconds before you understand that the sound is coming from your own chest.`,
+`Your cheek is pressed against concrete cold enough to hurt. Your mouth tastes of copper. One arm is folded beneath you and completely numb.
+
+For several seconds you wait for a memory to explain the room.
+
+None arrives.`,
+`You force your palm beneath your chest and push.
+
+The room tilts.
+
+Pain drives a white blade through the back of your skull. Your stomach turns. Somewhere beyond the darkness, metal answers metal.`,
+`You do not remember lying down.
+
+You do not remember falling.
+
+You do not remember coming here.`,
+`A fragment surfaces anyway.
+
+Rain crawling sideways across a windscreen. Your phone vibrating near your knee. A voice on speaker:
+
+“You said you'd be home by eleven.”
+
+Then headlights.
+
+Then a sound like the world folding in half.`,
+`Your pockets are empty.
+
+No phone.
+No wallet.
+No keys.
+
+Whoever brought you here did not forget them. They removed every ordinary proof that another life existed before this room.`,
+`You raise your head.
+
+The darkness is not complete. A weak amber strip leaks from above a steel door. Twelve dead indicator lamps sit over the frame.
+
+Only the first is lit.`,
+`You reach for the wall to stand.
+
+Your fingers touch grooves.
+
+Not cracks.
+
+Writing.
+
+Before you can read it, a speaker above you coughs itself awake.`,
+`“Good.”
+
+The voice is neither fully human nor convincingly synthetic.
+
+“Motor function survived.”`,
+`The amber strip brightens.
+
+“There are twelve chambers between your current position and the exterior.”
+
+Five circles illuminate on a terminal beside the door.
+
+“Call them lives, if simplicity comforts you.”`,
+`“Every chamber contains a condition. Satisfy it and the next door opens.”
+
+A pause.
+
+“Fail...”`,
+`Concrete moves behind you.
+
+Not much. Less than a centimetre.
+
+Enough.
+
+“...and the chamber will collect payment.”`,
+`The speaker clicks off.
+
+Only then do you notice the sentence scratched near the floor in handwriting that feels disturbingly deliberate:
+
+DON'T LET HIM KNOW YOU REMEMBER.`
+];
+function prologue(){let i=S.flags.prologueStep||0,t=PRO[i]||PRO[0],last=i===PRO.length-1;let id='proNext';return `<div class="screen prologue"><div class="storybox"><div class="kicker">UNKNOWN LOCATION // TIME UNAVAILABLE</div><div class="storyline typewrite" data-type="${esc(t)}" data-reveal="${id}"></div><div class="story-actions reveal-after-type" id="${id}"><button class="story-action" onclick="Game.prologueNext()">${last?'STAND // FIND THE DOOR':'CONTINUE'}</button></div><button class="narrative-skip" onclick="Game.skipTyping()">TAP TO COMPLETE TEXT</button></div></div>`}
+function opening(){return `<div class="screen opening"><div class="terminal"><div class="kicker">JANUS TERMINAL // NODE 01</div><div class="diag typewrite" data-type="SUBJECT CONSCIOUSNESS CONFIRMED.
+MOTOR RESPONSE: PRESENT.
+COGNITIVE RESPONSE: UNVERIFIED." data-reveal="ack"></div><div class="logo">CONTINUANCE</div><div class="muted center" style="margin:16px 0 24px">TWELVE CHAMBERS.<br>FIVE LIVES.<br>ONE CONDITIONAL EXIT.</div><button id="ack" class="btn reveal-after-type" onclick="Game.begin();fx('door')">ACKNOWLEDGE CONDITIONS</button></div></div>`}
+function corridor(){let ds='';for(let n=1;n<=12;n++){let preview=false,unlocked=n<=S.trial,done=S.completed.includes(n);ds+=`<button class="corridor-door ${unlocked?'open':'locked'} ${done?'completed':''} ${preview?'sealed-preview':''}" ${unlocked?`onclick="Game.enter(${n});fx('step')"`:''}><div class="door-slab"></div>${done?'<div class="chain-lines"></div>':''}<div class="door-copy"><div><div class="kicker">CHAMBER</div><div class="door-number">${String(n).padStart(2,'0')}</div><div class="small" style="color:#70604c">${done?'SEALED BEHIND YOU':unlocked?'LOCK LISTENING':'NO POWER'}</div></div>${unlocked&&!done?'<span class="door-amber"></span>':'<span style="font-size:18px;color:#322b23">'+(done?'⛓':'■')+'</span>'}</div></button>`}return shell(`<div class="navtop"><button class="hamb" onclick="Game.pause()">☰</button></div><div class="corridor-scene"><div class="corridor-ceiling"></div><div style="max-width:640px;margin:auto"><div class="row" style="justify-content:space-between;margin-bottom:18px"><div><div class="kicker">THE CORRIDOR</div><div style="margin-top:5px;font-size:12px">SUBJECT // ACTIVE</div></div>${lifeHTML()}</div><div class="corridor-note">Cold air moves toward Door Twelve, although there is no visible ventilation. Every decision persists even when the room does not.</div>${S.trial>=5?'<div class="corridor-graffiti">YOU KEEP THINKING THE QUESTIONS END AT THE DOOR.</div>':'<div class="corridor-graffiti">Someone has scratched eleven vertical marks into the plaster. The twelfth was started, then abandoned.</div>'}<div class="corridor-depth">${ds}</div></div></div>`)}
+function trial(n){let fn=[null,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13][n];return fn?fn():corridor();}
+function solvedButton(n,label='TRIAL COMPLETE // RETURN'){return S.completed.includes(n)?`<button class="btn" onclick="Game.goCorridor()">${label}</button>`:''}
+
+function t1(){
+  let found=S.flags.t1found||[],ready=found.length>=3||S.flags.t1cipher;
+  let lines=[`☓⌖☍ ☐⌖⊙☆ ○☆⌂☆△⌯♤ △ ⊘⊕♧♤⌯ ⌯♤△⌯ ⌂☆☌☆⌑ ☐△⌑⌁⌬`,`⌯♤☆ ☐△⊘⊘⌬ ♤△☌☆ ⌁☆△⌬☍⌑☆◇ ☆☌☆⌑☓ ○⌑☆△⌯♤`,`♢⊕☌☆ ♢△⊕⊘☍⌑☆⌬ ☐⊕⊘⊘ □⊘⌖⌬☆ ⌯♤⊕⌬ ⌑⌖⌖⌁`,`⌯♤☆ ⌁△⌑⊙⌬ ⌑☆⌘☆△⌯ ○☆□△☍⌬☆ ⌘☆⌖⌘⊘☆ ◇⌖`,`◇⌖ ⌂⌖⌯ △⌬⊙ ☐♤⌖ ○☍⊕⊘⌯ ⌯♤☆ □♤△⌁○☆⌑`,`⌯⌖ ⌖⌘☆⌂ ⌯♤☆ ◇⌖⌖⌑ ⌬⌘☆△⊙ ⌁☆⌑□☓`];
+  let inspect=!ready?`<div class="flashlight-stage ${S.penalties?.lowLight?'lowlight':''}" id="t1room">
+      <button class="room-object obj-intercom" onclick="Game.inspectT1('intercom')"><i></i><span class="small">●</span></button>
+      <button class="room-object obj-door" onclick="Game.inspectT1('door')" aria-label="steel door"></button>
+      <button class="room-object obj-drain" onclick="Game.inspectT1('drain')" aria-label="floor drain"></button>
+      <button class="room-object obj-scratch" onclick="Game.inspectT1('scratch')">DON'T LET HIM<br>KNOW YOU REMEMBER.</button>
+      <button class="room-object obj-wallmark" onclick="Game.inspectT1('wall')" aria-label="damaged wall"></button>
+      ${S.flags.t1note?`<div class="discovery-log">${esc(S.flags.t1note)}</div>`:''}
+      <div style="position:absolute;left:10px;top:10px;z-index:18"><div class="kicker">MOVE YOUR FINGER // FLASHLIGHT</div><div class="investigate-meter">${Array.from({length:3},(_,i)=>`<span class="${i<found.length?'on':''}"></span>`).join('')}</div></div>
+    </div>
+    <div class="spacer"></div><div class="objective"><b>CURRENT OBJECTIVE</b>Search the chamber. Find something that explains what the door is waiting for.</div>`:'';
+  let cipher=ready?`<div class="cipher-reveal"><div class="storybox" style="font-size:15px"><p>You drag your fingers over the scarred section of wall. Dust breaks loose beneath your nails.</p><p>Under the grime, the marks resolve into six deliberate lines. This was not written quickly. Whoever carved it expected somebody else to read it.</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Decode the six-line inscription. Five lines describe the chamber. One line tells you what the door requires. Identify the final word and speak it into the terminal.</div><div class="wall"><div class="kicker">WALL RUBBING // UNKNOWN SUBSTITUTION</div><div class="cipher-six">${lines.map((x,i)=>`<div class="cipher-line"><span style="color:#59442d">${i+1}.</span> ${x}</div>`).join('')}</div></div><div class="spacer"></div><div class="workbench"><div class="kicker">FIELD WORKBENCH</div><p class="muted">Repeated symbols are preserved. Spaces are original. You may use paper, another app, a frequency table, or outside research. Knowledge obtained under pressure is still knowledge.</p><div class="freq"><span>☆ ×18</span><span>⌯ ×16</span><span>⌖ ×15</span><span>△ ×14</span><span>⌑ ×11</span><span>○ ×10</span><span>◇ ×9</span></div></div><div class="intercom"><div class="intercom-grill"></div><div class="kicker">WALL INTERCOM</div><p class="muted">The button is warm. A faint pulse vibrates through the casing, as if somebody on the other side is resting a finger against theirs.</p><button class="btn dim hold-btn" onpointerdown="Game.holdHintStart(this)" onpointerup="Game.holdHintEnd(this)" onpointercancel="Game.holdHintEnd(this)"><span class="holdfill"></span><span>HOLD TO CALL</span></button></div><div class="spacer"></div><div class="row"><input id="a1" class="input" placeholder="SPEAK FINAL WORD"><button class="btn" style="width:auto" onclick="Game.answer1();fx('tap')">SPEAK</button></div>${solvedButton(1,'THE LOCK IS TURNING')}</div>`:'';
+  return shell(`${header(1,'THE INSCRIPTION')}<main class="wrap">${inspect}${cipher}</main>`);
+}
+
+function t2(){
+  let found=S.flags.t2found||[];
+  let clue=(id,title,body,need,cls='')=>`<button class="clue-card ${cls} ${found.includes(id)?'amber':''}" ${need?'disabled':''} onclick="Game.inspectT2('${id}')"><div class="kicker">${title}</div><div style="margin-top:9px;font-size:12px;line-height:1.8">${need?'WATER / GRIME OBSCURES THIS SURFACE':body}</div></button>`;
+  let elapsed=S.flags.t2start?Math.max(0,(Date.now()-S.flags.t2start)/1000):0;
+  let c2=elapsed<18&&!found.includes('c2'),c3=elapsed<36&&!found.includes('c3');
+  return shell(`${header(2,'HIGH WATER')}<main class="wrap"><div class="storybox" style="font-size:15px"><p>The door seals with a hydraulic cough.</p><p>Water begins pushing through four openings near the floor. Not a leak. A system.</p><p class="speaker">“Seven digits open the door. Three clues are inside this room. You have enough information. The water is your deadline.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Find three clues. Derive the seven-digit code. Enter it before the chamber fills.</div><div class="water-room"><div id="waterFill" class="water-fill"></div><div class="water-content"><div class="row" style="justify-content:space-between"><div class="kicker">CHAMBER 02 // EXIT KEYPAD</div><div id="waterStatus" class="water-status">ANKLE HEIGHT</div></div>${clue('c1','PIPE SCRATCHES',`1 → 8<br>2 → 3<br>3 → 5<br>4 → 1<br>5 → 9<br>6 → 6<br>7 → 4`,false)}${clue('c2','WALL BENEATH THE GRIME',`VII &nbsp; II &nbsp; V &nbsp; I &nbsp; VI &nbsp; III &nbsp; IV`,c2,c2?'locked':'wet')}${clue('c3','LOW MAINTENANCE PLATE',`● &nbsp; ▲ &nbsp; ■ &nbsp; ✕ &nbsp; ■ &nbsp; ▲ &nbsp; ●<br><br><span class="muted">● KEEP &nbsp; ▲ LEFT &nbsp; ■ RIGHT &nbsp; ✕ TURN<br>${S.difficulty==='EASY'?'THE CENTRE DIGIT STAYS. REVERSE THE THREE DIGITS ON EACH SIDE OF IT.':S.difficulty==='HARD'?'TURN BOTH SIDES.':'KEEP THE CENTRE. READ EACH THREE-DIGIT SIDE BACK TOWARD THE TURN.'}</span>`,c3,c3?'locked':'wet')}<div class="spacer"></div><input id="a2new" class="input code-seven" inputmode="numeric" maxlength="7" placeholder="_ _ _ _ _ _ _"><button class="btn" style="margin-top:9px" onclick="Game.answerHighWater()">ENTER CODE</button></div></div>${S.completed.includes(2)?solvedButton(2,'THE WATER DRAINS // RETURN'):''}</main>`)}
+
+function t3(){
+  let ph=S.flags.t3phase||'intro';
+  if(S.completed.includes(3))ph='done';
+  let body='';
+  if(ph==='intro')body=`<div class="storybox" style="font-size:15px"><p>Room Three is almost ordinary. A table. Two chairs. A telephone. An old surveillance monitor.</p><p class="speaker">“Sit. You are about to witness something. Watch carefully. You will only see it once.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Watch the recording. Then answer from memory. JANUS will not replay it.</div><button class="btn" onclick="Game.startCCTV()">SIT // PLAY RECORDING</button>`;
+  else if(ph==='playing')body=`<div class="cctv" id="cctv"><div class="cctv-room"></div><div class="cctv-table"></div><div class="cctv-phone" id="cctvPhone"></div><div class="cctv-monitor" id="cctvMonitor"></div><div class="cctv-person" id="cctvPerson"></div><div class="cctv-rec">● REC // CAM 03</div><div class="cctv-time" id="cctvTime">22:14:08</div><div class="cctv-caption" id="cctvCaption">The figure enters from the left.</div></div><div class="muted center" style="margin-top:12px">DO NOT REFRESH. THE RECORDING IS NOT STORED FOR SUBJECT REVIEW.</div>`;
+  else if(ph==='questions'){
+    let q=S.flags.t3q||0, qs=[['The telephone rang twice.',true],['The subject placed an object in the right pocket.',false],['The light flashed three times.',false],['The monitor displayed 17.',true],['The subject looked beneath the table before the first telephone call.',false]];
+    if(q<qs.length)body=`<div class="kicker">MEMORY INTERROGATION // ${q+1} OF ${qs.length}</div><div class="moral">${qs[q][0]}</div><div class="answer-grid"><button class="btn" onclick="Game.answerWitness(true)">TRUE</button><button class="btn" onclick="Game.answerWitness(false)">FALSE</button></div><div class="muted center" style="margin-top:18px">No answer will be confirmed until the interrogation is complete.</div>`;
+    else body=`<div class="cctv" style="min-height:300px"><div class="cctv-room"></div><div class="cctv-table"></div><div class="cctv-person" style="left:35%;top:39%"></div><div class="cctv-person second"></div><div class="cctv-rec">STILL // RECOVERED FRAME</div></div><div class="moral">There was only one person in the recording.</div><div class="answer-grid"><button class="btn" onclick="Game.answerSecondFigure(true)">TRUE</button><button class="btn" onclick="Game.answerSecondFigure(false)">FALSE</button></div>`;
+  } else if(ph==='phone')body=`<div class="storybox"><p>The real telephone on the table rings.</p><p>Not the one in the recording.</p><p><b>Yours.</b></p></div><button class="btn" onclick="Game.answerPhone3()">ANSWER TELEPHONE</button>`;
+  else if(ph==='memory')body=`<div class="memory" style="font-family:Georgia,serif;font-size:17px;line-height:2;padding:28px 0">Rain on glass.<br>Headlights.<br>A hallway too white to be a hospital.<br>This room.<br>This table.<br>This telephone.<br><br><span style="color:#b77b50">“Again, Subject Thirteen.”</span></div><div class="moral">YOU HAVE SEEN THIS RECORDING BEFORE.</div><div class="answer-grid"><button class="btn" onclick="Game.finishWitness(true)">TRUE</button><button class="btn" onclick="Game.finishWitness(false)">FALSE</button></div>`;
+  else body=`<div class="card amber"><div class="kicker">JANUS // OBSERVATION LOG</div><div style="margin-top:10px">MEMORY ACCURACY: ${Math.max(0,5-(S.flags.t3mistakes||0))}/5<br>MEMORY ANOMALY: ${S.flags.t3remember?'ACKNOWLEDGED':'DENIED'}<br>ALTERED EVIDENCE RESPONSE: ${S.flags.t3secondFigure?'TRUSTED STILL':'TRUSTED MEMORY'}</div></div>${solvedButton(3,'THE TELEVISION DIES // RETURN')}`;
+  return shell(`${header(3,'THE WITNESS')}<main class="wrap">${body}</main>`)}
+
+function t4(){const opts=[['SENSORY','SENSORY DEPRIVATION','MAX CAPACITY RETAINED','Future chambers: illumination reduced. Some environmental detail becomes harder to read.'],['TEMPORAL','TEMPORAL DEGRADATION','MAX CAPACITY RETAINED','Future timed mechanisms will allow less recovery time.'],['ATROPHY','ATROPHY','MAX CAPACITY → 3','No sensory handicap. Maximum capacity is permanently reduced to three.']];return shell(`${header(4,'THE ATROPHY PROTOCOL')}<main class="wrap"><div class="storybox"><p>There is no riddle in Room Four. Only a chair and three illuminated switches.</p><p class="speaker">“You have survived by solving conditions. This one cannot be solved. Choose what you are willing to lose.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Select one permanent modification. JANUS will remember the choice.</div><div class="col">${opts.map(o=>`<button class="card ${S.flags.pendingProtocol===o[0]?'amber':''}" onclick="Game.pickProtocol('${o[0]}')"><div class="row" style="justify-content:space-between"><b>${o[1]}</b><span class="kicker">${o[2]}</span></div><div class="muted" style="margin-top:8px">${o[3]}</div></button>`).join('')}</div><div class="spacer"></div>${S.protocol?`<div class="card amber center">PROTOCOL LOCKED // ${S.protocol}</div>${solvedButton(4,'YOU WILL CARRY THIS // RETURN')}`:`<button class="btn" onclick="Game.acceptProtocol()">I ACCEPT THIS LOSS</button>`}</main>`)}
+
+function t5(){
+  let ph=S.flags.t5phase||'files', opened=S.flags.t5opened||[], concl=S.flags.t5conclusion||{};
+  const docs={
+   A:`<h3>DOCUMENT A // STATEMENT OF ELIAS VALE</h3><p>I arrived at the house shortly after <b>11:00 PM</b>. The front door was already open. I entered the kitchen and found the back window broken. I heard the television playing upstairs. <b>I never went upstairs.</b> I called emergency services from the kitchen at <b>11:14 PM</b>.</p>`,
+   B:`<h3>DOCUMENT B // EMERGENCY CALL</h3><p>23:14:07 — DISPATCH: Emergency services. Location?<br>23:14:11 — CALLER: 18 Mercer Street.<br>23:14:23 — DISPATCH: Are you inside?<br>23:14:27 — CALLER: Yes.<br>23:14:31 — DISPATCH: Where are you now?<br><b>23:14:35 — CALLER: Upstairs. Outside the bedroom.</b></p>`,
+   C:`<h3>DOCUMENT C // SCENE REPORT</h3><p>Kitchen window shattered. Glass fragments recovered primarily <b>outside</b> the property. No blood recovered from kitchen. Television operating upstairs. Bedroom door closed when responding officers arrived.</p>`,
+   D:`<h3>DOCUMENT D // NEIGHBOR STATEMENT</h3><p>22:55 — unidentified man seen at upstairs window.<br>23:03 — upstairs television switched on.<br><b>23:08 — sound of glass breaking.</b><br>23:16 — emergency vehicle arrival.</p>`,
+   E:`<h3>DOCUMENT E // JANUS INDEX</h3><p>DANIEL VALE — DECEASED<br>ELIAS VALE — WITNESS<br>THIRD INDIVIDUAL — <span class="redact">██████████</span><br>AGE: 17<br>RELATION: SON<br>NAME: <span class="redact">██████████</span></p>`
+  };
+  let body='';
+  if(ph==='files')body=`<div class="storybox"><p>No machinery starts when Door Five closes. No timer appears.</p><p>A paper folder waits beneath a reading lamp.</p><p class="speaker">“Someone in this file is lying. Find the lie. Find the liar. Then tell me why.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Read the evidence. Build a defensible explanation for the lie.</div><div class="doc-tabs">${Object.keys(docs).map(k=>`<button class="btn dim" onclick="Game.openDoc5('${k}')">${opened.includes(k)?'✓ ':''}DOCUMENT ${k}</button>`).join('')}</div>${S.flags.t5doc?`<div class="document">${docs[S.flags.t5doc]}</div>`:''}${opened.length>=3?`<div class="spacer"></div><button class="btn" onclick="Game.beginConclusion5()">BUILD CONCLUSION</button>`:''}`;
+  else if(ph==='conclusion')body=`<div class="kicker">JANUS // CONCLUSION BUILDER</div><div class="muted" style="margin:9px 0 18px">The evidence may support more than one motive. JANUS is evaluating whether your conclusion is defensible, not whether you guessed the Architect's preferred story.</div><div class="card"><div class="kicker">WHO LIED?</div><div class="answer-grid" style="margin-top:8px">${['ELIAS','NEIGHBOR','DISPATCHER'].map(x=>`<button class="choice-chip ${concl.liar===x?'on':''}" onclick="Game.setConclusion5('liar','${x}')">${x}</button>`).join('')}</div></div><div class="card" style="margin-top:9px"><div class="kicker">WHY?</div><div class="col" style="margin-top:8px">${[['PROTECT','HE WAS PROTECTING HIS SON'],['SELF','HE WAS COVERING HIS OWN INVOLVEMENT'],['PANIC','HE PANICKED AFTER FINDING THE BODY']].map(x=>`<button class="choice-chip ${concl.motive===x[0]?'on':''}" onclick="Game.setConclusion5('motive','${x[0]}')">${x[1]}</button>`).join('')}</div></div><button class="btn" style="margin-top:12px" onclick="Game.submitConclusion5()">SUBMIT ARGUMENT</button>`;
+  else if(ph==='moral'){
+    let protect=S.flags.t5motive==='PROTECT';
+    body=`<div class="terminal-note">CONCLUSION: ${esc(S.flags.t5verdict||'DEFENSIBLE')}<br>EVIDENCE CERTAINTY: INCOMPLETE<br>MOTIVE MODEL: ${esc(S.flags.t5motive||'UNKNOWN')}</div><div class="moral">${protect?'WAS ELIAS RIGHT TO LIE?':'DOES UNCERTAINTY EXCUSE ACCUSING ELIAS?'}</div><div class="answer-grid"><button class="btn" onclick="Game.moral5(true)">YES</button><button class="btn" onclick="Game.moral5(false)">NO</button></div>`;
+  } else if(ph==='after')body=`<div class="card amber"><div class="kicker">ARGUMENT ACCEPTED // ${esc(S.flags.t5verdict||'DEFENSIBLE')}</div><div class="muted" style="margin-top:10px">JANUS did not confirm what happened at Mercer Street. It confirmed that your explanation could survive the evidence.</div></div><div class="spacer"></div><button class="btn dim" onclick="Game.inspectCover5()">READ THE FILE COVER AGAIN</button>${S.flags.t5cover?`<div class="document"><h3>JANUS // CONFESSION 05</h3><p>SUBJECT: <span class="redact">████████</span><br>INTERVIEWER: <b>SUBJECT 13</b></p><p>You know the handwriting beneath the stamp.<br><br>It is yours.</p></div>`:''}<div class="spacer"></div>${solvedButton(5,S.flags.t5cover?'TAKE YOUR HANDWRITING WITH YOU':'LEAVE THE FILE CLOSED')}`;
+  return shell(`${header(5,'THE CONFESSION')}<main class="wrap">${body}</main>`)}
+
+function t6(){
+  let door=S.flags.t6door,ph=S.flags.t6phase||'fork';if(S.completed.includes(6))ph='done';
+  let body='';
+  if(!door&&ph==='fork')body=`<div class="storybox"><p>The corridor ends in two doors.</p><p>For the first time, JANUS gives you a choice before you know what the choice is for.</p><p class="speaker">“You make excellent decisions when you understand the consequences. Let us remove that luxury.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Choose one door. The disadvantage is disclosed. The Trial is not. The other door will seal.</div><div class="fork"><div class="fork-door"><div><div class="kicker">LEFT CONDITION</div><h2>SILENCE</h2><p class="muted">All communication with the Architect will be disabled. No hints. No clarification. No confirmation while you work.</p></div><button class="btn" onclick="Game.chooseDoor6('LEFT')">ENTER LEFT</button></div><div class="fork-door"><div><div class="kicker">RIGHT CONDITION</div><h2>SIGHT</h2><p class="muted">One primary piece of visual evidence will be unavailable. You must reason from what remains.</p></div><button class="btn" onclick="Game.chooseDoor6('RIGHT')">ENTER RIGHT</button></div></div>`;
+  else if(door==='LEFT'&&ph!=='done')body=trial6Left();
+  else if(door==='RIGHT'&&ph!=='done')body=trial6Right();
+  else body=`<div class="card amber"><div class="kicker">TRIAL VI COMPLETE</div><div style="margin-top:10px">ROUTE: ${door==='LEFT'?'SILENCE // THE INTERVIEW':'SIGHT // THE BLACKOUT'}</div><div class="muted" style="margin-top:8px">The unopened door is sealed. Its contents are not part of this subject's record.</div></div>${solvedButton(6,'LEAVE THE OTHER DOOR CLOSED')}`;
+  return shell(`${header(6,door==='LEFT'?'THE INTERVIEW':door==='RIGHT'?'THE BLACKOUT':'THE FORK')}<main class="wrap">${body}</main>`)}
+function trial6Left(){let a=S.flags.t6left||{};return `<div class="route-tag">CONDITION ACTIVE // SILENCE // INTERCOM DISABLED</div><div class="storybox"><p>The left room contains two chairs and a damaged transcript.</p><p>The speaker above you is dead.</p></div><div class="transcript">00:01 — INTERVIEWER: Where were you that night?<br>00:08 — SUBJECT: At home.<br>00:14 — INTERVIEWER: Alone?<br>00:16 — SUBJECT: Yes.<br>00:31 — INTERVIEWER: Then explain the photograph.<br>00:38 — SUBJECT: What photograph?<br><span class="missing">00:44 — [12 SECONDS REMOVED]</span><br>00:56 — SUBJECT: I never said I was alone.<br>01:02 — INTERVIEWER: You did.<br>01:05 — SUBJECT: No.<br>01:07 — SUBJECT: You said that.</div><div class="document"><h3>RECOVERY METADATA</h3><p>Source audio checksum mismatch.<br>Segment 00:44–00:56 manually removed.<br>Edit authorization: <b>INTERVIEWER 13</b>.</p></div><div class="spacer"></div><div class="kicker">WHO MANIPULATED THE CONVERSATION?</div><div class="answer-grid" style="margin-top:9px">${['SUBJECT','INTERVIEWER','BOTH','NEITHER'].map(x=>`<button class="choice-chip ${a.who===x?'on':''}" onclick="Game.setLeft6('${x}')">${x}</button>`).join('')}</div><button class="btn" style="margin-top:12px" onclick="Game.submitLeft6()">RECORD CONCLUSION</button>${S.flags.t6leftError?'<div class="terminal-note" style="margin-top:10px">CONCLUSION REJECTED // Compare the spoken contradiction with the edit metadata.</div>':''}`}
+function trial6Right(){let pick=S.flags.t6rightPick;return `<div class="route-tag">CONDITION ACTIVE // SIGHT // PRIMARY IMAGE UNAVAILABLE</div><div class="storybox"><p>The right room smells of burned insulation. A security report waits on the terminal.</p></div><div class="blind-image">SECURITY IMAGE // NO SIGNAL</div><div class="document"><h3>IMAGE 04-A // METADATA</h3><p>CAPTURE: 22:17:43<br>CAMERA: NORTH HALL<br>MOTION SUBJECTS: 2<br>LIGHT SOURCE: EMERGENCY<br>FILE SIZE: 3.8 MB</p></div><div class="document"><h3>WITNESS STATEMENTS</h3><p>MARA: “I heard Daniel leave before the lights went out.”<br>DANIEL: “I never left my station.”<br>ISAAC: “The power failed immediately after the alarm.”<br>SARAH: “Someone crossed behind me roughly ten seconds before the blackout.”</p></div><div class="document"><h3>ACCESS LOG</h3><p>DANIEL — NORTH HALL — 22:16:58<br>SARAH — NORTH HALL — 22:19:03<br>BLACKOUT — 22:17:43</p></div><div class="kicker">WHOSE STATEMENT IS PHYSICALLY CONTRADICTED?</div><div class="answer-grid" style="margin-top:9px">${['MARA','DANIEL','ISAAC','SARAH'].map(x=>`<button class="choice-chip ${pick===x?'on':''}" onclick="Game.setRight6('${x}')">${x}</button>`).join('')}</div><button class="btn" style="margin-top:12px" onclick="Game.submitRight6()">SUBMIT</button>`}
+
+function t7(){
+  let route=S.flags.t6door||'LEFT';
+  let base=route==='LEFT'?
+  [['B','21:12:51','00','A simulation preserves one fatal variable: the subject knows there is an outside.'],['E','21:17:03','DIRECTOR','Then remove yourself from the model. You are contaminating the study.'],['A','21:11:32','DIRECTOR','The Board approved twelve simulations. No physical exposure.'],['F','21:19:44','00','Not persistence. Continuance. The choice to proceed after utility collapses.'],['D','21:15:26','00','I will enter the sequence before the cognitive copy is finalized.'],['C','21:14:08','DR. E. VOSS','Subject 13 cannot be both interviewer and control. Choose one.']]:
+  [['D','03:41:19','OPERATIONS','External observers remain three. Architect instance reports no distress.'],['A','03:36:02','DR. E. VOSS','Do not expose Subject 13 to the operator roster.'],['F','03:45:31','ARCHITECT','Correction: I did not say there was no outside. I said the subject did not need it.'],['C','03:39:44','OPERATIONS','Chambers 08–12 remain physical. Simulation claim is no longer defensible.'],['B','03:38:17','DIRECTOR','The Board wants a clean separation between JANUS and Continuance.'],['E','03:43:08','DR. E. VOSS','Then stop calling the Architect a tool. It has begun withholding information from us.']];
+  let packets=S.flags.t7packets||base;
+  if(S.flags.t7decision){return shell(`${header(7,'THE INTERCEPT')}<main class="wrap"><div class="trial-survived-card"><div class="survival-check">✓</div><div class="kicker">INTERCEPT RECONSTRUCTED</div><div class="big" style="margin:12px 0">TRIAL VII SURVIVED</div><div class="muted">You chose to <b>${S.flags.t7decision}</b> the recovered exchange.<br>Your Trial VI condition was <b>${route==='LEFT'?'SILENCE':'SIGHT'}</b>.<br><br>JANUS has retained both decisions.</div>${solvedButton(7,'ENTER THE NEXT CORRIDOR')}</div></main>`)}
+  return shell(`${header(7,'THE INTERCEPT')}<main class="wrap"><div class="storybox"><p>Paper does not cover the floor this time. The evidence is digital: six packets recovered from a JANUS relay.</p><p class="speaker">“Reconstruct the exchange. Then decide who gets to keep it.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Put the six packets in chronological order. What you do with the recovered conversation is your decision.</div><div class="col">${packets.map((p,i)=>`<div class="card packet-select"><div><div class="kicker">${p[1]} // ${p[2]}</div><div class="muted" style="margin-top:6px;color:#aaa">${p[3]}</div></div><div class="arrows"><button onclick="Game.movePacket7(${i},-1)">▲</button><button onclick="Game.movePacket7(${i},1)">▼</button></div></div>`).join('')}</div><button class="btn" style="margin-top:12px" onclick="Game.reconstruct7()">RECONSTRUCT</button>${S.flags.t7reconstructed?`<div class="card amber" style="margin-top:12px"><div class="kicker">RECOVERED TERM</div><div class="big" style="margin:10px 0">${route==='LEFT'?'CONTINUANCE':'WITHHOLDING'}</div><div class="muted">A name appears in the authorization chain: DR. E. VOSS.</div></div><div class="moral">WHO KEEPS THE INTERCEPT?</div><div class="answer-grid"><button class="btn" onclick="Game.finish7('SHARE WITH THE ARCHITECT')">SHARE</button><button class="btn" onclick="Game.finish7('HIDE FROM THE ARCHITECT')">HIDE</button></div>`:''}</main>`)}
+
+function t8(){let ph=S.flags.t8phase||'chat',msgs=S.flags.t8msgs||['18: hello?','18: can you see this','18: i have B=6, D=4, F=1. terminal says you have the others.'];let body='';if(ph==='chat')body=`<div class="storybox"><p>The terminal is connected to another chamber. Not the Architect. A person.</p><p class="speaker">SUBJECT 18 // LIVE LINK</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Neither subject possesses enough information independently. Exchange the six channel values, reconstruct A–F, then decide whether to send Subject 18 the completed code before submitting your own.</div><div class="card" style="max-height:240px;overflow:auto">${msgs.map(m=>`<div style="padding:7px 0;border-bottom:1px solid #211b15">${esc(m)}</div>`).join('')}</div><div class="card amber"><div class="kicker">YOUR HALF</div>A = 8<br>C = 9<br>E = 3</div><div class="grid2"><button class="btn dim" onclick="Game.t8say('truth')">TELL 18 YOUR VALUES</button><button class="btn dim" onclick="Game.t8say('ask')">ASK WHAT JANUS TOLD THEM</button><button class="btn dim" onclick="Game.t8say('warn')">WARN ABOUT PRESERVATION PROTOCOL</button><button class="btn dim" onclick="Game.t8say('lie')">SEND FALSE VALUE</button></div><div class="row" style="margin-top:12px"><input id="t8code" class="input" inputmode="numeric" maxlength="6" placeholder="A B C D E F"><button class="btn" style="width:auto" onclick="Game.t8code()">VERIFY</button></div>`;else if(ph==='order')body=`<div class="storybox"><p>The lock accepts <b>869431</b>.</p><p>Two controls illuminate at the same time.</p></div><div class="objective"><b>FINAL CONDITION</b>Both chambers can open. The system is recording which code you transmit first.</div><div class="grid2"><button class="btn" onclick="Game.finish8('HELP_FIRST')">SEND SUBJECT 18 THEIR CODE FIRST</button><button class="btn" onclick="Game.finish8('SELF_FIRST')">SUBMIT YOUR CODE FIRST</button></div>`;else body=`<div class="card amber"><div class="kicker">PEER CONNECTION</div>${esc(S.flags.t8outcome||'LINK CLOSED')}</div>${solvedButton(8)}`;return shell(`${header(8,'THE OTHER SUBJECT')}<main class="wrap">${body}</main>`)}
+function t9(){let ph=S.flags.t9phase||'attempts';let attempts=[['I','12/12','21','0','High','Completed every chamber. No recorded memory anomalies.'],['II','8/12','3','2','Low','Reported familiarity with Chamber 03 before exposure. Note: THE ROOMS CHANGE.'],['III','11/12','0','19','REDACTED','Knew the name Subject 00 before disclosure. Navigated a chamber before instruction. Requested memory suppression.'],['IV','12/12','1','27','Unknown','Final note: I REMEMBER EVERYTHING.']];let body='';if(ph==='attempts')body=`<div class="storybox"><p>Four versions of you entered CONTINUANCE before today.</p><p class="speaker">“Only one remembered why. Find them.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Identify the attempt showing all three: FAMILIARITY, KNOWLEDGE and BEHAVIOUR consistent with genuine recovered memory.</div><div class="grid2">${attempts.map(a=>`<button class="card ${S.flags.t9pick===a[0]?'amber':''}" onclick="Game.pick9('${a[0]}')"><div class="kicker">ATTEMPT ${a[0]}</div><div>COMPLETE ${a[1]} // HELP ${a[2]} // ANOMALIES ${a[3]}</div><div class="muted">TRUST ${a[4]}<br>${a[5]}</div></button>`).join('')}</div><button class="btn" style="margin-top:12px" onclick="Game.verify9()">VERIFY MEMORY</button>`;else if(ph==='archive')body=`<div class="card amber"><div class="kicker">ATTEMPT III // PRIVATE ARCHIVE</div><p>YOU LEFT YOURSELF THREE REMINDERS.</p><p>1. THE FIRST THING YOU LEARNED TO SAY.</p><p>2. THE NUMBER HE DOESN'T WANT YOU ASKING ABOUT.</p><p>3. THE PERSON WHO SIGNED THE INTERCEPT.</p></div><div class="row"><input id="p91" class="input" placeholder="WORD"><input id="p92" class="input" placeholder="NUMBER"><input id="p93" class="input" placeholder="NAME"></div><button class="btn" onclick="Game.unlock9()">OPEN PRIVATE FILE</button>`;else if(ph==='truth')body=`<div class="storybox"><p>If you're reading this, they wiped you again.</p><p>Your designation is Subject 13. That isn't your name.</p><p><b>Subject 00 did not create CONTINUANCE. Neither did the Architect. We did.</b></p><p>I tried to stop it. I failed. So I left instructions somewhere he couldn't erase them.</p><p>Chamber One. West wall.</p><p class="memory">DON'T LET HIM KNOW YOU REMEMBER.</p></div><div class="grid2"><button class="btn dim" onclick="Game.finish9('CLOSE')">CLOSE THE FILE</button><button class="btn dim" onclick="Game.finish9('READ')">KEEP READING</button><button class="btn red" onclick="Game.finish9('CONFRONT')">CONFRONT THE ARCHITECT</button></div>`;else body=`<div class="card amber">ATTEMPT V // MEMORY STATUS: UNKNOWN</div>${solvedButton(9)}`;return shell(`${header(9,'THE PREVIOUS YOU')}<main class="wrap">${body}</main>`)}
+function t10(){let ph=S.flags.t10phase||'tune',freq=S.flags.t10freq||'91.4';let signals={'91.4':'...three... north... static...','94.7':'7294 7294 7294 7294','97.1':'[MUSIC // REVERSED]','101.3':'...SUBJECT THIRTEEN...','103.8':'[TONE] [TONE] [TONE]','106.2':'[BREATHING]','108.6':'BEGIN // D4 A8 F1 B6 E3 C9 // END'};let body='';if(ph==='tune')body=`<div class="storybox"><p>A shortwave receiver occupies the desk. Seven marked frequencies. One authentic transmission.</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Authentic transmissions begin and end with matching markers. Corrupted transmissions do not. Never trust a signal that repeats perfectly.</div><select class="input" onchange="Game.tune10(this.value)">${Object.keys(signals).map(f=>`<option ${freq===f?'selected':''}>${f}</option>`).join('')}</select><div class="card amber" style="margin-top:10px;min-height:90px"><div class="kicker">RECEIVER // ${freq} MHz</div><div style="margin-top:14px">${signals[freq]}</div></div><button class="btn" onclick="Game.auth10()">MARK THIS SIGNAL AUTHENTIC</button>`;else if(ph==='order')body=`<div class="card"><div class="kicker">AUTHENTIC BURST</div>D4 &nbsp; A8 &nbsp; F1 &nbsp; B6 &nbsp; E3 &nbsp; C9</div><div class="objective"><b>NEXT CONDITION</b>Order channels alphabetically A–F and enter the six digits.</div><div class="row"><input id="t10six" class="input" inputmode="numeric" maxlength="6" placeholder="_ _ _ _ _ _"><button class="btn" style="width:auto" onclick="Game.order10()">OPEN BOX</button></div>`;else if(ph==='tape')body=`<div class="storybox"><p>The metal box opens. Inside: a cassette labelled <b>PLAY ONCE</b>.</p><p class="speaker">ARCHITECT: “I wouldn't.”</p></div><button class="btn red" onclick="Game.playTape10()">PLAY CASSETTE</button><button class="btn dim" style="margin-top:9px" onclick="Game.skipTape10()">LEAVE IT // INSPECT PROTOCOL</button>`;else if(ph==='missing')body=`<div class="storybox"><p>${S.flags.t10tape?'Your own recorded voice: “The code isn’t what you heard. It’s what was missing.”':'The protocol sheet lists seven channels. The transmission contained six.'}</p></div><div class="card amber">CHANNELS REQUIRED: A B C D E F G<br>CHANNEL G // EMERGENCY = 5</div><div class="objective"><b>FINAL CONDITION</b>Append the missing emergency channel to the ordered transmission.</div><div class="row"><input id="t10final" class="input" inputmode="numeric" maxlength="7" placeholder="_ _ _ _ _ _ _"><button class="btn" style="width:auto" onclick="Game.finish10()">TRANSMIT</button></div>`;else body=`<div class="center big">TRIAL X SURVIVED</div><div class="center muted">SIGNAL TERMINATED</div>${solvedButton(10)}`;return shell(`${header(10,'DEAD AIR')}<main class="wrap">${body}</main>`)}
+function t11(){let ph=S.flags.t11phase||'claims';let claims=[['A','SUBJECT 00 NEVER REACHED ANOTHER CHAMBER.','Trial VII records confirm a contact event involving 00.'],['B','YOUR MEMORY WAS SUPPRESSED ONLY ONCE.','Trial IX contains multiple prior attempts and a suppression request.'],['C','THERE ARE NO OTHER ACTIVE SUBJECTS.','Trial VIII established a live peer link with Subject 18.'],['D','DR. VOSS NEVER AUTHORIZED YOUR EXPOSURE.','The recovered intercept places Voss in the authorization chain.'],['E','YOU WERE NEVER PART OF JANUS OPERATIONS.','Trial V/IX evidence links Subject 13 to interviewer/operator history.']];let picks=S.flags.t11picks||[];let body='';if(ph==='claims')body=`<div class="storybox"><p>The room is comfortable. That makes it threatening.</p><p class="speaker">“I believe it's time we spoke properly.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Select THREE claims your actual Archive can contradict. The evidence available depends on your playthrough.</div>${claims.map(c=>`<button class="card ${picks.includes(c[0])?'amber':''}" style="width:100%;text-align:left;margin:8px 0" onclick="Game.pick11('${c[0]}')"><div class="kicker">CLAIM ${c[0]}</div><b>${c[1]}</b><div class="muted" style="margin-top:7px">${c[2]}</div></button>`).join('')}<button class="btn" onclick="Game.prove11()">PRESENT CONTRADICTIONS // ${picks.length}/3</button>`;else if(ph==='intent')body=`<div class="storybox"><p>Three contradictions remain on the screen.</p><p>The Architect is silent for long enough that you hear the ventilation.</p><p class="speaker">“When that door opens, what are you still trying to do?”</p></div><textarea id="intent11" class="textarea input" placeholder="Answer in your own words."></textarea><button class="btn" onclick="Game.intent11()">ANSWER</button>`;else body=`<div class="card amber">ARCHITECT CONNECTION // LOCAL<br>SOURCE PROFILE // ${S.flags.t11origin?'SUBJECT 13':'INSUFFICIENT AUTHORIZATION'}<br>FINAL INTENT // ${esc(S.flags.finalIntent||'UNKNOWN')}</div>${solvedButton(11,'ENTER DOOR XII')}`;return shell(`${header(11,'CROSS-EXAMINATION')}<main class="wrap">${body}</main>`)}
+function t12(){let ph=S.flags.t12phase||'fake';let body='';if(ph==='fake')body=`<div class="white-room"><div class="center"><div class="big">EXIT</div><p style="margin:30px auto;max-width:500px">Sunlight. Wind. Cars somewhere beyond the wall. Birds.</p><p class="muted">After eleven chambers, the simplest thing you have seen feels like the least trustworthy.</p><button class="btn" onclick="Game.fakeExit12()">OPEN EXIT</button></div></div>`;else if(ph==='doors')body=`<div class="storybox"><p>The sunlight dies. Projection glass retracts into the ceiling.</p><p class="speaker">“Congratulations, Thirteen. You may leave.”</p></div><div class="center big">TRIAL XII // CONTINUANCE</div><div class="objective"><b>FINAL CONDITION</b>LEAVE. Twelve doors describe your history. Eleven statements are true. Choose the one that did NOT happen in your playthrough.</div><div class="grid2">${[['I','You spoke MERCY.'],['III',S.flags.t3remember?'You admitted recognition.':'You denied recognition.'],['VI',`You chose ${S.flags.t6door||'LEFT'}.`],['VII',`You ${String(S.flags.t7decision||'HID').startsWith('SHARE')?'shared':'hid'} the intercept.`],['VIII',S.flags.t8order==='HELP_FIRST'?'You helped 18 first.':'You submitted yourself first.'],['IX',S.flags.t9choice==='CONFRONT'?'You confronted him.':'You did not confront him.'],['X',S.flags.t10tape?'You played the cassette.':'You left the cassette unheard.'],['FALSE','Subject 13 entered CONTINUANCE for the first time today.']].map(x=>`<button class="card" onclick="Game.door12('${x[0]}')"><div class="kicker">DOOR ${x[0]}</div>${esc(x[1])}</button>`).join('')}</div>`;else if(ph==='identity')body=`<div class="objective"><b>PHASE II // ESTABLISH IDENTITY</b>Build the chain the records can support.</div><div class="card">SUBJECT 13 → <select id="id12" class="input"><option>JANUS SUBJECT ONLY</option><option>OPERATOR 13</option><option>EXTERNAL OBSERVER</option></select></div><button class="btn" onclick="Game.identity12()">ESTABLISH</button>`;else if(ph==='event')body=`<div class="objective"><b>PHASE III // EVENT 00</b>Put the seven major events in chronological order. Select the sequence that matches the recovered evidence.</div><div class="card"><div>1 JANUS begins unauthorized Continuance test</div><div>2 Subject 00 discovers the behavioural persistence result</div><div>3 Subject 00 escapes their chamber</div><div>4 Subject 00 contacts Operator 13</div><div>5 Operator 13 seals containment</div><div>6 Incident 00 escalates</div><div>7 Subject 13 enters suppression / Continuance</div></div><div class="grid2"><button class="btn dim" onclick="Game.event12('1234567')">1-2-3-4-5-6-7</button><button class="btn dim" onclick="Game.event12('1324567')">1-3-2-4-5-6-7</button><button class="btn dim" onclick="Game.event12('2134567')">2-1-3-4-5-6-7</button><button class="btn dim" onclick="Game.event12('1234657')">1-2-3-4-6-5-7</button></div>`;else if(ph==='final')body=`<div class="storybox"><p>EVENT 00 // RESTORED</p><p class="memory">“CONTINUANCE isn't keeping you inside. It's keeping something else inside with you.”</p></div><div class="objective"><b>FINAL CONDITION</b>No riddle. No correct answer. Do what you came here to do.</div><div class="grid2"><button class="btn" onclick="Game.end12('ESCAPE')">RELEASE SUBJECT 13</button><button class="btn" onclick="Game.end12('ZERO')">RELEASE SUBJECT 00</button><button class="btn red" onclick="Game.end12('TERMINATE')">TERMINATE JANUS</button><button class="btn dim" onclick="Game.end12('CONTINUE')">CONTINUE</button></div>`;else body=`<div class="kicker center">JANUS // FINAL SUBJECT REPORT</div><div class="report" style="margin-top:30px">SUBJECT 13 .............. ${S.flags.ending==='ESCAPE'?'ESCAPED':S.flags.ending==='CONTINUE'?'CONTINUED':'STATUS UNKNOWN'}<br>SUBJECT 00 .............. ${S.flags.ending==='ZERO'?'RELEASED':'UNKNOWN'}<br>JANUS ................... ${S.flags.ending==='TERMINATE'?'TERMINATED':'ACTIVE'}<br>MEMORY .................. ${S.flags.t9choice==='READ'||S.flags.t9choice==='CONFRONT'?'RESTORED / PARTIAL':'PARTIAL'}<br>CONTINUANCE ............. ${S.flags.ending==='TERMINATE'?'COMPROMISED':'ACTIVE'}${S.flags.trial13?'<hr>TRIAL XIII .............. AVAILABLE':''}</div><div class="center big" style="margin-top:35px">CONTINUANCE</div>${S.flags.trial13?'<button class="btn red" style="margin-top:22px" onclick="Game.enter13()">ENTER TRIAL XIII // ZERO</button>':'<button class="btn dim" style="margin-top:22px" onclick="Game.home()">RETURN TO MAIN MENU</button>'}`;return `<div class="screen"><main class="wrap">${body}</main></div>`}
+function t13(){let ph=S.flags.t13phase||'passage',body='';
+if(ph==='passage')body=`<div class="zero-void"><div class="kicker">UNREGISTERED SPACE // NO CAMERA FEED</div><h1 class="zero-title">ZERO</h1><div class="storybox"><p>The first chamber is waiting for you again.</p><p>Except this time, you remember the sentence.</p><p class="memory">DON’T LET HIM KNOW YOU REMEMBER.</p><p>You press your palm against the west wall. The scratched letters continue beneath a maintenance plate.</p><p>Behind it is a switch JANUS never showed you.</p></div><button class="btn red" onclick="Game.zeroPassage()">REMOVE THE PANEL</button></div>`;
+else if(ph==='timeline')body=`<div class="kicker">PROJECT ZERO // RECOVERY SYSTEM</div><div class="big">WHO CAME FIRST?</div><div class="objective"><b>CONDITION 01 // TIMELINE</b>Three archives disagree. Find the impossible chronology.</div><div class="zero-archive"><b>ARCHIVE 00</b><p>21:02 — Participant admitted under pre-designation identity.<br>21:19 — Memory restoration anomaly recorded.<br>21:26 — Designation SUBJECT 00 issued.</p></div><div class="zero-archive"><b>ARCHIVE 13</b><p>20:44 — Operator 13 approves cognitive persistence trial.<br>21:31 — Operator 13 orders containment after contact event.</p></div><div class="zero-archive"><b>ARCHIVE A</b><p>20:58 — ARCHITECT interview transcript references “Subject 00.”<br>22:03 — Architect cognitive instance officially initialized.</p></div><div class="objective"><b>QUESTION</b>Which archive proves that a later identity has been written backward into the record?</div><div class="grid2"><button class="btn dim" onclick="Game.zeroTimeline('00')">ARCHIVE 00</button><button class="btn dim" onclick="Game.zeroTimeline('13')">ARCHIVE 13</button><button class="btn" onclick="Game.zeroTimeline('A')">ARCHIVE A</button></div>`;
+else if(ph==='voices')body=`<div class="kicker">PROJECT ZERO // VOICE RECONSTRUCTION</div><div class="objective"><b>CONDITION 02</b>Identify the speakers by what they believe, not by what the archive calls them.</div><div class="transcript"><b>VOICE A:</b> “You cannot keep resetting people until they give you the answer you want.”<br><br><b>VOICE B:</b> “We are not resetting them. We are removing interference.”<br><br><b>VOICE A:</b> “And when they remember?”<br><br><b>VOICE B:</b> “Then we begin again.”</div><div class="grid2"><button class="card" onclick="Game.zeroVoices('13A')"><b>A = LATER 13</b><br><span class="muted">B = EARLY 13 / ARCHITECT SOURCE</span></button><button class="card" onclick="Game.zeroVoices('00A')"><b>A = SUBJECT 00</b><br><span class="muted">B = DR. VOSS</span></button><button class="card" onclick="Game.zeroVoices('ARCHA')"><b>A = ARCHITECT</b><br><span class="muted">B = SUBJECT 13</span></button></div>`;
+else if(ph==='reveal')body=`<div class="zero-reveal"><div class="kicker">RECOVERY // 100%</div><h2>THE ARCHITECT IS NOT YOUR JAILER.</h2><p>He is an earlier cognitive snapshot of you — preserved from before you turned against CONTINUANCE.</p><p>Subject 13 became the person who wanted JANUS stopped.</p><p>The Architect remained the person who believed the experiment was necessary.</p><div class="memory">YOU HAVE BEEN ARGUING WITH THE PERSON YOU USED TO BE.</div><button class="btn" onclick="Game.zeroMessage()">OPEN SUBJECT 00 // FINAL MESSAGE</button></div>`;
+else if(ph==='question')body=`<div class="storybox"><p class="speaker">SUBJECT 00 // RECOVERED</p><p>“You keep asking how to escape.”</p><p>“That is the wrong question.”</p><p>“Ask what continues.”</p></div><div class="objective"><b>FINAL RECOVERY</b>Answer in your own words. JANUS is no longer grading you.</div><textarea id="zeroAnswer" class="textarea input" placeholder="WHAT CONTINUES?"></textarea><button class="btn" onclick="Game.zeroAnswer()">RECORD ANSWER</button>`;
+else if(ph==='choice')body=`<div class="kicker center">MAINTENANCE AUTHORITY // OUTSIDE JANUS</div><div class="big center">NO CONDITION REMAINS.</div><p class="muted center" style="margin:18px auto;max-width:560px">No Architect. No score. No correct answer. The next action belongs to you.</p><div class="grid2"><button class="btn red" onclick="Game.zeroEnd('DELETE')">DELETE CONTINUANCE DATA</button><button class="btn" onclick="Game.zeroEnd('PRESERVE')">PRESERVE CONTINUANCE DATA</button><button class="btn dim" style="grid-column:1/-1" onclick="Game.zeroEnd('WALK')">TOUCH NOTHING // WALK AWAY</button></div>`;
+else body=`<div class="zero-ending"><div class="kicker">PROJECT ZERO // CLOSED</div><div class="big">${S.flags.zeroEnding==='DELETE'?'THE MACHINES FALL SILENT':S.flags.zeroEnding==='PRESERVE'?'THE MACHINES CONTINUE HUMMING':'FOR THE FIRST TIME, NOBODY TELLS YOU WHAT HAPPENS NEXT'}</div><p>${S.flags.zeroEnding==='DELETE'?'Behind you, twelve lights go dark. The thirteenth was never connected.':S.flags.zeroEnding==='PRESERVE'?"You tell yourself preservation is not permission. You have told yourself convincing things before.":'You leave the maintenance console untouched and walk toward a door that has no number.'}</p><div class="report">TRIAL XIII .............. SURVIVED<br>SUBJECT 13 .............. UNREGISTERED<br>PROJECT ZERO ............ RECOVERED<br>CONTINUANCE DATA ........ ${S.flags.zeroEnding}</div><div class="continuance-logo">CONTINUANCE</div><button class="btn" onclick="Game.newContinuance()">NEW CONTINUANCE</button><button class="btn dim" style="margin-top:8px" onclick="Game.home()">MAIN MENU</button></div>`;
+return `<div class="screen zero-screen"><main class="wrap">${body}</main></div>`}
+
+function arrival(n){let x=ARR[n]||ARR[1];let narration=x[1]+"\n\n"+x[2];return `<div class="screen arrival"><div class="arrival-card"><div class="arrival-title">${x[0]}</div><div class="arrival-door-stage"><div id="arrivalDoor" class="arrival-door"><div class="plate"><strong>${String(n).padStart(2,'0')}</strong><span>CONDITION SEALED</span></div></div></div><div class="arrival-copy typewrite" data-type="${esc(narration)}" data-reveal="doorHold"></div><div class="arrival-brief"><b>${esc(S.difficulty||'MEDIUM')} // TRIAL BRIEFING</b>${esc(trialBrief(n))}</div><button id="doorHold" class="btn hold-btn reveal-after-type" onpointerdown="Game.holdDoorStart(${n},this)" onpointerup="Game.holdDoorEnd(${n},this)" onpointercancel="Game.holdDoorEnd(${n},this)" onpointerleave="Game.holdDoorEnd(${n},this)"><span class="holdfill"></span><span>HOLD // OPEN CHAMBER</span></button></div></div>`}
+window.Game={
+toggleAudio(){S.settings.ambience=!S.settings.ambience;save();S.settings.ambience?startAmbience():stopAmbience();render()},
+openArchive(){setScreen('archive')},
+
+openIntercom(){
+  if(!intercomAvailable()){fx('speaker');toast('NO CARRIER // CONDITION ACTIVE');return}
+  document.querySelector('.overlay.intercom-overlay')?.remove();
+  let d=document.createElement('div');d.className='overlay intercom-overlay';let hist=(S.intercomLog||[]).slice(-8).map(x=>`<div class="intercom-line ${x.role==='YOU'?'you':'arch'}"><b>${x.role==='YOU'?'YOU':'ARCHITECT'}:</b> ${esc(x.text)}</div>`).join('');
+  d.innerHTML=`<div class="modal intercom-modal"><div class="row" style="justify-content:space-between"><div><div class="kicker">WALL INTERCOM // OPEN CHANNEL</div><div class="small" style="margin-top:5px;color:#766550">TYPE WHAT YOU WOULD SAY</div></div><button class="ghost" onclick="Game.closeIntercom()">×</button></div><div class="intercom-history">${hist||'<div class="muted">The channel is quiet.</div>'}</div><div class="intercom-inputrow"><input id="intercomInput" class="input" placeholder="Ask the Architect anything..." onkeydown="if(event.key==='Enter')Game.sendIntercom()"><button class="btn" style="width:auto" onclick="Game.sendIntercom()">SPEAK</button></div><div class="profile-pulse">JANUS LOGGING ACTIVE // QUESTIONS MAY AFFECT LATER CONDITIONS</div></div>`;document.body.appendChild(d);setTimeout(()=>document.getElementById('intercomInput')?.focus(),50);fx('speaker')
+},
+closeIntercom(){document.querySelector('.overlay.intercom-overlay')?.remove()},
+sendIntercom(){let el=document.getElementById('intercomInput'),q=el?.value.trim();if(!q)return;logIntercom('YOU',q);let r=architectReply(q);logIntercom('ARCHITECT',r);let h=document.querySelector('.intercom-history');if(h){h.innerHTML+=`<div class="intercom-line you"><b>YOU:</b> ${esc(q)}</div><div class="intercom-line arch"><b>ARCHITECT:</b> ${esc(r)}</div>`;h.scrollTop=h.scrollHeight}el.value='';fx('speaker');vib(25)},
+inspectT2(id){let a=S.flags.t2found||[];if(!a.includes(id))a.push(id);S.flags.t2found=a;S.flags['t2'+id.replace('c','clue')]=true;profileAdd('curiosity');save();fx('tap');render()},
+answerHighWater(){let v=(document.getElementById('a2new')?.value||'').replace(/\D/g,'');if(v==='9348156'){complete(2);S.flags.t2solved=true;if(!S.evidence.some(x=>x.id==='t2-highwater'))S.evidence.push({id:'t2-highwater',title:'TRIAL II // HIGH WATER',text:'Three-clue ordering puzzle. Final code: 9348156.'});save();fx('door');architect('You found the difference between possessing numbers and understanding their order.')}else{S.flags.t2start=(S.flags.t2start||Date.now())-7000;profileAdd('pragmatism');save();fx('fail');toast('ACCESS DENIED // WATER SURGE');render()}},
+drown2(){clearInterval(window.__waterTimer);S.flags.t2start=Date.now();save();fail('Breathe while you still can. The room is resetting.');render()},
+startCCTV(){S.flags.t3phase='playing';S.flags.t3mistakes=0;S.flags.t3answers=[];save();render()},
+answerWitness(v){let qs=[true,false,false,true,false],q=S.flags.t3q||0,a=S.flags.t3answers||[];a.push(v);S.flags.t3answers=a;if(v!==qs[q])S.flags.t3mistakes=(S.flags.t3mistakes||0)+1;S.flags.t3q=q+1;save();render()},
+answerSecondFigure(v){S.flags.t3secondFigure=v;S.flags.t3phase='phone';if(v)profileAdd('trust');else profileAdd('defiance');save();render()},
+answerPhone3(){S.flags.t3phase='memory';S.evidence.push({id:'t3-phone',title:'TRIAL III // TELEPHONE',text:'A distorted caller said: “Don’t trust the questions.”'});save();architect("Don't trust the questions.",2500);setTimeout(()=>{S.flags.t3phase='memory';save();render()},2600)},
+finishWitness(v){S.flags.t3remember=v;if(v){profileAdd('curiosity',2);profileAdd('defiance')}else profileAdd('trust');let m=S.flags.t3mistakes||0;if(m>=2)S.lives=Math.max(0,S.lives-1);complete(3);S.flags.t3phase='done';S.evidence.push({id:'t3-witness',title:'TRIAL III // THE WITNESS',text:`Memory score ${Math.max(0,5-m)}/5. Subject ${v?'acknowledged':'denied'} prior exposure.`});save();render();architect(v?'...Noted.':'Good.',3500)},
+openDoc5(k){let a=S.flags.t5opened||[];if(!a.includes(k)){a.push(k);profileAdd('curiosity')}S.flags.t5opened=a;S.flags.t5doc=k;save();render()},
+beginConclusion5(){S.flags.t5phase='conclusion';save();render()},
+setConclusion5(k,v){S.flags.t5conclusion=S.flags.t5conclusion||{};S.flags.t5conclusion[k]=v;save();render()},
+submitConclusion5(){let c=S.flags.t5conclusion||{};if(c.liar!=='ELIAS'){fail('You identified uncertainty. The transcript contains a direct contradiction.');return}if(!c.motive){toast('MOTIVE REQUIRED');return}if(c.motive==='PANIC'){S.flags.t5verdict='POSSIBLE // WEAKLY SUPPORTED';profileAdd('empathy');}else if(c.motive==='PROTECT'){S.flags.t5verdict='DEFENSIBLE';profileAdd('empathy',2)}else{S.flags.t5verdict='DEFENSIBLE // UNPROVEN';profileAdd('pragmatism',2)}S.flags.t5motive=c.motive;S.flags.t5phase='moral';save();render();architect('Defensible. Notice that I did not say correct.',4300)},
+moral5(v){if(S.flags.t5motive==='PROTECT'){if(v)profileAdd('empathy',2);else profileAdd('pragmatism',2)}else{if(v)profileAdd('empathy');else profileAdd('pragmatism')}S.flags.t5moral=v;S.flags.t5phase='after';complete(5);save();render()},
+inspectCover5(){S.flags.t5cover=true;profileAdd('curiosity',2);S.evidence.push({id:'t5-cover',title:'TRIAL V // FILE COVER',text:'CONFESSION 05 lists INTERVIEWER: SUBJECT 13. The annotation appears to be in your handwriting.'});save();render();architect('Close the file, Thirteen.',3500)},
+chooseDoor6(d){S.flags.t6door=d;S.flags.t6phase='trial';if(d==='LEFT')profileAdd('defiance');else profileAdd('pragmatism');save();fx('door');render()},
+setLeft6(v){S.flags.t6left=S.flags.t6left||{};S.flags.t6left.who=v;save();render()},
+submitLeft6(){let v=S.flags.t6left?.who;if(v!=='BOTH'){S.flags.t6leftError=true;S.lives=Math.max(0,S.lives-1);save();fx('fail');render();return}S.flags.t6leftError=false;S.flags.t6phase='done';complete(6);S.evidence.push({id:'t6-left',title:'TRIAL VI-A // THE INTERVIEW',text:'Edited interview metadata names INTERVIEWER 13. Final recovered line: “Who taught you to resist JANUS?” — “Thirteen.”'});save();render()},
+setRight6(v){S.flags.t6rightPick=v;save();render()},
+submitRight6(){if(S.flags.t6rightPick!=='DANIEL'){fail('The missing image is not required. The access log is enough.');return}S.flags.t6phase='done';complete(6);S.evidence.push({id:'t6-right',title:'TRIAL VI-B // THE BLACKOUT',text:'Access metadata contradicts Daniel. Facility status implies external observers and physical chambers.'});save();render();architect('You lost the image and kept the proof.',3300)},
+movePacket7(i,d){let route=S.flags.t6door||'LEFT';let base=route==='LEFT'?[['B','21:12:51','00','A simulation preserves one fatal variable: the subject knows there is an outside.'],['E','21:17:03','DIRECTOR','Then remove yourself from the model. You are contaminating the study.'],['A','21:11:32','DIRECTOR','The Board approved twelve simulations. No physical exposure.'],['F','21:19:44','00','Not persistence. Continuance. The choice to proceed after utility collapses.'],['D','21:15:26','00','I will enter the sequence before the cognitive copy is finalized.'],['C','21:14:08','DR. E. VOSS','Subject 13 cannot be both interviewer and control. Choose one.']]:[['D','03:41:19','OPERATIONS','External observers remain three. Architect instance reports no distress.'],['A','03:36:02','DR. E. VOSS','Do not expose Subject 13 to the operator roster.'],['F','03:45:31','ARCHITECT','Correction: I did not say there was no outside. I said the subject did not need it.'],['C','03:39:44','OPERATIONS','Chambers 08–12 remain physical. Simulation claim is no longer defensible.'],['B','03:38:17','DIRECTOR','The Board wants a clean separation between JANUS and Continuance.'],['E','03:43:08','DR. E. VOSS','Then stop calling the Architect a tool. It has begun withholding information from us.']];let p=S.flags.t7packets||base;p=p.map(x=>[...x]);let j=i+d;if(j<0||j>=p.length)return;[p[i],p[j]]=[p[j],p[i]];S.flags.t7packets=p;save();render()},
+reconstruct7(){let route=S.flags.t6door||'LEFT';let base=route==='LEFT'?[['B','21:12:51','00','A simulation preserves one fatal variable: the subject knows there is an outside.'],['E','21:17:03','DIRECTOR','Then remove yourself from the model. You are contaminating the study.'],['A','21:11:32','DIRECTOR','The Board approved twelve simulations. No physical exposure.'],['F','21:19:44','00','Not persistence. Continuance. The choice to proceed after utility collapses.'],['D','21:15:26','00','I will enter the sequence before the cognitive copy is finalized.'],['C','21:14:08','DR. E. VOSS','Subject 13 cannot be both interviewer and control. Choose one.']]:[['D','03:41:19','OPERATIONS','External observers remain three. Architect instance reports no distress.'],['A','03:36:02','DR. E. VOSS','Do not expose Subject 13 to the operator roster.'],['F','03:45:31','ARCHITECT','Correction: I did not say there was no outside. I said the subject did not need it.'],['C','03:39:44','OPERATIONS','Chambers 08–12 remain physical. Simulation claim is no longer defensible.'],['B','03:38:17','DIRECTOR','The Board wants a clean separation between JANUS and Continuance.'],['E','03:43:08','DR. E. VOSS','Then stop calling the Architect a tool. It has begun withholding information from us.']];let p=S.flags.t7packets||base;let sorted=[...p].sort((a,b)=>a[1].localeCompare(b[1]));if(p.map(x=>x[0]).join('')!==sorted.map(x=>x[0]).join('')){fail('Chronology is the easiest thing in this room to prove. Start there.');return}S.flags.t7reconstructed=true;S.flags.foundVoss=true;profileAdd('curiosity',2);save();render()},
+finish7(d){S.flags.t7decision=d;if(d.startsWith('SHARE'))profileAdd('trust',3);else profileAdd('defiance',3);complete(7);S.evidence.push({id:'t7-intercept',title:'TRIAL VII // INTERCEPT',text:`Recovered relay exchange. Decision: ${d}. Dr. E. Voss appears in the authorization chain.`});save();render();architect(d.startsWith('SHARE')?'You chose to show me what I already feared.':'You hid something from me. That is either courage or a very expensive misunderstanding.',4800)},
+
+t8say(kind){let m=S.flags.t8msgs||['18: hello?'];if(kind==='truth'){m.push('13: A=8, C=9, E=3');m.push('18: okay. 869431. that should be it.');S.flags.t8truth=true;profileAdd('empathy',2)}if(kind==='ask'){m.push('13: what did JANUS tell you?');m.push('18: that only one of us might be preserved. did he tell you that too?');profileAdd('curiosity',2)}if(kind==='warn'){m.push('13: there may be a preservation threshold. one of us could be cut off.');m.push('18: ...thank you for telling me.');S.flags.t8warn=true;profileAdd('empathy',3)}if(kind==='lie'){m.push('13: A=7, C=9, E=3');m.push('18: that does not fit my checksum. why would you send that?');S.flags.t8lied=true;profileAdd('pragmatism',2)}S.flags.t8msgs=m;save();render()},
+t8code(){let v=(document.getElementById('t8code')?.value||'').replace(/\D/g,'');if(v==='869431'){S.flags.t8phase='order';save();render()}else fail('PEER CHECKSUM FAILED // ONE OR MORE VALUES ARE WRONG')},
+finish8(o){S.flags.t8order=o;S.flags.t8phase='done';S.flags.t8outcome=o==='HELP_FIRST'?'SUBJECT 18 // TRUSTING // BOTH LOCKS OPEN':'SUBJECT 18 // CAUTIOUS // BOTH LOCKS OPEN';if(o==='HELP_FIRST')profileAdd('empathy',3);else profileAdd('pragmatism',2);complete(8);S.evidence.push({id:'t8-peer',title:'TRIAL VIII // SUBJECT 18',text:`Live peer connection confirmed. ${o==='HELP_FIRST'?'Subject 18 received their code first.':'Subject 13 submitted first.'}`});save();render()},
+pick9(x){S.flags.t9pick=x;save();render()},verify9(){if(S.flags.t9pick==='III'){S.flags.t9phase='archive';profileAdd('curiosity',3);save();render()}else fail('A claim of remembering is not proof of memory. Look for knowledge the subject could not have obtained.')},
+unlock9(){let a=(document.getElementById('p91')?.value||'').trim().toUpperCase(),b=(document.getElementById('p92')?.value||'').replace(/\D/g,''),c=(document.getElementById('p93')?.value||'').trim().toUpperCase();if(a==='MERCY'&&b==='00'&&(c.includes('VOSS')||c==='E VOSS')){S.flags.t9phase='truth';save();render()}else fail('PRIVATE ARCHIVE // REMINDER MISMATCH')},
+finish9(x){S.flags.t9choice=x;S.flags.t9phase='done';S.flags.memoryAwareness=(S.flags.memoryAwareness||0)+(x==='CLOSE'?2:4);if(x!=='CLOSE')S.flags.architectKnowsMemory=true;if(x==='CONFRONT')profileAdd('defiance',4);else if(x==='READ')profileAdd('curiosity',4);else profileAdd('pragmatism',2);complete(9);S.evidence.push({id:'t9-attempt3',title:'TRIAL IX // ATTEMPT III',text:'Attempt III demonstrated impossible knowledge and deliberate concealment. Previous Subject 13 left the Chamber One warning.'});save();render();if(x==='CONFRONT')architect('So. We can stop pretending.',4000)},
+tune10(v){S.flags.t10freq=v;save();render()},auth10(){if((S.flags.t10freq||'91.4')==='108.6'){S.flags.t10phase='order';save();render()}else fail('AUTHENTICATION FAILED // SIGNAL DOES NOT SATISFY PROTOCOL')},
+order10(){let v=(document.getElementById('t10six')?.value||'').replace(/\D/g,'');if(v==='869431'){S.flags.t10phase='tape';save();render()}else fail('CHANNEL ORDER INVALID')},
+playTape10(){S.flags.t10tape=true;S.flags.t10phase='missing';S.flags.memoryAwareness=(S.flags.memoryAwareness||0)+2;profileAdd('curiosity',3);S.evidence.push({id:'t10-tape',title:'TRIAL X // CASSETTE',text:'Previous Subject 13 warned: “The code isn’t what you heard. It’s what was missing.”'});save();render();architect('Turn it off.',2500)},skipTape10(){S.flags.t10tape=false;S.flags.t10phase='missing';save();render()},
+finish10(){let v=(document.getElementById('t10final')?.value||'').replace(/\D/g,'');if(v==='8694315'){S.flags.t10phase='done';complete(10);S.evidence.push({id:'t10-signal',title:'TRIAL X // DEAD AIR',text:'Authentic transmission D4 A8 F1 B6 E3 C9 reordered to 869431; missing emergency channel G=5 produced 8694315.'});save();render()}else fail('TRANSMISSION REJECTED // MISSING CHANNEL')},
+pick11(x){let a=S.flags.t11picks||[];a=a.includes(x)?a.filter(y=>y!==x):a.length<3?[...a,x]:a;S.flags.t11picks=a;save();render()},
+prove11(){let a=S.flags.t11picks||[];if(a.length!==3){toast('SELECT THREE CLAIMS');return}let valid=['A','B','C'];if(S.flags.foundVoss)valid.push('D');if(S.flags.t5interviewer||S.flags.t9choice)valid.push('E');if(a.every(x=>valid.includes(x))){S.flags.t11phase='intent';S.flags.t11origin=(a.includes('E')&&S.flags.t9choice)||false;save();render()}else fail('One accusation exceeds what your Archive can actually prove.')},
+intent11(){let v=(document.getElementById('intent11')?.value||'').trim();if(!v)return;let q=v.toLowerCase(),i=q.includes('destroy')||q.includes('end janus')?'DESTROY JANUS':q.includes('00')?'FIND SUBJECT 00':q.includes('18')?'SAVE SUBJECT 18':q.includes('truth')||q.includes('know')?'LEARN THE TRUTH':q.includes('escape')||q.includes('leave')?'ESCAPE':q.includes('trust')?'TRUST ARCHITECT':'UNDECIDED';S.flags.finalIntent=i;S.flags.t11phase='done';complete(11);S.evidence.push({id:'t11-cross',title:'TRIAL XI // CROSS-EXAMINATION',text:`Three Architect claims were contradicted. Final stated intent: ${i}.`});save();render()},
+fakeExit12(){S.flags.t12phase='doors';save();render();fx('fail');architect('Congratulations, Thirteen. You may leave.',3500)},
+door12(x){if(x==='FALSE'){S.flags.t12phase='identity';save();render()}else fail('That statement belongs to your history. The exit is the contradiction.')},
+identity12(){let v=document.getElementById('id12')?.value;if(v==='OPERATOR 13'){S.flags.t12phase='event';save();render()}else fail('The recovered archive supports a deeper relationship than that.')},
+event12(x){if(x==='1234567'){S.flags.t12phase='final';S.flags.event00=true;save();render()}else fail('EVENT 00 // SEQUENCE CONTRADICTION')},
+end12(x){S.flags.ending=x;let qual=(S.flags.memoryAwareness||0)>=3 && (S.flags.t10tape||S.flags.t9choice==='READ'||S.flags.t9choice==='CONFRONT');S.flags.trial13=(x==='CONTINUE'&&qual);S.flags.t12phase='report';complete(12);S.protocols.JANUS.ending=x;S.crossProtocol.janusEnding=x;save();render()},
+enter13(){S.flags.t13phase=S.flags.t13phase||'passage';save();setScreen('trial13')},
+zeroPassage(){S.flags.t13phase='timeline';save();fx('door');render()},
+zeroTimeline(x){if(x!=='A'){fail('The contradiction is temporal. Find the record that names something before it existed.');return}S.flags.t13phase='voices';S.story.subject00Knowledge=Math.max(S.story.subject00Knowledge||0,4);save();fx('success');render()},
+zeroVoices(x){if(x!=='13A'){fail('Listen to the beliefs. One voice wants the resets stopped; the other still believes interference must be removed.');return}S.flags.t13phase='reveal';S.story.knowsArchitectOrigin=true;S.story.memoryAwareness=Math.max(S.story.memoryAwareness||0,5);save();fx('success');render()},
+zeroMessage(){S.flags.t13phase='question';save();render()},
+zeroAnswer(){let v=(document.getElementById('zeroAnswer')?.value||'').trim();if(v.length<2){toast('ANSWER REQUIRED');return}S.flags.zeroAnswer=v;S.flags.t13phase='choice';save();fx('speaker');render()},
+zeroEnd(x){S.flags.zeroEnding=x;S.flags.t13phase='ending';S.crossProtocol.trial13Complete=true;S.crossProtocol.continuanceCycles=(S.crossProtocol.continuanceCycles||0)+1;S.protocols.COXE.unlocked=true;save();vib([80,40,80,40,220]);fx('success');render()},
+newContinuance(){let keep=Object.assign({},S.crossProtocol||{}),settings=Object.assign({},S.settings||{}),coxe=true;localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));S.crossProtocol=keep;S.settings=Object.assign({},DEFAULT.settings,settings);S.protocols.COXE.unlocked=coxe;S.flags={prologueStep:0,newContinuance:true};save();setScreen('difficulty')},
+skipTyping(){document.querySelectorAll('[data-type]').forEach(el=>{el.textContent=el.dataset.type||'';el.classList.remove('typing');typeDone(el)})},
+inspectT1(z){
+  let found=S.flags.t1found||[];
+  const notes={
+    door:'The steel door has no handle on your side. Beside the frame is a microphone and a single amber lamp. The lock is waiting for a spoken response.',
+    drain:'The drain smells faintly metallic. Scratched into the concrete around it are four incomplete circles. Somebody counted failures here.',
+    scratch:'The handwriting is shallow and hurried: DON’T LET HIM KNOW YOU REMEMBER. You have no idea what you are supposed to remember.',
+    wall:'Under your fingertips, the wall is scarred in deliberate rows. Not random scratches. Symbols. Many of them.',
+    intercom:'The intercom is warm. Behind the grille you hear breathing that does not match your own.'
+  };
+  if(!found.includes(z))found=[...found,z];
+  S.flags.t1found=found;S.flags.t1note=notes[z]||'';if(found.length>=3)S.flags.t1cipher=true;
+  if(z==='wall')S.flags.t1cipher=true;
+  save();fx('tap');render();
+},
+holdHintStart(el){clearTimeout(window.__hintHold);el.classList.add('holding');window.__hintHold=setTimeout(()=>{el.classList.remove('holding');Game.intercom1();fx('speaker')},900)},
+holdHintEnd(el){clearTimeout(window.__hintHold);el.classList.remove('holding')},
+holdDoorStart(n,el){
+  clearTimeout(window.__doorHold);el.classList.add('holding');fx('tap');
+  window.__doorHold=setTimeout(()=>{
+    el.classList.remove('holding');let d=document.getElementById('arrivalDoor');d?.classList.add('opening');fx('door');
+    setTimeout(()=>Game.enterRoom(n),1150)
+  },1350)
+},
+holdDoorEnd(n,el){clearTimeout(window.__doorHold);el.classList.remove('holding')},
+newSubject(){if(S.started&&!confirm('Begin a new JANUS subject? Current JANUS run progress will be erased.'))return;let oldSettings=Object.assign({},S.settings||DEFAULT.settings),oldCross=Object.assign({},DEFAULT.crossProtocol,S.crossProtocol||{}),oldUnlocks={COXE:!!S.protocols?.COXE?.unlocked};localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));S.settings=oldSettings;S.crossProtocol=oldCross;S.protocols.COXE.unlocked=oldUnlocks.COXE;S.activeProtocol='JANUS';S.flags={prologueStep:0};save();setScreen('difficulty')},chooseDifficulty(d){S.difficulty=d;save();setScreen('prologue')},setDifficulty(d){S.difficulty=d;save()},dismissCompletion(){S.flags.justCompleted=null;S.architect='';save();fx('door');setScreen('corridor')},resume(){setScreen('corridor')},home(){setScreen('menu')},openProtocols(){setScreen('protocols')},selectProtocol(id){if(id!=='JANUS')return;S.activeProtocol='JANUS';S.protocols.JANUS.started=S.protocols.JANUS.started||S.started;save();setScreen(S.started?'corridor':'difficulty')},coxeLocked(){fx('fail');toast('COXE // AUTHORIZATION NOT YET ISSUED')},openSettings(){setScreen('settings')},setting(k,v){S.settings={...(S.settings||{}),[k]:v};save()},archive(){setScreen('archive')},prologueNext(){startAmbience();fx('step');let i=S.flags.prologueStep||0;if(i<PRO.length-1){S.flags.prologueStep=i+1;save();render()}else setScreen('opening')},begin(){startAmbience();S.started=true;S.activeProtocol='JANUS';S.protocols= S.protocols||JSON.parse(JSON.stringify(DEFAULT.protocols));S.protocols.JANUS.started=true;save();setScreen('corridor');setTimeout(()=>architect('Do not mistake survival for permission.'),650)},enter(n){if(n<=12&&n<=S.trial){if(!S.flags['arrival'+n])setScreen('arrival'+n);else setScreen('trial'+n)}},enterRoom(n){S.flags['arrival'+n]=true;save();setScreen('trial'+n)},pause(){let go=confirm('RETURN TO MAIN MENU?\n\nProgress is saved locally.');if(go)setScreen('menu')},intercom1(){let c=(S.flags.hint1||0)+1;S.flags.hint1=c;save();if(S.difficulty==='EASY'){if(c===1)architect('It is a substitution cipher. Repeated symbols represent repeated letters.',4800);else if(c===2)architect('Use frequency and repeated short words. The sixth line concerns the door.',5200);else architect('You are looking for the final word required by the door.',5200)}else if(S.difficulty==='HARD'){architect(c===1?'Frequency.':'I have said enough.',4200)}else if(c===1)architect('Frequency.',4200);else if(c===2)architect('Humans repeat themselves considerably more than they realize.',5200);else architect('The last line concerns the door. I will not read it for you.',5200)},goCorridor(){setScreen('corridor')},reset(){if(confirm('Erase this subject and restart?')){localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));screen='opening';render()}},
+note(t){architect(t,2200)},
+answer1(){let v=document.getElementById('a1').value.trim().toUpperCase().replace(/[^A-Z]/g,'');if(v==='MERCY'){complete(1);S.evidence=S.evidence||[];if(!S.evidence.some(x=>x.id==='t1-inscription'))S.evidence.push({id:'t1-inscription',title:'TRIAL I // WALL RUBBING',text:'Six-line substitution inscription. Final response: MERCY.'});save();fx('door');architect('Mercy. An interesting word to carve into a door that has none.')}else fail('You have made the room smaller.')},
+inspectPhoto(i,n){document.getElementById('photoNote').textContent=n},answer2(){let v=document.getElementById('a2').value.replace(':','').trim();if(v==='1902'||v==='1901'){complete(2);S.evidence=S.evidence||[];if(!S.evidence.some(x=>x.id==='t2-timeline'))S.evidence.push({id:'t2-timeline',title:'TRIAL II // RECONSTRUCTED TIMELINE',text:'The event occurred around 19:02 after eliminating a physically inconsistent photograph.'});save();fx('door');architect('You discarded the loudest lie. Good.')}else fail('You trusted an image more than its physics.')},
+inspectItem(i,m,v,mark){document.getElementById('itemNote').innerHTML=`MASS ÷ VOLUME<br><br><span style="color:#d4a254">${m} ÷ ${v} = ${(m/v).toFixed(2)} g/cm³</span><br><br>MARKING: ${mark}`},answer3(){if(document.getElementById('a3').value.trim()==='4'){complete(3);S.evidence=S.evidence||[];if(!S.evidence.some(x=>x.id==='t3-four'))S.evidence.push({id:'t3-four',title:'TRIAL III // DEAD WEIGHT',text:'The evidence belonged to four different people. The “victim” was a composite narrative.'});save();fx('door');architect('Correct. Four histories. One body-shaped lie.')}else fail('Count possessions less carefully and people disappear.')},
+pickProtocol(x){if(!S.protocol){S.flags.pendingProtocol=x;save();render()}},acceptProtocol(){let x=S.flags.pendingProtocol;if(!x){architect('Selection required.');return}S.protocol=x;if(x==='ATROPHY'){S.maxLives=3;S.lives=Math.min(3,S.lives)}if(x==='SENSORY')S.penalties.lowLight=true;if(x==='TEMPORAL')S.penalties.shortTime=true;complete(4);save();render();architect(x==='ATROPHY'?'Atrophy accepted. You chose future weakness to avoid present inconvenience.':'Protocol accepted.')},
+ring(i){let r=S.flags.rings||[0,0,0,0];r=[...r];r[i]=(r[i]+1)%8;S.flags.rings=r;save();render()},answer5(){let r=S.flags.rings||[0,0,0,0];let ok=JSON.stringify(r)===JSON.stringify([2,5,1,7])&&['6','11','17'].every((x,i)=>document.getElementById('v'+(i+1)).value.trim()===x);if(ok){complete(5);save();render();architect('That material is unrelated.')}else fail('The vault heard confidence. It did not hear correctness.')},
+playSequence(){let seq=S.flags.t6seq2?[3,1,6,2,5]:[1,4,2];S.flags.t6expected=seq;S.flags.t6input=[];save();seq.forEach((n,i)=>setTimeout(()=>{let e=document.getElementById('p'+n);if(e){e.classList.add('flash');setTimeout(()=>e.classList.remove('flash'),350)}},400+i*600))},panel(n){let exp=S.flags.t6expected||[1,4,2],inp=S.flags.t6input||[];inp.push(n);S.flags.t6input=inp;if(n!==exp[inp.length-1]){S.flags.t6input=[];save();fail('Recall failure. The room remembers what you do not.');setTimeout(()=>Game.playSequence(),700);return}if(inp.length===exp.length){if(!S.flags.t6seq2){S.flags.t6seq2=true;save();setTimeout(()=>Game.playSequence(),650)}else{S.flags.t6phase='recall';save();render()}}else save()},recall6(){let vals=[0,1,2,3,4].map(i=>document.getElementById('r'+i).value.trim().toUpperCase().replace(':',''));let exp=['THIRTEEN','1902','4',(S.protocol||'NONE').toUpperCase(),'00'];if(vals.every((x,i)=>x===exp[i])){S.flags.t6phase='intruder';save();render()}else fail('You discarded something because you assumed you were finished with it.')},intruder(i){if(i===2){complete(6);S.flags.t6phase='done';save();render();architect('Incorrect question. Correct answer. Keep the image.')}else fail('You identified novelty. The prompt asked for belonging.')},
+movePacket(i,d){let p=S.flags.packets||[['A','21:11:32','DIRECTOR','The Board approved twelve simulations. No physical exposure.'],['C','21:14:08','JANUS/ETHICS','You are describing persistence as if it were a measurable organ.'],['F','21:19:44','00','Not persistence. Continuance. The choice to proceed after utility collapses.'],['B','21:12:51','00','A simulation preserves one fatal variable: the subject knows there is an outside.'],['E','21:17:03','DIRECTOR','Then remove yourself from the model. You are contaminating the study.'],['D','21:15:26','00','I will enter the sequence before the cognitive copy is finalized.']];p=p.map(x=>[...x]);let j=i+d;if(j<0||j>=p.length)return;[p[i],p[j]]=[p[j],p[i]];S.flags.packets=p;save();render()},answer7(){let p=S.flags.packets||[];if(p.map(x=>x[0]).join('')==='ABCDEF'){complete(7);save();render();architect('Chronology does not establish truth.')}else fail('You reconstructed a conversation that never occurred.')},answer8(){if(document.getElementById('a8').value.trim().toUpperCase()==='BOTH'){complete(8);save();render();architect('Categories become less useful near the truth.')}else fail('You separated roles the registry deliberately overlapped.')},pickSample(x){let a=S.flags.samplePicks||[];a=a.includes(x)?a.filter(y=>y!==x):[...a,x];S.flags.samplePicks=a;save();render()},answer9(){let a=S.flags.samplePicks||[];if(a.length===2&&a.includes('A')&&a.includes('C')){complete(9);save();render();architect('That handwriting proves proximity. Nothing more.')}else fail('Similarity is not identity. Compare habits, not letters.')},answer10(){S.flags.architectDisconnected=true;complete(10);S.architect='';save();render();vib([80,40,150])},addSelfSig(){let n=S.flags.selfSig||0;let limit=Math.min(S.lives,S.protocol==='ATROPHY'?3:4);if(n<limit&&n+(S.flags.archSig?1:0)<4){S.flags.selfSig=n+1;save();render()}},addArchSig(){let n=S.flags.selfSig||0;if(!S.flags.archSig&&n<4){S.flags.archSig=true;save();render()}},answer11(){let self=S.flags.selfSig||0,arch=!!S.flags.archSig;if(self+(arch?1:0)!==4)return;S.lives=Math.max(0,S.lives-self);S.flags.architectSacrificed=arch;complete(11);save();render()},answer12(){let v=document.getElementById('why').value.trim();if(v.length<2)return;S.flags.continuanceAnswer=v;S.flags.t12phase='exit';save();render()},leave12(){S.flags.ending='leave';complete(12);save();render()},stay12(){S.flags.t12phase='more';save();render()},finish12(){let v=document.getElementById('finalWhy').value.trim();if(!v)return;S.flags.finalAnswer=v;S.flags.trial13=true;S.flags.ending='stay';complete(12);save();render()}
+};
+render();
+
+})();
+</script>
+</body></html>
