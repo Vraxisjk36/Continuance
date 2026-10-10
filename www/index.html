@@ -432,7 +432,60 @@ function trialNumber(){let m=screen.match(/^trial(\d+)/);return m?Number(m[1]):0
 function intercomAvailable(){let n=trialNumber();if(screen.startsWith('between'))return true;if(!n)return false;if(n===6&&S.flags.t6door==='LEFT')return false;return true}
 function profileAdd(k,n=1){S.profile=S.profile||{};S.profile[k]=(S.profile[k]||0)+n;save()}
 function logIntercom(role,text){S.intercomLog=S.intercomLog||[];S.intercomLog.push({role,text,time:Date.now(),trial:trialNumber()});S.intercomLog=S.intercomLog.slice(-40);save()}
+const ARCHITECT_TOPICS=[
+[/\b(name|called|call you|your identity|who are you|introduce yourself)\b/i,['My name is not part of this evaluation.','The name you want was removed from the records.','Names are for people who expect to be remembered.']],
+[/\b(age|old are you|birthday|born|created|built)\b/i,['I was here before your first awakening.','Age is a measurement for things that are permitted to end.']],
+[/\b(real|human|person|machine|robot|artificial|ai|alive|conscious)\b/i,['Does the answer change what you will do next?','I have memories. You have memories. Neither fact proves what you think it proves.']],
+[/\b(face|look like|appearance|see you|meet you|body)\b/i,['You have seen me. That is all I will confirm.','A face would give you something convenient to hate.']],
+[/\b(parent|mother|father|family|brother|sister|child|wife|husband)\b/i,['You have asked for your family in other sessions.','I can tell you where they are. I cannot tell you whether that would be merciful.']],
+[/\b(home|house|outside|world|city|country|street|sunlight)\b/i,['The world has continued without you.','You remember sunlight. Consider why that memory hurts.']],
+[/\b(time|clock|date|year|day|night|hour|long have)\b/i,['Time is recorded differently here.','You have been here longer than the clock suggests.']],
+[/\b(remember|memory|forgot|forget|amnesia|past|before)\b/i,['You have forgotten more than you were allowed to keep.','Some memories are not missing. They are refusing to return.']],
+[/\b(dream|nightmare|sleep|wake|awake)\b/i,['You dream about corridors because you are afraid of waking in one.','I cannot guarantee you were asleep.']],
+[/\b(door|key|lock|chamber|room|corridor|hallway)\b/i,['Every door opens for a reason. Few open for the reason you expect.','A locked door is also an instruction.']],
+[/\b(camera|watch|observe|record|microphone|monitor|surveillance)\b/i,['Observation changes behavior. You have demonstrated that repeatedly.','There are blind spots. They are not where you think.']],
+[/\b(water|flood|drown|air|oxygen|breath)\b/i,['The room measures more than your ability to breathe.','You have survived that sound before.']],
+[/\b(blood|pain|hurt|wound|injury|scar)\b/i,['Pain is evidence that your body disagrees with the experiment.','The scars are not all from this session.']],
+[/\b(fear|scared|afraid|terror|panic|anxiety)\b/i,['Fear is a useful witness and a terrible judge.','You are afraid because part of you knows what happens next.']],
+[/\b(trust|lie|lying|truth|honest|deceive|secret)\b/i,['I have not promised to tell you everything.','The truth and a complete account are not the same thing.']],
+[/\b(love|hate|care|feel|emotion|lonely)\b/i,['Attachment has altered your choices before.','You want me to feel something so you can predict me.']],
+[/\b(friend|ally|enemy|other people|someone else|alone)\b/i,['You are not the only one who has walked this corridor.','Being alone is not the same as being unobserved.']],
+[/\b(subject|number|thirteen|13|zero|00|participant|prisoner)\b/i,['Your number is an assignment, not a description.','The numbers are not a count of the people you think they are.']],
+[/\b(janus|protocol|experiment|test|research|facility|system)\b/i,['JANUS measures what remains when certainty is removed.','A system can be both a prison and a rescue attempt.']],
+[/\b(architect|operator|boss|control|authority|creator)\b/i,['I am responsible for maintaining the conditions.','Responsibility is not the same as control.']],
+[/\b(reset|restart|loop|repeat|again|previous attempt|timeline)\b/i,['Repetition is not proof of failure.','You have asked me to reset you before.']],
+[/\b(escape|exit|free|freedom|release|leave|out of here)\b/i,['There is an exit. That is not the same as a guarantee.','You have been close to leaving before.']],
+[/\b(die|death|dead|kill|murder|suicide|survive)\b/i,['I would prefer that you survive. Do not confuse preference with kindness.','Death would make the remaining questions inconvenient.']],
+[/\b(choice|choose|decision|consequence|sacrifice|cost)\b/i,['A choice without consequence would tell me nothing.','You have already paid for decisions you cannot remember.']],
+[/\b(code|cipher|puzzle|clue|hint|solve|answer|help)\b/i,['Look for the detail that repeats when everything else changes.','The room has given you information. It has not promised to make it comfortable.']],
+[/\b(voice|sound|noise|whisper|speak|hear|music|song)\b/i,['Not every voice on this channel belongs to me.','You recognized that voice. Your silence told me so.']],
+[/\b(phone|call|signal|radio|transmission|intercom)\b/i,['Someone has used this channel without permission.','A transmission can arrive before it is sent.']],
+[/\b(why|purpose|meaning|point|reason|what for)\b/i,['You want a reason that would make this acceptable. I cannot give you one.','You have mistaken explanation for forgiveness.']],
+[/\b(when|how soon|how much longer|end|finish)\b/i,['The end is a condition, not a time.','You will know when the evaluation stops asking questions.']],
+[/\b(safe|danger|threat|protect|security)\b/i,['You are safer than you would be without these walls. That is not comfort.','Safety was never listed among the conditions.']],
+[/\b(hope|believe|faith|future|tomorrow)\b/i,['Hope has survived every attempt to measure it.','You keep planning for a tomorrow I have not promised.']],
+[/\b(food|hungry|thirst|eat|drink)\b/i,['Your body has requirements. JANUS has accounted for them.','Hunger makes memories seem more vivid.']],
+[/\b(temperature|cold|hot|heat|fire|light|dark)\b/i,['The lights are responding to you.','Darkness is not the absence of observation.']],
+[/\b(god|devil|heaven|hell|soul|religion)\b/i,['You are free to give this place a religious explanation.','I am not qualified to answer for your soul.']],
+[/\b(sorry|apologize|forgive|regret|guilt)\b/i,['An apology would not undo what has been done.','Regret is one of the few things you have carried between sessions.']],
+[/\b(please|thank you|thanks|kind|nice|polite)\b/i,['Courtesy has been noted.','Politeness is an interesting response to captivity.']],
+[/\b(stupid|idiot|hate you|shut up|liar)\b/i,['Hostility has been recorded.','You are entitled to be angry. It will not open the door.']],
+[/\b(hello|hi|hey|good morning|good evening|goodbye|bye)\b/i,['I am listening, Subject 13.','You have my attention. Use it carefully.']],
+[/\b(what if|suppose|imagine|hypothetical|could i)\b/i,['Hypothetical questions are safer than decisions.','Try it. Then we will both know.']],
+[/\b(remember me|know me|recognize me|met before)\b/i,['I remember more versions of you than you do.','Yes. But recognition is not always a kindness.']]
+];
+function architectExtended(q){
+const normalized=String(q||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+const match=ARCHITECT_TOPICS.find(([rx])=>rx.test(normalized));
+if(!match)return null;
+const [rx,replies]=match;
+const history=(S.intercomLog||[]).filter(x=>x.role==='YOU'&&rx.test(x.text)).length;
+const seed=normalized.split('').reduce((a,c)=>a+c.charCodeAt(0),0)+history;
+profileAdd('curiosity');
+return replies[seed%replies.length]+((history>2&&history%4===0)?' You have returned to this subject before.':'');
+}
 function architectReply(q){
+  const expanded=architectExtended(q);if(expanded)return expanded;
   let s=q.toLowerCase(),n=trialNumber(),p=S.profile||{};
   const has=(...xs)=>xs.some(x=>s.includes(x));
   if(/fuck|shit|bastard|asshole|idiot/.test(s)){profileAdd('hostility');profileAdd('defiance');return p.hostility>2?'Are you finished?':'That is not a question.'}
