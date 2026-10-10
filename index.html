@@ -291,6 +291,10 @@ body.success-pulse{animation:successPulse .55s ease}@keyframes successPulse{0%,1
 @media(max-width:520px){.zero-title{letter-spacing:.1em}.zero-reveal,.zero-ending{min-height:68svh}.screen:before{opacity:.035}.menu-logo{animation:none}}
 
 </style>
+<style>
+@keyframes sceneFade{from{opacity:0;filter:brightness(0);transform:translateY(14px)}to{opacity:1;filter:brightness(1);transform:none}}
+.between-cinema .btn{min-height:48px;touch-action:manipulation}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -425,10 +429,63 @@ function successOverlay(){let n=S.flags?.justCompleted;if(!n||trialNumber()!==n)
 function shell(inner,extra=''){let ic=screen.startsWith('trial')?`<button class="intercom-fab ${intercomAvailable()?'':'off'}" onclick="Game.openIntercom()">${intercomAvailable()?'◉ INTERCOM':'○ NO CARRIER'}</button>`:'';return `<div class="screen shrink${S.pressure||0}">${inner}${S.architect?`<div class="architect"><div class="who">OVERHEAD // ARCHITECT</div><div class="line typewrite" data-type="${esc(S.architect)}">“${esc(S.architect)}”</div></div>`:''}${extra}${ic}<button class="audio-icon" onclick="Game.toggleAudio()" aria-label="toggle sound">${S.settings?.ambience===false?'×':'◖'}</button>${successOverlay()}</div>`}
 
 function trialNumber(){let m=screen.match(/^trial(\d+)/);return m?Number(m[1]):0}
-function intercomAvailable(){let n=trialNumber();if(!n)return false;if(n===6&&S.flags.t6door==='LEFT')return false;return true}
+function intercomAvailable(){let n=trialNumber();if(screen.startsWith('between'))return true;if(!n)return false;if(n===6&&S.flags.t6door==='LEFT')return false;return true}
 function profileAdd(k,n=1){S.profile=S.profile||{};S.profile[k]=(S.profile[k]||0)+n;save()}
 function logIntercom(role,text){S.intercomLog=S.intercomLog||[];S.intercomLog.push({role,text,time:Date.now(),trial:trialNumber()});S.intercomLog=S.intercomLog.slice(-40);save()}
+const ARCHITECT_TOPICS=[
+[/\b(name|called|call you|your identity|who are you|introduce yourself)\b/i,['My name is not part of this evaluation.','The name you want was removed from the records.','Names are for people who expect to be remembered.']],
+[/\b(age|old are you|birthday|born|created|built)\b/i,['I was here before your first awakening.','Age is a measurement for things that are permitted to end.']],
+[/\b(real|human|person|machine|robot|artificial|ai|alive|conscious)\b/i,['Does the answer change what you will do next?','I have memories. You have memories. Neither fact proves what you think it proves.']],
+[/\b(face|look like|appearance|see you|meet you|body)\b/i,['You have seen me. That is all I will confirm.','A face would give you something convenient to hate.']],
+[/\b(parent|mother|father|family|brother|sister|child|wife|husband)\b/i,['You have asked for your family in other sessions.','I can tell you where they are. I cannot tell you whether that would be merciful.']],
+[/\b(home|house|outside|world|city|country|street|sunlight)\b/i,['The world has continued without you.','You remember sunlight. Consider why that memory hurts.']],
+[/\b(time|clock|date|year|day|night|hour|long have)\b/i,['Time is recorded differently here.','You have been here longer than the clock suggests.']],
+[/\b(remember|memory|forgot|forget|amnesia|past|before)\b/i,['You have forgotten more than you were allowed to keep.','Some memories are not missing. They are refusing to return.']],
+[/\b(dream|nightmare|sleep|wake|awake)\b/i,['You dream about corridors because you are afraid of waking in one.','I cannot guarantee you were asleep.']],
+[/\b(door|key|lock|chamber|room|corridor|hallway)\b/i,['Every door opens for a reason. Few open for the reason you expect.','A locked door is also an instruction.']],
+[/\b(camera|watch|observe|record|microphone|monitor|surveillance)\b/i,['Observation changes behavior. You have demonstrated that repeatedly.','There are blind spots. They are not where you think.']],
+[/\b(water|flood|drown|air|oxygen|breath)\b/i,['The room measures more than your ability to breathe.','You have survived that sound before.']],
+[/\b(blood|pain|hurt|wound|injury|scar)\b/i,['Pain is evidence that your body disagrees with the experiment.','The scars are not all from this session.']],
+[/\b(fear|scared|afraid|terror|panic|anxiety)\b/i,['Fear is a useful witness and a terrible judge.','You are afraid because part of you knows what happens next.']],
+[/\b(trust|lie|lying|truth|honest|deceive|secret)\b/i,['I have not promised to tell you everything.','The truth and a complete account are not the same thing.']],
+[/\b(love|hate|care|feel|emotion|lonely)\b/i,['Attachment has altered your choices before.','You want me to feel something so you can predict me.']],
+[/\b(friend|ally|enemy|other people|someone else|alone)\b/i,['You are not the only one who has walked this corridor.','Being alone is not the same as being unobserved.']],
+[/\b(subject|number|thirteen|13|zero|00|participant|prisoner)\b/i,['Your number is an assignment, not a description.','The numbers are not a count of the people you think they are.']],
+[/\b(janus|protocol|experiment|test|research|facility|system)\b/i,['JANUS measures what remains when certainty is removed.','A system can be both a prison and a rescue attempt.']],
+[/\b(architect|operator|boss|control|authority|creator)\b/i,['I am responsible for maintaining the conditions.','Responsibility is not the same as control.']],
+[/\b(reset|restart|loop|repeat|again|previous attempt|timeline)\b/i,['Repetition is not proof of failure.','You have asked me to reset you before.']],
+[/\b(escape|exit|free|freedom|release|leave|out of here)\b/i,['There is an exit. That is not the same as a guarantee.','You have been close to leaving before.']],
+[/\b(die|death|dead|kill|murder|suicide|survive)\b/i,['I would prefer that you survive. Do not confuse preference with kindness.','Death would make the remaining questions inconvenient.']],
+[/\b(choice|choose|decision|consequence|sacrifice|cost)\b/i,['A choice without consequence would tell me nothing.','You have already paid for decisions you cannot remember.']],
+[/\b(code|cipher|puzzle|clue|hint|solve|answer|help)\b/i,['Look for the detail that repeats when everything else changes.','The room has given you information. It has not promised to make it comfortable.']],
+[/\b(voice|sound|noise|whisper|speak|hear|music|song)\b/i,['Not every voice on this channel belongs to me.','You recognized that voice. Your silence told me so.']],
+[/\b(phone|call|signal|radio|transmission|intercom)\b/i,['Someone has used this channel without permission.','A transmission can arrive before it is sent.']],
+[/\b(why|purpose|meaning|point|reason|what for)\b/i,['You want a reason that would make this acceptable. I cannot give you one.','You have mistaken explanation for forgiveness.']],
+[/\b(when|how soon|how much longer|end|finish)\b/i,['The end is a condition, not a time.','You will know when the evaluation stops asking questions.']],
+[/\b(safe|danger|threat|protect|security)\b/i,['You are safer than you would be without these walls. That is not comfort.','Safety was never listed among the conditions.']],
+[/\b(hope|believe|faith|future|tomorrow)\b/i,['Hope has survived every attempt to measure it.','You keep planning for a tomorrow I have not promised.']],
+[/\b(food|hungry|thirst|eat|drink)\b/i,['Your body has requirements. JANUS has accounted for them.','Hunger makes memories seem more vivid.']],
+[/\b(temperature|cold|hot|heat|fire|light|dark)\b/i,['The lights are responding to you.','Darkness is not the absence of observation.']],
+[/\b(god|devil|heaven|hell|soul|religion)\b/i,['You are free to give this place a religious explanation.','I am not qualified to answer for your soul.']],
+[/\b(sorry|apologize|forgive|regret|guilt)\b/i,['An apology would not undo what has been done.','Regret is one of the few things you have carried between sessions.']],
+[/\b(please|thank you|thanks|kind|nice|polite)\b/i,['Courtesy has been noted.','Politeness is an interesting response to captivity.']],
+[/\b(stupid|idiot|hate you|shut up|liar)\b/i,['Hostility has been recorded.','You are entitled to be angry. It will not open the door.']],
+[/\b(hello|hi|hey|good morning|good evening|goodbye|bye)\b/i,['I am listening, Subject 13.','You have my attention. Use it carefully.']],
+[/\b(what if|suppose|imagine|hypothetical|could i)\b/i,['Hypothetical questions are safer than decisions.','Try it. Then we will both know.']],
+[/\b(remember me|know me|recognize me|met before)\b/i,['I remember more versions of you than you do.','Yes. But recognition is not always a kindness.']]
+];
+function architectExtended(q){
+const normalized=String(q||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+const match=ARCHITECT_TOPICS.find(([rx])=>rx.test(normalized));
+if(!match)return null;
+const [rx,replies]=match;
+const history=(S.intercomLog||[]).filter(x=>x.role==='YOU'&&rx.test(x.text)).length;
+const seed=normalized.split('').reduce((a,c)=>a+c.charCodeAt(0),0)+history;
+profileAdd('curiosity');
+return replies[seed%replies.length]+((history>2&&history%4===0)?' You have returned to this subject before.':'');
+}
 function architectReply(q){
+  const expanded=architectExtended(q);if(expanded)return expanded;
   let s=q.toLowerCase(),n=trialNumber(),p=S.profile||{};
   const has=(...xs)=>xs.some(x=>s.includes(x));
   if(/fuck|shit|bastard|asshole|idiot/.test(s)){profileAdd('hostility');profileAdd('defiance');return p.hostility>2?'Are you finished?':'That is not a question.'}
@@ -473,7 +530,25 @@ const BETWEEN_TRIALS={
 11:['THE QUESTION','ARCHITECT','If the exit required you to leave another person behind, would you still call it freedom?','No.','I do not know.','Then you may understand the purpose of this place.','Uncertainty is the closest you have come to honesty.'],
 12:['THE LAST CORRIDOR','SELF','You have walked this corridor before. You know it now, though you cannot say how. The final door feels like a memory.','I want the truth.','I want to leave.','The thought steadies your hands.','For the first time, the desire feels like a decision rather than a reflex.']
 };
-function betweenTrial(n){let v=BETWEEN_TRIALS[n]||BETWEEN_TRIALS[1];let phase=S.flags?.['betweenChoice'+n];return shell(`<main style="min-height:75svh;padding:70px 22px 45px;display:flex;flex-direction:column;justify-content:center;gap:20px;max-width:560px;margin:auto"><div class="kicker">CORRIDOR TRANSMISSION // ${String(n).padStart(2,'0')}</div><h2 style="letter-spacing:.12em;color:#d4af37">${esc(v[0])}</h2><div class="muted">${esc(v[1]==='SELF'?'INNER MONOLOGUE':'OVERHEAD // ARCHITECT')}</div><p style="line-height:1.9;font-size:16px">${esc(v[2])}</p>${phase?`<p style="color:#d4af37;line-height:1.8">${esc(v[phase===1?5:6])}</p><button class="btn" onclick="Game.finishBetween(${n})">CONTINUE TO TRIAL ${String(n).padStart(2,'0')} →</button>`:`<button class="btn" onclick="Game.chooseBetween(${n},1)">${esc(v[3])}</button><button class="btn dim" onclick="Game.chooseBetween(${n},2)">${esc(v[4])}</button>`}<button class="back" onclick="Game.finishBetween(${n})">SKIP SCENE →</button><button class="back" onclick="Game.goCorridor()">← RETURN TO CORRIDOR</button></main>`)}
+const BETWEEN_CHAPTERS=[
+['The overhead speakers hiss. Somewhere behind the plaster, a relay clicks three times.','You have heard those three clicks before. You are certain of it, even though you cannot remember arriving.','ARCHITECT: You took longer last time.','SELF: Last time? My mouth is dry. I do not remember speaking.','ARCHITECT: You are confusing the absence of memory with the absence of history.'],
+['The corridor is wet. A thin stream runs beneath the next door, carrying a piece of paper covered in your handwriting.','You crouch. The writing is smudged, but one sentence survives: DO NOT ANSWER TOO QUICKLY.','ARCHITECT: You have a habit of leaving instructions for yourself.','SELF: If I wrote that, what happened to the person who read it?','ARCHITECT: That depends on whether you consider them the same person.'],
+['The lights go out in sequence, one by one, until the only illumination comes from a red diode above the intercom.','A camera moves behind the wall. You hear its motor, then the unmistakable sound of somebody breathing into a microphone.','ARCHITECT: You keep looking for the observer.','SELF: Someone was here. Someone stood where I am standing.','ARCHITECT: And yet you still insist on calling yourself alone.'],
+['The floor vibrates as though an enormous machine has started beneath the building.','For a moment your fingers feel numb. A memory surfaces: a hospital corridor, a hand holding yours, an unfinished goodbye.','ARCHITECT: Everything worth keeping has a price.','SELF: That is what people say when they want you to surrender something.','ARCHITECT: Perhaps. But you are still walking toward the door.'],
+['A metal shutter drops behind you. The impact makes you flinch before you hear it.','The wall opposite you bears twelve shallow scratches. The fifth is fresh. Your nails ache when you look at it.','ARCHITECT: There are names in this facility that you are not permitted to hear.','SELF: You are afraid I will recognize one.','ARCHITECT: Fear is a human interpretation. I prefer containment.'],
+['A telephone rings inside a locked maintenance cabinet. There is no cord leading into it.','You put your ear to the metal. Someone is humming a tune you knew as a child. You cannot remember who taught it to you.','ARCHITECT: Memory is not evidence.','SELF: Then why are you trying so hard to take mine?','ARCHITECT: I have never claimed the memories were yours.'],
+['Static floods the intercom. Beneath it, a voice whispers your number, then says not to trust the next answer.','The speaker goes silent. A second later the Architect comes on, unnaturally calm.','ARCHITECT: Disregard that transmission.','SELF: You heard it. You know who it was.','ARCHITECT: I know who it was supposed to be. That is not the same thing.'],
+['You hear footsteps ahead of you. They stop when you stop. You take another step; the sound comes from behind.','On the wall is a dark handprint, much smaller than yours. The paint around it is warm.','ARCHITECT: The facility is not empty.','SELF: Then why have you made sure I never meet anyone?','ARCHITECT: You have met them. The difficulty is recognizing them.'],
+['A recording begins without warning: your own voice asking to be let out. Then another recording answers, also in your voice.','You cannot tell which one is older. Both sound exhausted. Both use words you would never say.','ARCHITECT: There are versions of you who made different choices.','SELF: What happened to them?','ARCHITECT: That is a question you will regret learning to ask.'],
+['The corridor speakers broadcast silence. Even your footsteps seem to arrive a moment late.','You press your palm against the wall. A faint pulse answers from the other side, matching your heartbeat until you move away.','ARCHITECT: Silence is a form of communication.','SELF: Then tell me what you are hiding inside it.','ARCHITECT: You have already heard it. You simply did not understand.'],
+['The exit sign flickers between two arrows pointing in opposite directions.','For the first time, you imagine opening a door and finding someone else trapped behind it. The thought is unbearable because it feels familiar.','ARCHITECT: Freedom for one subject may require captivity for another.','SELF: You want me to make that sound reasonable.','ARCHITECT: I want to know whether you will.'],
+['The final corridor looks exactly like the first. Same stain on the ceiling. Same three clicks behind the plaster.','You recognize the scratches near the floor. Your own hand made them. The certainty settles into your bones.','ARCHITECT: We have reached the point where you usually ask me to begin again.','SELF: Not this time.','ARCHITECT: You have said that before, too.']
+];
+function betweenTrial(n){
+let v=BETWEEN_TRIALS[n]||BETWEEN_TRIALS[1],pages=BETWEEN_CHAPTERS[n-1]||BETWEEN_CHAPTERS[0],step=Math.min(4,Math.max(0,Number(S.flags?.['betweenStep'+n]||0))),choice=S.flags?.['betweenChoice'+n],done=step>=4;
+let body=pages.slice(0,step+1).map((p,i)=>`<div style="padding:13px 0;border-bottom:1px solid #34271b;color:${i===step?'#e8d8bb':'#8e806c'};line-height:1.9;font-size:15px" ${i===step?`class="typewrite" data-type="${esc(p)}" data-reveal="sceneNext"`:''}>${i===step?'':esc(p)}</div>`).join('');
+return shell(`<main class="between-cinema" style="min-height:100svh;padding:65px 22px 55px;max-width:580px;margin:auto;display:flex;flex-direction:column;justify-content:center;gap:15px;animation:sceneFade .85s ease both"><div class="kicker" style="letter-spacing:.28em">JANUS // INTERVAL ${String(n).padStart(2,'0')}</div><h2 style="color:#c49b5d;letter-spacing:.16em">${esc(v[0])}</h2><div style="font-size:10px;letter-spacing:.22em;color:#8c4339">● REC // SUBJECT 13</div><div>${body}</div>${!done?`<button id="sceneNext" class="btn reveal-after-type" onclick="Game.nextBetween(${n})">CONTINUE // ${step+1} OF 5 →</button>`:choice?`<p class="typewrite" data-type="${esc(v[choice===1?5:6])}" data-reveal="sceneNext"></p><button id="sceneNext" class="btn reveal-after-type" onclick="Game.finishBetween(${n})">ENTER CHAMBER ${String(n).padStart(2,'0')} →</button>`:`<div class="muted">THE ARCHITECT IS LISTENING. WHAT DO YOU SAY?</div><button class="btn" onclick="Game.chooseBetween(${n},1)">${esc(v[3])}</button><button class="btn dim" onclick="Game.chooseBetween(${n},2)">${esc(v[4])}</button>`}<button class="btn dim" onclick="Game.openIntercom()">◉ QUESTION THE ARCHITECT</button><button class="back" onclick="Game.finishBetween(${n})">SKIP CINEMATIC →</button><button class="back" onclick="Game.goCorridor()">← CORRIDOR</button></main>`)
+}
 function setScreen(x){screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0}
 function render(){
   let old=document.querySelector('.screen'), keepScroll=old?old.scrollTop:0;
@@ -682,6 +757,7 @@ return `<div class="screen zero-screen"><main class="wrap">${body}</main></div>`
 
 function arrival(n){let x=ARR[n]||ARR[1];let narration=x[1]+"\n\n"+x[2];return `<div class="screen arrival"><div class="arrival-card"><div class="arrival-title">${x[0]}</div><div class="arrival-door-stage"><div id="arrivalDoor" class="arrival-door"><div class="plate"><strong>${String(n).padStart(2,'0')}</strong><span>CONDITION SEALED</span></div></div></div><div class="arrival-copy typewrite" data-type="${esc(narration)}" data-reveal="doorHold"></div><div class="arrival-brief"><b>${esc(S.difficulty||'MEDIUM')} // TRIAL BRIEFING</b>${esc(trialBrief(n))}</div><button id="doorHold" class="btn hold-btn reveal-after-type" onclick="Game.enterRoom(${n})"><span class="holdfill"></span><span>TAP // OPEN CHAMBER</span></button></div></div>`}
 window.Game={
+nextBetween(n){S.flags['betweenStep'+n]=Math.min(4,(Number(S.flags['betweenStep'+n])||0)+1);save();fx('speaker');render()},
 chooseBetween(n,choice){S.flags=S.flags||{};S.flags['betweenChoice'+n]=choice;S.profile=S.profile||{};S.profile[choice===1?'defiance':'caution']=(S.profile[choice===1?'defiance':'caution']||0)+1;save();render()},
 finishBetween(n){S.flags=S.flags||{};S.flags['betweenSeen'+n]=true;S.flags['arrival'+n]=true;save();setScreen('trial'+n)},
 
