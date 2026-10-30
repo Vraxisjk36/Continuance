@@ -308,6 +308,18 @@ body.success-pulse{animation:successPulse .55s ease}@keyframes successPulse{0%,1
 @keyframes case3-appear{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @media(min-width:650px){.case3-ui .case3-locations{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.case3-ui .case3-stage,.case3-ui .case3-detail,.case3-ui .case3-dialogue{animation:none!important}.case3-ui .case3-location{transition:none!important}}
+
+/* Trial I: atmosphere supports discovery, never blocks interaction */
+.t1-ui .wrap{max-width:760px;padding:20px clamp(14px,4vw,24px) 120px}
+.t1-ui .t1-opening{padding:22px 18px;margin-bottom:18px;border:1px solid #46321c;border-left:3px solid #c18c47;background:linear-gradient(135deg,#20170e,#090807);animation:t1-arrive .4s ease-out both}
+.t1-ui .t1-opening h2{font-size:clamp(22px,5vw,34px);line-height:1.15;letter-spacing:.04em;margin:14px 0}
+.t1-ui .t1-opening p{font-size:clamp(13px,3.3vw,16px);line-height:1.85;color:#d5c1a3}
+.t1-ui .t1-direction{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;font-size:11px;letter-spacing:.1em;color:#d7ad73}
+.t1-ui .t1-direction span{color:#a18b70;font-variant-numeric:tabular-nums}
+.t1-ui .t1-reveal{animation:t1-arrive .4s ease-out both;border-left:3px solid #c18c47}
+.t1-ui .room-object:focus-visible,.t1-ui button:focus-visible{outline:2px solid #f0c36a;outline-offset:3px}
+@keyframes t1-arrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.t1-ui .t1-opening,.t1-ui .t1-reveal{animation:none!important}}
 </style>
 <style>
 @keyframes sceneFade{from{opacity:0;filter:brightness(0);transform:translateY(14px)}to{opacity:1;filter:brightness(1);transform:none}}
@@ -573,7 +585,7 @@ function render(){
   clearInterval(window.__waterTimer);clearTimeout(window.__cctvTimer);
   document.body.dataset.screen=screen;
   const a=document.getElementById('app');
-  a.innerHTML = screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='settings'?settings():screen==='archive'?archiveScreen():screen==='paywall'?janusPaywall():screen.startsWith('between')?betweenTrial(Number(screen.replace('between',''))):screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
+  a.innerHTML = screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='settings'?settings():screen==='archive'?archiveScreen():screen.startsWith('between')?betweenTrial(Number(screen.replace('between',''))):screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
   bind();
   let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
 }
@@ -682,7 +694,7 @@ function solvedButton(n,label='TRIAL COMPLETE // RETURN'){return S.completed.inc
 function t1(){
   let found=S.flags.t1found||[],ready=found.length>=3||S.flags.t1cipher;
   let lines=[`☓⌖☍ ☐⌖⊙☆ ○☆⌂☆△⌯♤ △ ⊘⊕♧♤⌯ ⌯♤△⌯ ⌂☆☌☆⌑ ☐△⌑⌁⌬`,`⌯♤☆ ☐△⊘⊘⌬ ♤△☌☆ ⌁☆△⌬☍⌑☆◇ ☆☌☆⌑☓ ○⌑☆△⌯♤`,`♢⊕☌☆ ♢△⊕⊘☍⌑☆⌬ ☐⊕⊘⊘ □⊘⌖⌬☆ ⌯♤⊕⌬ ⌑⌖⌖⌁`,`⌯♤☆ ⌁△⌑⊙⌬ ⌑☆⌘☆△⌯ ○☆□△☍⌬☆ ⌘☆⌖⌘⊘☆ ◇⌖`,`◇⌖ ⌂⌖⌯ △⌬⊙ ☐♤⌖ ○☍⊕⊘⌯ ⌯♤☆ □♤△⌁○☆⌑`,`⌯⌖ ⌖⌘☆⌂ ⌯♤☆ ◇⌖⌖⌑ ⌬⌘☆△⊙ ⌁☆⌑□☓`];
-  let inspect=!ready?`<div class="flashlight-stage ${S.penalties?.lowLight?'lowlight':''}" id="t1room">
+  let inspect=!ready?`<div class="t1-opening"><div class="kicker">JANUS // CHAMBER 01</div><h2>YOU ARE NOT THE FIRST.</h2><p>The concrete is cold enough to burn your bare feet. Somewhere behind the wall, a person takes a breath. The sound stops when you move.</p><p>Above the sealed door, an amber light blinks three times. The speaker clicks. A voice, almost kind: “There is no correct way to be afraid, Thirteen. But there is a correct way to leave.”</p></div><div class="t1-direction">EXPLORE THE ROOM <span>${found.length} / 5 DETAILS DISCOVERED</span></div><div class="flashlight-stage ${S.penalties?.lowLight?'lowlight':''}" id="t1room">
       <button class="room-object obj-intercom" onclick="Game.inspectT1('intercom')"><i></i><span class="small">●</span></button>
       <button class="room-object obj-door" onclick="Game.inspectT1('door')" aria-label="steel door"></button>
       <button class="room-object obj-drain" onclick="Game.inspectT1('drain')" aria-label="floor drain"></button>
@@ -692,8 +704,8 @@ function t1(){
       <div style="position:absolute;left:10px;top:10px;z-index:18"><div class="kicker">MOVE YOUR FINGER // FLASHLIGHT</div><div class="investigate-meter">${Array.from({length:3},(_,i)=>`<span class="${i<found.length?'on':''}"></span>`).join('')}</div></div>
     </div>
     <div class="spacer"></div><div class="objective"><b>CURRENT OBJECTIVE</b>Search the chamber. Find something that explains what the door is waiting for.</div>`:'';
-  let cipher=ready?`<div class="cipher-reveal"><div class="storybox" style="font-size:15px"><p>You drag your fingers over the scarred section of wall. Dust breaks loose beneath your nails.</p><p>Under the grime, the marks resolve into six deliberate lines. This was not written quickly. Whoever carved it expected somebody else to read it.</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Decode the six-line inscription. Five lines describe the chamber. One line tells you what the door requires. Identify the final word and speak it into the terminal.</div><div class="wall"><div class="kicker">WALL RUBBING // UNKNOWN SUBSTITUTION</div><div class="cipher-six">${lines.map((x,i)=>`<div class="cipher-line"><span style="color:#59442d">${i+1}.</span> ${x}</div>`).join('')}</div></div><div class="spacer"></div><div class="workbench"><div class="kicker">FIELD WORKBENCH</div><p class="muted">Repeated symbols are preserved. Spaces are original. You may use paper, another app, a frequency table, or outside research. Knowledge obtained under pressure is still knowledge.</p><div class="freq"><span>☆ ×18</span><span>⌯ ×16</span><span>⌖ ×15</span><span>△ ×14</span><span>⌑ ×11</span><span>○ ×10</span><span>◇ ×9</span></div></div><div class="intercom"><div class="intercom-grill"></div><div class="kicker">WALL INTERCOM</div><p class="muted">The button is warm. A faint pulse vibrates through the casing, as if somebody on the other side is resting a finger against theirs.</p><button class="btn dim hold-btn" onpointerdown="Game.holdHintStart(this)" onpointerup="Game.holdHintEnd(this)" onpointercancel="Game.holdHintEnd(this)"><span class="holdfill"></span><span>HOLD TO CALL</span></button></div><div class="spacer"></div><div class="row"><input id="a1" class="input" placeholder="SPEAK FINAL WORD"><button class="btn" style="width:auto" onclick="Game.answer1();fx('tap')">SPEAK</button></div>${solvedButton(1,'THE LOCK IS TURNING')}</div>`:'';
-  return shell(`${header(1,'THE INSCRIPTION')}<main class="wrap">${inspect}${cipher}</main>`);
+  let cipher=ready?`<div class="cipher-reveal"><div class="storybox t1-reveal" style="font-size:15px"><p>You drag your fingers over the scarred section of wall. Dust breaks loose beneath your nails.</p><p>Under the grime, the marks resolve into six deliberate lines. This was not written quickly. Whoever carved it expected somebody else to read it.</p><p>The speaker turns on without a chime. “The last subject found the writing too. They made a different choice.” A second voice, much quieter, comes through the grille: “Don’t answer until you understand what it means.”</p></div><div class="objective"><b>SURVIVAL CONDITION</b>Decode the six-line inscription. Five lines describe the chamber. One line tells you what the door requires. Identify the final word and speak it into the terminal.</div><div class="wall"><div class="kicker">WALL RUBBING // UNKNOWN SUBSTITUTION</div><div class="cipher-six">${lines.map((x,i)=>`<div class="cipher-line"><span style="color:#59442d">${i+1}.</span> ${x}</div>`).join('')}</div></div><div class="spacer"></div><div class="workbench"><div class="kicker">FIELD WORKBENCH</div><p class="muted">Repeated symbols are preserved. Spaces are original. You may use paper, another app, a frequency table, or outside research. Knowledge obtained under pressure is still knowledge.</p><div class="freq"><span>☆ ×18</span><span>⌯ ×16</span><span>⌖ ×15</span><span>△ ×14</span><span>⌑ ×11</span><span>○ ×10</span><span>◇ ×9</span></div></div><div class="intercom"><div class="intercom-grill"></div><div class="kicker">WALL INTERCOM</div><p class="muted">The button is warm. A faint pulse vibrates through the casing, as if somebody on the other side is resting a finger against theirs.</p><button class="btn dim hold-btn" onpointerdown="Game.holdHintStart(this)" onpointerup="Game.holdHintEnd(this)" onpointercancel="Game.holdHintEnd(this)"><span class="holdfill"></span><span>HOLD TO CALL</span></button></div><div class="spacer"></div><div class="row"><input id="a1" class="input" placeholder="SPEAK FINAL WORD"><button class="btn" style="width:auto" onclick="Game.answer1();fx('tap')">SPEAK</button></div>${solvedButton(1,'THE LOCK IS TURNING')}</div>`:'';
+  return shell(`<div class="t1-ui">${header(1,'THE INSCRIPTION')}<main class="wrap">${inspect}${cipher}</main></div>`);
 }
 
 function t2(){
@@ -906,7 +918,7 @@ inspectT1(z){
     intercom:'The intercom is warm. Behind the grille you hear breathing that does not match your own.'
   };
   if(!found.includes(z))found=[...found,z];
-  S.flags.t1found=found;S.flags.t1note=notes[z]||'';if(found.length>=3)S.flags.t1cipher=true;
+  S.flags.t1found=found;S.flags.t1note=notes[z]||'';if(z==='scratch'&&!S.flags.t1memory){S.flags.t1memory=true;S.evidence=S.evidence||[];if(!S.evidence.some(e=>e.id==='t1-warning'))S.evidence.push({id:'t1-warning',title:'TRIAL I // HIDDEN WARNING',text:'Someone left a message: DON’T LET HIM KNOW YOU REMEMBER.'})}if(found.length>=3)S.flags.t1cipher=true;
   if(z==='wall')S.flags.t1cipher=true;
   save();fx('tap');render();
 },
