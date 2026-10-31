@@ -371,14 +371,14 @@ body[data-screen="trial4"] .card:active{transform:translateY(2px)}
 .cinema-track{display:flex;gap:5px;margin-top:22px}.cinema-track i{display:block;flex:1;height:2px;background:#4b514c}.cinema-track i.active{background:#c5c8b8}
 .cinema-choices{display:grid;gap:10px;margin:20px 0}.cinema-choices button{line-height:1.7}
 .janus-splash{display:flex;align-items:center;justify-content:center;background:#010203;isolation:isolate;overflow:hidden}
-.splash-haze{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 47%,rgba(109,126,116,.14),transparent 54%);opacity:0;animation:splashHaze 5.5s ease forwards}
-.splash-beam{position:absolute;inset:-35%;z-index:-1;background:conic-gradient(from 160deg at 50% 50%,transparent 0deg,transparent 37deg,rgba(226,232,208,.01) 42deg,rgba(225,232,208,.28) 52deg,rgba(226,232,208,.015) 63deg,transparent 73deg,transparent 360deg);filter:blur(22px);transform:translateX(-55%) rotate(-30deg);animation:splashSweep 5.8s cubic-bezier(.25,.55,.2,1) forwards}
-.splash-sequence{text-align:center;width:100%;padding:22px;position:relative}
+.splash-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 47%,rgba(109,126,116,.14),transparent 54%);opacity:0;animation:splashHaze 5.5s ease forwards}
+.splash-beam{position:absolute;inset:-35%;z-index:0;background:conic-gradient(from 160deg at 50% 50%,transparent 0deg,transparent 37deg,rgba(226,232,208,.01) 42deg,rgba(225,232,208,.28) 52deg,rgba(226,232,208,.015) 63deg,transparent 73deg,transparent 360deg);filter:blur(22px);transform:translateX(-55%) rotate(-30deg);animation:splashSweep 5.8s cubic-bezier(.25,.55,.2,1) forwards}
+.splash-sequence{text-align:center;width:100%;padding:22px;position:relative;z-index:2}
 .splash-studio{color:#d4d5c9;font:14px/1.5 Georgia,serif;letter-spacing:.08em;opacity:0;animation:studioReveal 2.5s ease .8s forwards}.splash-studio strong{font-weight:600;letter-spacing:.025em}
 .splash-line{width:45px;height:1px;background:#8b978e;margin:27px auto;opacity:0;animation:studioReveal 1s ease 2.7s forwards}
 .splash-game{font:600 clamp(29px,8vw,57px)/1.1 Georgia,serif;letter-spacing:clamp(.08em,1.2vw,.18em);color:#e6e7dd;text-shadow:0 0 36px rgba(201,218,194,.25);opacity:0;transform:translateY(9px);animation:gameReveal 2s ease 3s forwards;overflow-wrap:anywhere}
 .splash-sub{color:#919b91;font:9px/1.8 ui-monospace,monospace;letter-spacing:.17em;margin-top:23px;opacity:0;animation:studioReveal 1.6s ease 4.2s forwards}
-.splash-enter{position:absolute;bottom:max(8vh,45px);left:50%;transform:translateX(-50%);min-width:160px;min-height:48px;background:transparent;border:1px solid #5d6a61;color:#d7dfd2;font:11px ui-monospace,monospace;letter-spacing:.24em;opacity:0;animation:studioReveal 1s ease 5.1s forwards}
+.splash-enter{position:absolute;z-index:3;bottom:max(8vh,45px);left:50%;transform:translateX(-50%);min-width:160px;min-height:48px;background:transparent;border:1px solid #5d6a61;color:#d7dfd2;font:11px ui-monospace,monospace;letter-spacing:.24em;opacity:0;animation:studioReveal 1s ease 5.1s forwards}
 .splash-enter span{margin-left:12px}
 @keyframes splashSweep{0%{transform:translateX(-65%) rotate(-30deg);opacity:0}18%{opacity:1}78%{opacity:1}100%{transform:translateX(52%) rotate(17deg);opacity:.3}}
 @keyframes splashHaze{0%,20%{opacity:0}70%,100%{opacity:1}}
@@ -696,7 +696,7 @@ const PRO=[
 "You pull yourself upright. The speaker clicks again.\n\n‘Subject Thirteen. There are twelve rooms. Each has a condition. Meet it, and the next door opens.’\n\n‘Where am I?’\n\n‘You can ask me that again when you've finished.’",
 "At knee height, someone has scratched a sentence into the wall. The letters are small, written where a standing camera might miss them.\n\nDON'T LET HIM KNOW YOU REMEMBER.\n\nYou read it twice. You don't remember anything. That is what frightens you."
 ];
-function prologue(){let i=S.flags.prologueStep||0,t=PRO[i]||PRO[0],last=i===PRO.length-1;let id='proNext';return `<div class="screen prologue"><div class="storybox"><div class="kicker">UNKNOWN LOCATION // TIME UNAVAILABLE</div><div class="storyline typewrite" data-type="${esc(t)}" data-reveal="${id}"></div><div class="story-actions reveal-after-type" id="${id}"><button class="story-action" onclick="Game.prologueNext()">${last?'STAND // FIND THE DOOR':'CONTINUE'}</button></div><button class="narrative-skip" onclick="Game.skipTyping()">TAP TO COMPLETE TEXT</button></div></div>`}
+function prologue(){let i=S.flags.prologueStep||0,last=i===PRO.length-1;return cinematicScene({eyebrow:'UNKNOWN LOCATION / TIME UNAVAILABLE',body:PRO[i]||PRO[0],next:'Game.prologueNext()',action:last?'STAND / FIND THE DOOR':'CONTINUE',index:i,total:PRO.length})}
 function opening(){return `<div class="screen opening"><div class="terminal"><div class="kicker">JANUS TERMINAL // NODE 01</div><div class="diag typewrite" data-type="SUBJECT CONSCIOUSNESS CONFIRMED.
 MOTOR RESPONSE: PRESENT.
 COGNITIVE RESPONSE: UNVERIFIED." data-reveal="ack"></div><div class="logo">CONTINUANCE</div><div class="muted center" style="margin:16px 0 24px">TWELVE CHAMBERS.<br>FIVE LIVES.<br>ONE CONDITIONAL EXIT.</div><button id="ack" class="btn reveal-after-type" onclick="Game.begin();fx('door')">ACKNOWLEDGE CONDITIONS</button></div></div>`}
