@@ -481,6 +481,26 @@ body[data-screen="trial4"] .card:active{transform:translateY(2px)}
 .between-cinema .btn{min-height:48px;touch-action:manipulation}
 </style>
 <!-- Pages redeploy trigger: 2026-10-31 / JANUS cinematic release -->
+
+<style id="cinematic-overhaul-v1">
+/* Cinematic pass: ambient depth and touch feedback without altering puzzle state. */
+:root{--cinema-accent:#8bc7ed}
+body[data-screen^="trial"] .screen{position:relative;isolation:isolate}
+body[data-screen^="trial"] .screen::before{content:"";pointer-events:none;position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse at 50% 32%,transparent 25%,rgba(0,5,13,.35) 100%);opacity:.7}
+body[data-screen^="trial"] .screen::after{content:"";pointer-events:none;position:fixed;inset:0;z-index:3;background:repeating-linear-gradient(0deg,rgba(120,180,230,.024) 0 1px,transparent 1px 5px);mix-blend-mode:screen;opacity:.35}
+body[data-screen^="trial"] .screen .card{transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease}
+@media(hover:hover){body[data-screen^="trial"] .screen .card:hover{border-color:rgba(139,199,237,.42);box-shadow:0 12px 40px rgba(0,0,0,.18)}}
+body[data-screen^="trial"] button:active{transform:scale(.975);filter:brightness(1.18)}
+.cinema-room-atmosphere{height:108px;position:relative;overflow:hidden;border:1px solid rgba(139,199,237,.23);background:linear-gradient(180deg,#071321,#0b1928 55%,#050a12);margin:12px 0 18px;box-shadow:inset 0 -25px 35px rgba(0,0,0,.55)}
+.cinema-room-atmosphere::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 19%,rgba(130,190,230,.09) 19.2% 19.5%,transparent 19.7% 40%);transform:perspective(250px) rotateX(14deg);transform-origin:bottom}
+.cinema-room-atmosphere::after{content:"";position:absolute;left:50%;top:-70px;width:180px;height:220px;transform:translateX(-50%);background:radial-gradient(ellipse at top,rgba(133,203,255,.24),transparent 67%);animation:cinemaLight 7s ease-in-out infinite alternate}
+.cinema-room-label{position:absolute;left:14px;bottom:12px;z-index:1;color:#a9c8dc;font:10px monospace;letter-spacing:.2em}
+.cinema-room-number{position:absolute;right:14px;bottom:2px;font:64px Georgia,serif;color:rgba(165,205,234,.13)}
+.cinema-entry{animation:cinemaEnter .6s ease both}
+@keyframes cinemaLight{from{opacity:.45}to{opacity:1}}
+@keyframes cinemaEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.cinema-room-atmosphere::after,.cinema-entry{animation:none!important}body[data-screen^="trial"] button,.screen .card{transition:none!important}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -763,6 +783,17 @@ function render(){
   const a=document.getElementById('app');
   a.innerHTML = screen==='splash'?splash():screen==='loading'?loadingScreen():screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='corridor'?corridor():screen==='t1to2'?trialOneToTwo():screen.startsWith('interlude')?narrativeInterlude(Number(screen.replace('interlude',''))):screen==='settings'?settings():screen==='archive'?archiveScreen():screen.startsWith('between')?betweenTrial(Number(screen.replace('between',''))):screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial','')));
   bind();
+  if(/^trial(?:[1-9]|1[0-2])$/.test(screen)){
+    const n=Number(screen.slice(5)),scene=document.querySelector('.screen');
+    if(scene&&!scene.querySelector('.cinema-room-atmosphere')){
+      const atmosphere=document.createElement('div');
+      atmosphere.className='cinema-room-atmosphere cinema-entry';
+      atmosphere.setAttribute('aria-hidden','true');
+      atmosphere.innerHTML='<span class="cinema-room-label">JANUS // CHAMBER '+String(n).padStart(2,'0')+' // LIVE FEED</span><span class="cinema-room-number">'+String(n).padStart(2,'0')+'</span>';
+      const first=scene.querySelector('main')||scene;
+      first.insertBefore(atmosphere,first.firstChild);
+    }
+  }
   let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
 }
 function bind(){
