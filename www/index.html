@@ -540,6 +540,23 @@ body[data-screen^="trial"] button:active{transform:scale(.975);filter:brightness
 @keyframes cinemaVoice{from{height:3px}to{height:10px}}
 @media(prefers-reduced-motion:reduce){.cinema-character.architect,.cinema-interrogation[data-speaking="true"] .cinema-wave i{animation:none}}
 </style>
+
+<style id="cinema-chamber-fx-v4">
+body[data-screen="trial2"] .cinema-room-atmosphere{background:linear-gradient(180deg,#071b27,#103447 72%,#061a2b)}
+body[data-screen="trial2"] .cinema-room-atmosphere::before{background:repeating-linear-gradient(0deg,rgba(91,180,212,.06) 0 2px,transparent 2px 12px);animation:cinemaWater 5s linear infinite}
+body[data-screen="trial3"] .cinema-room-atmosphere{background:linear-gradient(110deg,#07101b,#152b32 60%,#07111a)}
+body[data-screen="trial4"] .cinema-room-atmosphere,body[data-screen="trial11"] .cinema-room-atmosphere{background:radial-gradient(ellipse at 50% -25%,#25465c,#070c16 65%)}
+body[data-screen="trial6"] .cinema-room-atmosphere{background:linear-gradient(90deg,#0a2031 49.5%,#02070c 50%,#1b1525 50.5%)}
+body[data-screen="trial8"] .cinema-room-atmosphere,body[data-screen="trial10"] .cinema-room-atmosphere{background:repeating-linear-gradient(0deg,#07121e 0 4px,#0d2030 5px 7px)}
+body[data-screen="trial9"] .cinema-room-atmosphere,body[data-screen="trial12"] .cinema-room-atmosphere{background:radial-gradient(ellipse at center,#243445,#050a11 80%)}
+.cinema-room-atmosphere .cinema-effect{position:absolute;inset:0;pointer-events:none;opacity:.38;z-index:1}
+.cinema-room-atmosphere .cinema-effect::after{content:"";position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,rgba(151,202,239,.09) 50%,transparent 60%);animation:cinemaSweep 9s ease-in-out infinite alternate}
+.cinema-room-atmosphere .cinema-hotspot{z-index:6}
+.cinema-room-atmosphere .cinema-room-label,.cinema-room-atmosphere .cinema-room-number{z-index:4}
+@keyframes cinemaWater{to{background-position:0 36px}}
+@keyframes cinemaSweep{from{transform:translateX(-30%)}to{transform:translateX(30%)}}
+@media(prefers-reduced-motion:reduce){.cinema-room-atmosphere .cinema-effect::after,body[data-screen="trial2"] .cinema-room-atmosphere::before{animation:none}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -850,6 +867,7 @@ function render(){
         12:['The air is unnaturally still.','The camera image shows an empty room for a heartbeat.','The exit mechanism hums, but no motor engages.']
       };
       const descriptions=sceneClues[n]||points.map(p=>p[1]);
+      atmosphere.innerHTML+='<div class="cinema-effect" aria-hidden="true"></div>';
       atmosphere.innerHTML+=points.map((p,i)=>'<button type="button" class="cinema-hotspot" data-spot="'+i+'" aria-label="Inspect '+p[0].toLowerCase()+'">+</button>').join('');
       const inspection=document.createElement('div');
       inspection.className='cinema-inspection';
@@ -879,6 +897,11 @@ function render(){
           S.flags.cinemaInspections=seen;
           save();
           button.dataset.found='true';
+          if(S.settings?.ambience!==false){
+            const notes=[72,110,155,92,62,80,140,170,58,200,94,48];
+            tone(notes[n-1]*(1+i*.12),.12,.012,'sine');
+          }
+          if(S.settings?.haptics!==false)try{navigator.vibrate?.(12)}catch(e){}
           inspection.dataset.open='true';
           const count=[0,1,2].filter(j=>seen[n+'-'+j]).length;
           inspection.innerHTML='<strong>'+('CHAMBER '+String(n).padStart(2,'0'))+' / '+points[i][0]+'</strong><p>'+descriptions[i]+'</p><div class="cinema-inspection-status">ENVIRONMENT DETAILS OBSERVED '+count+' / 3 · OPTIONAL</div>';
