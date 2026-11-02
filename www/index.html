@@ -517,6 +517,29 @@ body[data-screen^="trial"] button:active{transform:scale(.975);filter:brightness
 @keyframes cinemaHotspot{0%,100%{box-shadow:0 0 0 4px rgba(94,172,223,.06)}50%{box-shadow:0 0 0 9px rgba(94,172,223,.14)}}
 @media(prefers-reduced-motion:reduce){.cinema-hotspot{animation:none}}
 </style>
+
+<style id="cinema-interrogation-pass3">
+.cinema-interrogation{position:relative;min-height:190px;overflow:hidden;margin:12px 0 18px;border:1px solid #35536a;background:radial-gradient(ellipse at 50% -12%,rgba(141,199,235,.22),transparent 58%),linear-gradient(120deg,#07111e,#101f2c 52%,#060c15);display:grid;grid-template-columns:1fr 1fr;align-items:end;isolation:isolate}
+.cinema-interrogation::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(145,195,225,.025) 4px 5px);z-index:3}
+.cinema-interrogation::after{content:"";position:absolute;left:20%;right:20%;height:5px;bottom:30px;background:#0a121b;box-shadow:0 0 18px rgba(120,180,230,.17);transform:perspective(150px) rotateX(15deg);z-index:2}
+.cinema-character{position:relative;height:152px;align-self:end;display:flex;align-items:center;flex-direction:column;justify-content:flex-end;filter:drop-shadow(0 4px 15px rgba(0,0,0,.7))}
+.cinema-character .head{width:47px;height:56px;border-radius:47% 47% 44% 44%;background:linear-gradient(115deg,#172c3d,#07111c);border:1px solid rgba(147,195,225,.19);box-shadow:inset 12px 0 18px rgba(0,0,0,.4);z-index:2}
+.cinema-character .torso{width:105px;height:85px;margin-top:-3px;border-radius:50% 50% 8px 8px;background:linear-gradient(110deg,#152c3c,#060e18 80%);border:1px solid rgba(147,195,225,.15)}
+.cinema-character.subject .head{background:linear-gradient(120deg,#294354,#0a1622)}
+.cinema-character.architect .head{background:linear-gradient(120deg,#0a1520,#172533)}
+.cinema-character.architect{animation:cinemaBreath 4s ease-in-out infinite}
+.cinema-character.active .head{box-shadow:0 0 22px rgba(143,203,243,.16),inset 12px 0 18px rgba(0,0,0,.4)}
+.cinema-voice{position:absolute;z-index:5;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px;font:10px monospace;letter-spacing:.13em;color:#b3d5eb}
+.cinema-voice span:last-child{color:#d58b92}
+.cinema-wave{position:absolute;z-index:5;bottom:11px;left:15px;right:15px;height:10px;display:flex;gap:3px;justify-content:center;align-items:center}
+.cinema-wave i{display:block;width:3px;height:3px;background:#8dc8e9;opacity:.7}
+.cinema-interrogation[data-speaking="true"] .cinema-wave i{animation:cinemaVoice .7s ease-in-out infinite alternate}
+.cinema-wave i:nth-child(2n){animation-delay:.2s}.cinema-wave i:nth-child(3n){animation-delay:.4s}
+.cinema-dialogue-label{margin:-7px 0 14px;padding:10px 13px;border-left:2px solid #6f9dbc;background:#0a1623;color:#a9c5d9;font:11px monospace;letter-spacing:.07em}
+@keyframes cinemaBreath{50%{transform:translateY(2px)}}
+@keyframes cinemaVoice{from{height:3px}to{height:10px}}
+@media(prefers-reduced-motion:reduce){.cinema-character.architect,.cinema-interrogation[data-speaking="true"] .cinema-wave i{animation:none}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -834,6 +857,20 @@ function render(){
       inspection.setAttribute('aria-live','polite');
       first.insertBefore(atmosphere,first.firstChild);
       atmosphere.insertAdjacentElement('afterend',inspection);
+      if([3,4,11].includes(n)){
+        const labels={3:['INVESTIGATOR','UNIDENTIFIED WITNESS','CASE RECORDING // LIVE'],4:['SUBJECT 13','THE ARCHITECT','INTERVIEW // REC'],11:['SUBJECT 13','THE ARCHITECT','CONFRONTATION // REC']};
+        const meta=labels[n],interrogation=document.createElement('section');
+        interrogation.className='cinema-interrogation cinema-entry';
+        interrogation.setAttribute('aria-label',meta[2]+': cinematic character silhouettes');
+        interrogation.innerHTML='<div class="cinema-voice"><span>'+meta[0]+'</span><span>'+meta[1]+'</span></div><div class="cinema-character subject active"><div class="head"></div><div class="torso"></div></div><div class="cinema-character architect"><div class="head"></div><div class="torso"></div></div><div class="cinema-wave" aria-hidden="true">'+Array.from({length:19},()=>'<i></i>').join('')+'</div>';
+        const dialogue=document.createElement('div');
+        dialogue.className='cinema-dialogue-label';
+        dialogue.textContent=n===3?'SURVEILLANCE ACTIVE // OBSERVE THE WITNESS':n===4?'THE ARCHITECT IS LISTENING // CHOOSE YOUR WORDS':'THE RECORD IS OPEN // EVERY CLAIM CAN BE CHALLENGED';
+        inspection.insertAdjacentElement('afterend',interrogation);
+        interrogation.insertAdjacentElement('afterend',dialogue);
+        const speaking=scene.querySelector('.t4-narration,.storybox,.t4-cutscene');
+        interrogation.dataset.speaking=String(!!speaking);
+      }
       atmosphere.querySelectorAll('.cinema-hotspot').forEach((button,i)=>{
         button.addEventListener('click',()=>{
           const seen=S.flags.cinemaInspections||{};
