@@ -1,0 +1,83 @@
+name: Continuance production Android AAB
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Release smoke tests
+        run: node tests/continuity-smoke.cjs
+      - name: Assert screenshot override disabled
+        run: |
+          grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
+      - name: Generate Android project
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: Configure Play release API, version and signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.CONTINUANCE_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.CONTINUANCE_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.CONTINUANCE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.CONTINUANCE_KEY_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import os,base64,pathlib
+          keys=['KEYSTORE_BASE64','STORE_PASSWORD','KEY_ALIAS','KEY_PASSWORD']
+          missing=[k for k in keys if not os.environ.get(k)]
+          if missing: raise SystemExit('Missing required GitHub signing secrets: '+', '.join(missing))
+          pathlib.Path('android/app/continuance-release.jks').write_bytes(base64.b64decode(os.environ['KEYSTORE_BASE64']))
+          gradle=pathlib.Path('android/app/build.gradle')
+          with gradle.open('a') as f:
+              f.write("""
+          android {
+              compileSdk 36
+              defaultConfig {
+                  targetSdk 36
+                  versionCode 1
+                  versionName "1.0.0"
+              }
+              signingConfigs {
+                  continuanceRelease {
+                      storeFile file("continuance-release.jks")
+                      storePassword System.getenv("STORE_PASSWORD")
+                      keyAlias System.getenv("KEY_ALIAS")
+                      keyPassword System.getenv("KEY_PASSWORD")
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.continuanceRelease
+                  }
+              }
+          }
+          """)
+          PY
+      - name: Install Android 16 SDK
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Build signed Play AAB
+        working-directory: android
+        env:
+          STORE_PASSWORD: ${{ secrets.CONTINUANCE_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.CONTINUANCE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.CONTINUANCE_KEY_PASSWORD }}
+        run: bash ./gradlew bundleRelease --no-daemon
+      - name: Upload signed AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: continuance-v1.0.0-signed-aab
+          path: android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
