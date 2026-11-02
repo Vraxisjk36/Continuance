@@ -1,5 +1,6 @@
 name: Browser preview
 # Deploy main game, screenshots, and cinematic preview
+# Redeploy requested 2026-11-02: verify all-trials cinematic preview
 on:
   workflow_dispatch:
   push:
