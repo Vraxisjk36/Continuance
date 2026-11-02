@@ -38,7 +38,7 @@ test('Progress and save data persist locally',()=>{
   q.getState().trial=3;
   q.getState().completed=[1,2];
   q.getState().flags.testSaveMarker='persisted';
-  g.goCorridor();
+  g.saveWitnessNotes('release QA');
   const saved=JSON.parse(store.get('continuance_standalone_v1'));
   assert.equal(saved.trial,3);
   assert.deepEqual(Array.from(saved.completed),[1,2]);
