@@ -11,7 +11,7 @@ const document={body:{dataset:{},classList:{add(){},remove(){}},style:{},appendC
 const window={addEventListener(){},location:{},matchMedia(){return {matches:false}},scrollTo(){}};
 const localStorage={getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)};
 const sandbox={document,window,localStorage,navigator:{vibrate(){}},setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,clearInterval(){},console,confirm:()=>true};
-const injected=script.replace(/\brender\(\);\s*\}\)\(\);\s*$/,'window.__qa={getState:()=>S,setState:x=>{S=x},DEFAULT,Game:window.Game,t6,t7,t8,t9,t10,t11,t12};\n})();');
+const injected=script.replace(/\brender\(\);\s*\}\)\(\);\s*$/,'window.__qa={getState:()=>S,setState:x=>{S=x},DEFAULT,Game:window.Game,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12};\n})();');
 assert.notEqual(injected,script,'Could not install smoke test hook');
 vm.runInNewContext(injected,sandbox,{timeout:5000});
 const q=window.__qa,g=q.Game;
@@ -25,4 +25,30 @@ test('Trial XI evidence confrontation',()=>{for(let i=0;i<6;i++)g.t11ReadRecord(
 test('Trial XI unproven accusation rejected',()=>{for(let i=0;i<6;i++)g.t11ReadRecord(i);for(const x of ['A','B','D'])g.pick11(x);g.prove11();assert.equal(q.getState().flags.t11phase||'claims','claims')});
 for(const ending of ['ESCAPE','ZERO','TERMINATE','CONTINUE'])test('Trial XII ending '+ending,()=>{g.fakeExit12();g.door12('FALSE');vals.id12='OPERATOR 13';g.identity12();g.event12('B');g.end12(ending);assert.equal(q.getState().flags.t12phase,'aftermath');assert.match(q.t12(),/FINAL TRANSMISSION/);g.t12ViewReport();assert(q.getState().completed.includes(12))});
 test('Trial XIII eligibility gate',()=>{q.getState().flags.memoryAwareness=4;q.getState().flags.t10tape=true;g.end12('CONTINUE');assert.equal(q.getState().flags.trial13,true)});
+
+test('Release locks trial directory and prevents skipping',()=>{
+  assert.equal(q.getState().trial,1);
+  g.enter(5);
+  assert.equal(q.getState().trial,1);
+  assert(!q.getState().completed.includes(5));
+});
+test('Progress and save data persist locally',()=>{
+  g.enter(2);
+  assert.equal(q.getState().trial,1);
+  q.getState().trial=3;
+  q.getState().completed=[1,2];
+  q.getState().flags.testSaveMarker='persisted';
+  g.goCorridor();
+  const saved=JSON.parse(store.get('continuance_standalone_v1'));
+  assert.equal(saved.trial,3);
+  assert.deepEqual(Array.from(saved.completed),[1,2]);
+  assert.equal(saved.flags.testSaveMarker,'persisted');
+});
+test('All twelve trial renderers available',()=>{
+  for(let n=1;n<=12;n++){
+    const out=[null,q.t1,q.t2,q.t3,q.t4,q.t5,q.t6,q.t7,q.t8,q.t9,q.t10,q.t11,q.t12][n]();
+    assert(out.length>100,'Trial '+n+' rendered');
+  }
+});
+
 console.log('CONTINUANCE smoke suite complete.');
