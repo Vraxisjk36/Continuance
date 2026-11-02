@@ -1,4 +1,5 @@
 name: Browser preview
+# Redeploy screenshot-mode build (all twelve chambers accessible)
 on:
   workflow_dispatch:
   push:
