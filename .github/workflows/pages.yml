@@ -1,5 +1,5 @@
 name: Browser preview
-# Redeploy screenshot-mode build (all twelve chambers accessible)
+# Deploy main game, screenshots, and cinematic preview
 on:
   workflow_dispatch:
   push:
@@ -19,8 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify playable source
-        run: test -s www/index.html
+      - name: Verify playable source and cinematic preview
+        run: |
+          test -s www/index.html
+          test -s www/cinematic-preview.html
+          echo "Preview present in Pages artifact"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
