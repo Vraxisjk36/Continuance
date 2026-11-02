@@ -27,6 +27,25 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
+      - name: Generate launcher icons from source artwork
+        run: |
+          python3 -m pip install --quiet cairosvg pillow
+          python3 - <<'PY'
+          from pathlib import Path
+          import cairosvg,io
+          from PIL import Image
+          source=Path('assets/continuance-icon.svg').read_bytes()
+          root=Path('android/app/src/main/res')
+          for density,size in [('mdpi',48),('hdpi',72),('xhdpi',96),('xxhdpi',144),('xxxhdpi',192)]:
+              folder=root/('mipmap-'+density)
+              folder.mkdir(parents=True,exist_ok=True)
+              raw=cairosvg.svg2png(bytestring=source,output_width=size,output_height=size)
+              image=Image.open(io.BytesIO(raw)).convert('RGBA')
+              for name in ['ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png']:
+                  image.save(folder/name)
+          for p in root.glob('values*/ic_launcher_background.xml'):
+              p.write_text('<resources><color name="ic_launcher_background">#05090e</color></resources>')
+          PY
       - name: Configure Play release API, version and signing
         env:
           KEYSTORE_BASE64: ${{ secrets.CONTINUANCE_KEYSTORE_BASE64 }}
