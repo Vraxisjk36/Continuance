@@ -501,6 +501,22 @@ body[data-screen^="trial"] button:active{transform:scale(.975);filter:brightness
 @keyframes cinemaEnter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.cinema-room-atmosphere::after,.cinema-entry{animation:none!important}body[data-screen^="trial"] button,.screen .card{transition:none!important}}
 </style>
+
+<style id="cinema-touch-inspection">
+.cinema-room-atmosphere{height:172px;touch-action:manipulation}
+.cinema-hotspot{position:absolute;z-index:5;border:1px solid rgba(143,202,242,.38);border-radius:50%;width:36px;height:36px;background:rgba(6,24,40,.7);color:#d9f0ff;display:grid;place-items:center;box-shadow:0 0 0 5px rgba(94,172,223,.07),0 0 22px rgba(81,158,209,.15);font:20px monospace;cursor:pointer;animation:cinemaHotspot 3s ease-in-out infinite}
+.cinema-hotspot:nth-of-type(2){animation-delay:.8s}.cinema-hotspot:nth-of-type(3){animation-delay:1.6s}
+.cinema-hotspot:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.cinema-hotspot[data-found="true"]{border-color:#83b1a0;color:#9cddc5;animation:none}
+.cinema-hotspot[data-spot="0"]{left:17%;top:23%}.cinema-hotspot[data-spot="1"]{left:48%;top:40%}.cinema-hotspot[data-spot="2"]{right:16%;top:17%}
+.cinema-inspection{margin:-12px 0 18px;padding:14px;border:1px solid rgba(139,199,237,.3);background:#07121f;color:#c8deee;display:none;line-height:1.6}
+.cinema-inspection[data-open="true"]{display:block;animation:cinemaEnter .2s ease both}
+.cinema-inspection strong{display:block;color:#f2f8fc;letter-spacing:.1em;font:12px monospace;margin-bottom:5px}
+.cinema-inspection p{margin:0;font-size:13px}
+.cinema-inspection-status{font:10px monospace;letter-spacing:.1em;color:#8aafc7;margin-top:9px}
+@keyframes cinemaHotspot{0%,100%{box-shadow:0 0 0 4px rgba(94,172,223,.06)}50%{box-shadow:0 0 0 9px rgba(94,172,223,.14)}}
+@media(prefers-reduced-motion:reduce){.cinema-hotspot{animation:none}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -791,7 +807,47 @@ function render(){
       atmosphere.setAttribute('aria-hidden','true');
       atmosphere.innerHTML='<span class="cinema-room-label">JANUS // CHAMBER '+String(n).padStart(2,'0')+' // LIVE FEED</span><span class="cinema-room-number">'+String(n).padStart(2,'0')+'</span>';
       const first=scene.querySelector('main')||scene;
+      const points=[
+        ['VENTILATION','A faint mechanical rhythm moves behind the grille. The system is still running.'],
+        ['SURVEILLANCE','The lens follows movement a fraction of a second too late. Someone may be watching a recording.'],
+        ['DOOR MECHANISM','The lock is controlled from outside this chamber. Force will not open it.']
+      ];
+      const sceneClues={
+        1:['A scratched line runs beneath the grille. Someone counted their nights here.','The camera turns toward the cipher before you touch it.','There is no handle on your side of the door.'],
+        2:['Moisture gathers around the intake pipe. The pressure is rising.','The monitor flickers between water-level readings.','The release mechanism is linked to the control sequence.'],
+        3:['The hospital air smells of disinfectant and something burnt.','The monitor repeats a corridor recording with a missing second.','The security door is marked AUTHORISED PERSONNEL ONLY.'],
+        4:['The ventilation stops whenever the Architect speaks.','A recording light flashes behind the observation glass.','There are scratches near the chair bolts.'],
+        5:['Paper dust drifts from a vent that should be sealed.','A lens is aimed at the evidence rather than at you.','A label has been torn from the cabinet lock.'],
+        6:['Air moves from one passage but not the other.','The camera can see both doors at once.','One door frame has been repaired recently.'],
+        7:['The vent carries a voice too faint to distinguish.','The surveillance timecode skips a frame.','The access panel shows signs of forced entry.'],
+        8:['A soft tapping follows the ventilation cycle.','The monitor reflects a second terminal behind you.','The door light changes whenever a message arrives.'],
+        9:['The air carries the smell of overheated circuitry.','The monitor displays a prior attempt for one frame.','An old identification strip is caught in the lock.'],
+        10:['The vent resonates at the same frequency as the receiver.','The monitor shows a waveform with a missing section.','The door relay clicks when the transmission repeats.'],
+        11:['The ventilation is silent, though the indicator says ACTIVE.','The surveillance camera has been turned toward the records.','Someone has scratched a warning beside the latch.'],
+        12:['The air is unnaturally still.','The camera image shows an empty room for a heartbeat.','The exit mechanism hums, but no motor engages.']
+      };
+      const descriptions=sceneClues[n]||points.map(p=>p[1]);
+      atmosphere.innerHTML+=points.map((p,i)=>'<button type="button" class="cinema-hotspot" data-spot="'+i+'" aria-label="Inspect '+p[0].toLowerCase()+'">+</button>').join('');
+      const inspection=document.createElement('div');
+      inspection.className='cinema-inspection';
+      inspection.setAttribute('role','status');
+      inspection.setAttribute('aria-live','polite');
       first.insertBefore(atmosphere,first.firstChild);
+      atmosphere.insertAdjacentElement('afterend',inspection);
+      atmosphere.querySelectorAll('.cinema-hotspot').forEach((button,i)=>{
+        button.addEventListener('click',()=>{
+          const seen=S.flags.cinemaInspections||{};
+          const key=n+'-'+i;
+          seen[key]=true;
+          S.flags.cinemaInspections=seen;
+          save();
+          button.dataset.found='true';
+          inspection.dataset.open='true';
+          const count=[0,1,2].filter(j=>seen[n+'-'+j]).length;
+          inspection.innerHTML='<strong>'+('CHAMBER '+String(n).padStart(2,'0'))+' / '+points[i][0]+'</strong><p>'+descriptions[i]+'</p><div class="cinema-inspection-status">ENVIRONMENT DETAILS OBSERVED '+count+' / 3 · OPTIONAL</div>';
+        });
+        if((S.flags.cinemaInspections||{})[n+'-'+i])button.dataset.found='true';
+      });
     }
   }
   let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
