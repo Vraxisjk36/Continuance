@@ -23,6 +23,8 @@ jobs:
       - name: Assert screenshot override disabled
         run: |
           grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
+      - name: Exclude screenshot-only build from Android package
+        run: rm -f www/store-screenshots-2026.html
       - name: Generate Android project
         run: |
           npx cap add android
