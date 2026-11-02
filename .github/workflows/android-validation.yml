@@ -1,0 +1,21 @@
+name: Continuance release validation
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'www/index.html'
+      - 'tests/**'
+      - '.github/workflows/android-validation.yml'
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Assert screenshot mode disabled
+        run: grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
+      - name: Run progression, saves, scene and ending checks
+        run: node tests/continuity-smoke.cjs
