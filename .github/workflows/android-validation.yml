@@ -18,4 +18,6 @@ jobs:
       - name: Assert screenshot mode disabled
         run: grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
       - name: Run progression, saves, scene and ending checks
-        run: node tests/continuity-smoke.cjs
+        run: |
+          node tests/continuity-smoke.cjs
+          node tests/ai-resistance-audit.cjs
