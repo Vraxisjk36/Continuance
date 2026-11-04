@@ -1,0 +1,17 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),vm=require('node:vm');
+const html=fs.readFileSync('www/index.html','utf8');
+const start=html.indexOf('function t12Consequences(){'),end=html.indexOf('function t12RenPromise(){',start);
+assert(start>=0&&end>start,'final consequence recap missing');
+const ctx={S:{flags:{t4choice:'SENSORY',t5cover:'PROTECT',t7decision:'SHARE WITH THE ARCHITECT',t8lied:true,t9choice:'CONFRONT',t10tape:false}},esc(x){return String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}};
+vm.createContext(ctx);vm.runInContext(html.slice(start,end)+'this.recap=t12Consequences;',ctx);
+const result=ctx.recap();
+for(const label of ['CHAMBER IV','MERCER FILE','INTERCEPT','FALSE VALUE','PREVIOUS YOU','CASSETTE'])assert(result.includes(label),'Missing consequence: '+label);
+assert(result.includes('shared the recovered conversation'),'Shared intercept not reflected');
+ctx.S.flags.t7decision='HIDE FROM THE ARCHITECT';ctx.S.flags.t8lied=false;ctx.S.flags.t10tape=true;
+const alternate=ctx.recap();assert(alternate.includes('kept the recovered conversation'),'Hidden intercept not reflected');
+assert(!alternate.includes('FALSE VALUE'),'Honest Ren branch incorrectly accused');
+assert(alternate.includes('You heard the recording'),'Cassette branch incorrect');
+ctx.S.flags={};assert.equal(ctx.recap(),'','Legacy saves must not fabricate decisions');
+assert(html.includes('${t12WitnessPayoff()}${t12Consequences()}'),'Final choice must display consequences');
+assert(html.includes('${t12RenPromise()}${t12Consequences()}'),'Ending must display consequences');
+console.log('Trial XII cross-trial consequence and legacy-save checks passed');
