@@ -21,6 +21,8 @@ jobs:
           java-version: '21'
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
       - name: Verify web app is present
         run: |
           test -s www/index.html || { echo "::error::Missing www/index.html"; exit 1; }
