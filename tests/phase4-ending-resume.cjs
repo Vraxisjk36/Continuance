@@ -12,6 +12,6 @@ assert(ctx.endings.CONTINUE[2].includes('risk'),'continuation must acknowledge r
 const m=src.match(/resume\(\)\{([^}]+)\}/);assert(m,'resume handler missing');
 assert(m[1].includes("S.completed?.includes(12)"),'completed game must not resume Trial XIII');
 assert(m[1].includes("setScreen('trial12')"),'completed game must show final record');
-assert(m[1].includes('Math.min(12'),'incomplete save must cap resumed chamber');
+assert(src.includes('let n=Math.min(12,Math.max(1,Number(S.trial)||1));Game.loadChamber(n)'), 'incomplete save must cap resumed chamber');
 assert(src.includes("if(!SCREENSHOT_MODE_UNLOCK_ALL&&n>Math.max(1,Number(S.trial)||1))return;"),'trial progression must stay gated');
 console.log('Phase IV endings, outcome uncertainty and completed-game resume checks passed');
