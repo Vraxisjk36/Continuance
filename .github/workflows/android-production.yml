@@ -33,36 +33,8 @@ jobs:
         run: |
           npx cap add android
           npx cap sync android
-      - name: Enable secure screenshots only inside trials
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          root=Path('android/app/src/main/java')
-          matches=list(root.rglob('MainActivity.java'))
-          if len(matches)!=1: raise SystemExit('Expected exactly one generated MainActivity.java')
-          p=matches[0]
-          src=p.read_text()
-          if 'extends BridgeActivity' not in src: raise SystemExit('Unexpected Capacitor MainActivity')
-          src=src.replace('import com.getcapacitor.BridgeActivity;', '''import com.getcapacitor.BridgeActivity;
-          import android.os.Bundle;
-          import android.webkit.JavascriptInterface;
-          import android.view.WindowManager;''')
-          src=src.replace('public class MainActivity extends BridgeActivity {', '''public class MainActivity extends BridgeActivity {
-              @Override public void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  getBridge().getWebView().addJavascriptInterface(new Object() {
-                      @JavascriptInterface public void setSecure(boolean secure) {
-                          runOnUiThread(() -> {
-                              if (secure) getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                              else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                          });
-                      }
-                  }, "AndroidScreenGuard");
-              }
-          ''')
-          p.write_text(src)
-          print('Installed trial-only Android FLAG_SECURE bridge')
-          PY
+      - name: Install native capture protection
+        run: python3 scripts/install-android-screen-guard.py
       - name: Generate launcher icons from source artwork
         run: |
           python3 -m pip install --quiet cairosvg pillow
