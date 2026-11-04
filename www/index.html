@@ -485,6 +485,21 @@ body[data-screen^="trial"] input,body[data-screen^="trial"] textarea{user-select
 .between-cinema .btn{min-height:48px;touch-action:manipulation}
 </style>
 <!-- Pages redeploy trigger: 2026-10-31 / JANUS cinematic release -->
+<style>
+/* Mobile game presentation: preserve scrollable story/evidence areas without browser chrome. */
+html,body,#app{width:100%;max-width:100%;overflow-x:hidden;scrollbar-width:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html::-webkit-scrollbar,body::-webkit-scrollbar,#app::-webkit-scrollbar,.screen::-webkit-scrollbar,.wrap::-webkit-scrollbar,*::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+body{margin:0;touch-action:pan-y;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+.screen{min-height:100dvh;max-width:100%;overflow-x:clip;overscroll-behavior:contain}
+.wrap{width:100%;max-width:760px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:max(80px,calc(80px + env(safe-area-inset-bottom)))}
+.header{padding-top:max(12px,env(safe-area-inset-top));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+.architect{bottom:max(10px,env(safe-area-inset-bottom));left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right))}
+button,.btn,[role=button]{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:44px}
+input,textarea,select{font-size:max(16px,1em);-webkit-user-select:text;user-select:text}
+img,svg,canvas,video{max-width:100%}
+@media(max-width:380px){.header{grid-template-columns:minmax(50px,64px) minmax(0,1fr) minmax(75px,96px);gap:5px}.wrap{padding-left:12px;padding-right:12px}.grid3{gap:6px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
