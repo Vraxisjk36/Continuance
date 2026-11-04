@@ -1,6 +1,6 @@
 /* CONTINUANCE / Node smoke tests. Run: node tests/continuity-smoke.cjs */
 'use strict';
-const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{webcrypto}=require('node:crypto');
 const html=fs.readFileSync(require('node:path').join(__dirname,'../www/index.html'),'utf8');
 const script=html.split('<script>')[1]?.split('</script>')[0];
 assert(script,'Main game script missing');
@@ -10,7 +10,7 @@ const dummy={style:{},classList:{add(){},remove(){}},appendChild(){},remove(){},
 const document={body:{dataset:{},classList:{add(){},remove(){}},style:{},appendChild(){}},getElementById(id){return id==='app'?app:{...dummy,value:vals[id]||''}},querySelector(){return null},querySelectorAll(){return []},addEventListener(){},createElement(){return {...dummy}},createTextNode(){return dummy}};
 const window={addEventListener(){},location:{},matchMedia(){return {matches:false}},scrollTo(){}};
 const localStorage={getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)};
-const sandbox={document,window,localStorage,navigator:{vibrate(){}},setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,clearInterval(){},console,confirm:()=>true};
+const sandbox={document,window,localStorage,crypto:webcrypto,navigator:{vibrate(){}},setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,clearInterval(){},console,confirm:()=>true};
 const injected=script.replace(/\brender\(\);\s*\}\)\(\);\s*$/,'window.__qa={getState:()=>S,setState:x=>{S=x},DEFAULT,Game:window.Game,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t12MemoryDoors};\n})();');
 assert.notEqual(injected,script,'Could not install smoke test hook');
 vm.runInNewContext(injected,sandbox,{timeout:5000});
