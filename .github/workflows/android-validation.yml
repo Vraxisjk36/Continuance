@@ -35,5 +35,6 @@ jobs:
           node tests/trial7-deduction.cjs
           node tests/trial8-exploration.cjs
           node tests/trial9-exploration.cjs
+          node tests/trial9-crosscheck.cjs
           node tests/trial11-rebuttal.cjs
           node tests/trial12-memory.cjs
