@@ -31,6 +31,8 @@ jobs:
         run: npm install
       - name: Create Android platform
         run: npx cap add android
+      - name: Install native capture protection
+        run: python3 scripts/install-android-screen-guard.py
       - name: Sync web app
         run: npx cap sync android
       - name: Build debug APK
