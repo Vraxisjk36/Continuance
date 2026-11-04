@@ -6,7 +6,7 @@ assert.equal(android.webDir,'www','Android must package the tested game');
 assert.match(pages,/path:\s*www\b/,'GitHub Pages must deploy the tested game, not the legacy root index');
 for(let n=1;n<=12;n++)assert(app.includes('function t'+n+'(){'),'Missing Trial '+n+' from deployed game');
 const checks=[
- ['Trial 5 evidence connections',app.includes('4 connections unlock the confrontation')],
+ ['Trial 5 evidence connections',app.includes('four connections unlock the confrontation')],
  ['Trial 6 permanent route warning',app.includes('IRREVERSIBLE ROUTE CHOICE')],
  ['Trial 7 legacy save compatibility',app.includes('S.flags.t7verified||(!S.flags.t7inspect&&!S.flags.t7packets)')],
  ['Trial 8 live peer authentication',app.includes('authenticate the live peer using the wall taps')],
