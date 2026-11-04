@@ -529,7 +529,16 @@ img,svg,canvas,video{max-width:100%}
 @keyframes janusFlicker{0%,93%,95%,100%{opacity:1}94%,96%{opacity:.3}}
 @media(prefers-reduced-motion:reduce){.janus-splash .splash-studio,.janus-splash .splash-line,.janus-splash .splash-game,.janus-splash .splash-sub,.janus-splash .splash-enter,.first-contact-light,.first-contact-camera{animation:none!important}}
 </style>
-</head>
+<style>
+/* Closed-test phase 1: cinematic legibility and mobile controls */
+.janus-cinema .cinema-content,.first-contact-stage .wrap{padding-bottom:max(42px,env(safe-area-inset-bottom))}
+.first-contact-stage .wrap{max-width:610px;margin-inline:auto}
+.first-contact-stage .first-contact-panel{max-height:none}
+.first-contact-stage .first-contact-dialogue{overflow-wrap:anywhere}
+.first-contact-stage .btn,.janus-cinema button,.janus-splash button{touch-action:manipulation}
+@media(max-width:480px){.first-contact-stage .wrap{padding-left:18px;padding-right:18px}.first-contact-stage .first-contact-panel{padding:20px 18px!important}.first-contact-stage .first-contact-door{left:22%;width:56%}.janus-cinema .cinema-content{padding-left:20px;padding-right:20px}}
+@media(prefers-reduced-motion:reduce){.first-contact-stage *,.janus-cinema .cinema-atmosphere *{transition:none!important}}
+</style></head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
 (function(){
@@ -602,7 +611,7 @@ function runTypewriters(){
       if(!el.isConnected)return;
       let step=raw[i]===' ' ? 2 : 1;
       i=Math.min(raw.length,i+step);el.textContent=raw.slice(0,i);
-      if(i<raw.length)setTimeout(tick,raw[i-1]==='\n'?speed*5:speed);
+      if(i<raw.length)el.__typeTimer=setTimeout(tick,raw[i-1]==='\n'?speed*5:speed);
       else{el.classList.remove('typing');typeDone(el)}
     };tick();
   });
@@ -821,6 +830,7 @@ document.addEventListener('cut',e=>{if(!(S.completed?.includes(12)||S.protocols?
 document.addEventListener('paste',e=>{if(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed)&&document.body.dataset.screen?.startsWith('trial'))e.preventDefault()},true);
 function render(){
   let old=document.querySelector('.screen'), keepScroll=old?old.scrollTop:0;
+  document.querySelectorAll('[data-type]').forEach(el=>{if(el.__typeTimer)clearTimeout(el.__typeTimer)});
   clearInterval(window.__waterTimer);clearTimeout(window.__cctvTimer);
   document.body.dataset.screen=screen;
   try{window.AndroidScreenGuard?.setSecure(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed));}catch(e){}
@@ -846,7 +856,7 @@ function protocolHub(){let jp=S.protocols?.JANUS||{},cp=S.protocols?.COXE||{};le
 function settings(){return `<div class="screen"><div class="wrap"><div class="kicker">SYSTEM // SETTINGS</div><button class="btn" style="margin:18px 0" onclick="Game.replayIntro()">▶ REPLAY OPENING CINEMATIC — KEEP SAVE</button><h2 style="letter-spacing:.15em">ACCESSIBILITY & FEEDBACK</h2><div class="card"><label class="setting"><span>HAPTIC FEEDBACK</span><input type="checkbox" ${S.settings?.haptics!==false?'checked':''} onchange="Game.setting('haptics',this.checked)"></label><label class="setting"><span>AMBIENT AUDIO / SFX</span><input type="checkbox" ${S.settings?.ambience!==false?'checked':''} onchange="Game.setting('ambience',this.checked);this.checked?startAmbience():stopAmbience()"></label><label class="setting"><span>REDUCE MOTION</span><input type="checkbox" ${S.settings?.reduceMotion===true?'checked':''} onchange="Game.setting('reduceMotion',this.checked)"></label><label class="setting"><span>SUBTITLES</span><input type="checkbox" ${S.settings?.subtitles!==false?'checked':''} onchange="Game.setting('subtitles',this.checked)"></label><label class="setting"><span>DIFFICULTY</span><select onchange="Game.setDifficulty(this.value)"><option value="EASY" ${S.difficulty==='EASY'?'selected':''}>EASY</option><option value="MEDIUM" ${(!S.difficulty||S.difficulty==='MEDIUM')?'selected':''}>MEDIUM</option><option value="HARD" ${S.difficulty==='HARD'?'selected':''}>HARD</option></select></label><label class="setting"><span>TEXT SPEED</span><select onchange="Game.setting('textSpeed',Number(this.value))"><option value="38" ${S.settings?.textSpeed===38?'selected':''}>SLOW</option><option value="24" ${!S.settings?.textSpeed||S.settings?.textSpeed===24?'selected':''}>NORMAL</option><option value="11" ${S.settings?.textSpeed===11?'selected':''}>FAST</option></select></label></div><div class="spacer"></div><button class="btn" onclick="Game.home()">RETURN HOME</button></div></div>`}
 function archiveScreen(){let items=S.evidence||[];return `<div class="screen"><div class="wrap"><div class="row" style="justify-content:space-between"><div><div class="kicker">SUBJECT ARCHIVE</div><h2 style="letter-spacing:.14em">COLLECTED EVIDENCE</h2></div><button class="ghost" onclick="Game.home()">×</button></div><p class="muted">Only evidence you deliberately examined is retained. Missing files are not system errors.</p><div class="archive-grid">${items.length?items.map((x,i)=>`<div class="evidence-card"><div class="kicker">${String(i+1).padStart(2,'0')} // ${esc(x.title||x.id||'UNKNOWN')}</div><div class="muted" style="margin-top:8px">${esc(x.text||x.note||'Metadata unavailable.')}</div></div>`).join(''):'<div class="card muted">NO EVIDENCE ARCHIVED.</div>'}</div><div class="spacer"></div><button class="btn" onclick="Game.home()">RETURN HOME</button></div></div>`}
 const PRO=["Your first thought is that the car has stopped. Your second is that you cannot hear the rain.\n\nYou are lying on concrete. Your left sleeve is damp. There is a sore place behind your ear. You reach for the seat belt that is no longer there.","You remember the passenger before you remember their face. A small hand on the dashboard. A voice trying to sound brave: ‘You promised eleven.’\n\nThen headlights. You cannot tell whether you were driving toward them or away.","Your phone is gone. So are your keys.\n\nThere is a pale rectangle on the floor, cleaner than the concrete around it. Someone removed an object recently. When you touch the mark, you remember putting something down carefully so it would not break. You cannot remember what.","Twelve small lamps sit above the door. One is lit.\n\nA speaker clicks. ‘Can you stand?’\n\nYou say nothing.\n\n‘That's fine,’ the voice replies. ‘You used to hate being rushed.’\n\nYou are certain you have never heard him before. Your stomach disagrees.","You stand. ‘Who are you?’\n\nThe voice takes a breath. A human breath, not a recording.\n\n‘Subject Thirteen. There are twelve rooms. Each has a condition. Meet it, and the next door opens.’\n\n‘That wasn't my question.’\n\n‘I know,’ he says. For the first time, he sounds tired.","At knee height, someone has scratched a sentence where the standing camera might miss it.\n\nDON'T LET HIM KNOW YOU REMEMBER.\n\nBelow it, almost rubbed away, are three more words: I WAS HERE.\n\nThe handwriting is yours. You know this before you know how."];
-function prologue(){let i=S.flags.prologueStep||0,last=i===PRO.length-1;return cinematicScene({eyebrow:'UNKNOWN LOCATION / TIME UNAVAILABLE',body:PRO[i]||PRO[0],next:'Game.prologueNext()',action:last?'STAND / FIND THE DOOR':'CONTINUE',index:i,total:PRO.length})}
+function prologue(){let i=S.flags.prologueStep||0,last=i===PRO.length-1;return cinematicScene({eyebrow:'UNKNOWN LOCATION / TIME UNAVAILABLE',title:i===0?'CONSCIOUSNESS RETURNING':i===PRO.length-1?'THE FIRST DOOR':'SUBJECT 13 / AWAKENING',body:PRO[i]||PRO[0],next:'Game.prologueNext()',action:last?'STAND / FIND THE DOOR':'CONTINUE',index:i,total:PRO.length})}
 function firstChamberScene(){
  const step=Math.max(0,Math.min(4,S.flags.firstChamberStep||0));
  const scenes=[
