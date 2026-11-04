@@ -7,6 +7,15 @@ function action(name,next,flags={}){const signature=name+'(choice){';const a=htm
  c.actions.t8Confess('FOCUS');assert.equal(c.S.flags.t8confession,'CAR','choice is persistent');
 }
 {
+ const a=html.indexOf('t8Balance(choice){'),b=html.indexOf('t8ReleaseAudit(choice){',a);
+ assert(a>=0&&b>a,'cooperative regulator method missing');
+ const ctx={S:{flags:{t8phase:'order',t8msgs:[]}},toast(){},save(){},render(){}};
+ vm.runInNewContext('this.balance=({'+html.slice(a,b)+'}).t8Balance',ctx);
+ ctx.balance('B');assert.equal(ctx.S.flags.t8relayBalanced,undefined);
+ ctx.balance('A');assert.equal(ctx.S.flags.t8relayBalanced,true);
+ assert(ctx.S.flags.t8msgs.some(m=>m.includes('72')));
+}
+{
  const c=action('t8ReleaseAudit','t8Promise',{t8phase:'order',t8msgs:[]});
  c.actions.t8ReleaseAudit('SAFE');assert.equal(c.S.flags.t8releaseVerified,undefined);
  c.actions.t8ReleaseAudit('TWO');assert.equal(c.S.flags.t8releaseVerified,true);
