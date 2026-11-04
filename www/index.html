@@ -816,7 +816,7 @@ const T1_SOURCE_ORDER=[3,0,5,2,1,4];
 function t1CipherAlphabet(){
   if(!S.flags.t1cipherAlphabet){
     const glyphs=[...T1_GLYPHS];
-    if((S.flags.t1found&&S.flags.t1found.length) || S.flags.t1cipher || S.flags.t1words&&Object.keys(S.flags.t1words).length || S.flags.t1map&&Object.keys(S.flags.t1map).length || S.flags.t1decoded || S.completed.includes(1)){
+    if((S.flags.t1found&&S.flags.t1found.length) || S.flags.t1cipher || S.flags.t1words&&Object.keys(S.flags.t1words).length || S.flags.t1map&&Object.keys(S.flags.t1map).length || S.flags.t1decoded || S.completed?.includes(1)){
       S.flags.t1cipherAlphabet=glyphs;
     }else{
       const bytes=new Uint32Array(glyphs.length);
@@ -1057,7 +1057,7 @@ const T10_WITNESS=[
 function t10Channels(){
   if(!S.flags.t10channels){
     const old=['8','6','9','4','3','1'];
-    if((S.flags.t10phase&&S.flags.t10phase!=='tune') || S.completed.includes(10))S.flags.t10channels=old;
+    if((S.flags.t10phase&&S.flags.t10phase!=='tune') || S.completed?.includes(10))S.flags.t10channels=old;
     else{
       const digits=['1','2','3','4','5','6','7','8','9'];
       const bytes=new Uint32Array(digits.length);
