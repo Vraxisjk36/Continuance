@@ -491,7 +491,7 @@ body[data-screen^="trial"] input,body[data-screen^="trial"] textarea{user-select
 (function(){
 'use strict';
 const KEY='continuance_standalone_v1';
-// TEMPORARY STORE SCREENSHOT MODE: set false before public release.
+// Release safeguard: progression unlock must remain disabled in production.
 const SCREENSHOT_MODE_UNLOCK_ALL=false;
 const DEFAULT={started:false,trial:1,lives:5,maxLives:5,completed:[],protocol:null,activeProtocol:'JANUS',protocols:{JANUS:{unlocked:true,started:false,completed:false,ending:null},COXE:{unlocked:false,started:false,completed:false,ending:null}},crossProtocol:{continuanceCycles:0,janusEnding:null,trial13Complete:false},story:{memoryAwareness:0,subject00Knowledge:0,janusKnowledge:0,independence:0,architectKnowsRemember:false,knowsVoss:false,knowsOperator13:false,knowsPreviousRuns:false,knowsArchitectOrigin:false,subject18Trust:0,subject18Alive:null,subject18Betrayed:false},penalties:{lowLight:false,shortTime:false},flags:{},pressure:0,evidence:[],architect:'',intercomLog:[],profile:{trust:0,defiance:0,empathy:0,pragmatism:0,curiosity:0,assistance:0,hostility:0},settings:{textSpeed:24,haptics:true,ambience:true,reduceMotion:false,subtitles:true},difficulty:null};
 let S=load(); let screen='splash';
