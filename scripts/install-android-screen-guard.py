@@ -7,12 +7,27 @@ p.write_text("""package com.continuance.janus;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.view.WindowManager;
+import android.view.View;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     private boolean unlocked = false;
+    private void enableImmersive() {
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+            View.SYSTEM_UI_FLAG_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+    }
+    @Override public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) enableImmersive();
+    }
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
+        enableImmersive();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         getBridge().getWebView().addJavascriptInterface(new Object() {
             @JavascriptInterface public void setSecure(boolean secure) {
