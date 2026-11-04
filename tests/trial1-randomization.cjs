@@ -14,4 +14,5 @@ const known=api.known();assert.equal(first[19],known.T);assert.equal(first[7],kn
 const previous=first.join('');
 context.S.flags={};const second=Array.from(api.alphabet()).join('');assert.notEqual(second,previous,'new playthrough should reshuffle');
 context.S.flags={t1words:{'0-0':'BUT'}};assert.equal(Array.from(api.alphabet()).join(''),Array.from(api.glyphs).join(''),'legacy partial saves retain original mapping');
+context.S.flags={t1found:['wall']};assert.equal(Array.from(api.alphabet()).join(''),Array.from(api.glyphs).join(''),'legacy explored rooms retain original mapping');
 console.log('Trial 1 cipher instance checks passed');
