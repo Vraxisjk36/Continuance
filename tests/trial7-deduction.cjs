@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('verifyIntercept7(id){'),b=src.indexOf('finish7(d){',a);
+assert(a>=0&&b>a,'Trial VII deduction action missing');
+const ctx=vm.createContext({S:{flags:{t7reconstructed:true,t6door:'LEFT'}},toast(){},save(){},render(){}});
+vm.runInContext('this.verify=({'+src.slice(a,b)+'}).verifyIntercept7',ctx);
+ctx.verify('A');assert.notEqual(ctx.S.flags.t7verified,true,'unrelated evidence cannot pass');
+ctx.verify('C');assert.equal(ctx.S.flags.t7verified,true);
+ctx.S.flags={t7reconstructed:true,t6door:'RIGHT'};
+ctx.verify('C');assert.equal(ctx.S.flags.t7verified,true,'right route uses physical-chamber packet');
+ctx.S.flags={t7reconstructed:false,t6door:'LEFT'};
+ctx.verify('C');assert.notEqual(ctx.S.flags.t7verified,true,'must reconstruct first');
+assert(src.includes('S.flags.t7verified||(!S.flags.t7inspect&&!S.flags.t7packets)'),'legacy saves retain access to ending choice');
+console.log('Trial VII evidence deduction checks passed');
