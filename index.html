@@ -534,6 +534,9 @@ img,svg,canvas,video{max-width:100%}
 .first-contact-stage .btn,.janus-cinema button,.janus-splash button{touch-action:manipulation}
 @media(max-width:480px){.first-contact-stage .wrap{padding-left:18px;padding-right:18px}.first-contact-stage .first-contact-panel{padding:20px 18px!important}.first-contact-stage .first-contact-door{left:22%;width:56%}.janus-cinema .cinema-content{padding-left:20px;padding-right:20px}}
 @media(prefers-reduced-motion:reduce){.first-contact-stage *,.janus-cinema .cinema-atmosphere *{transition:none!important}}
+</style><style>
+/* Phase 1: dialogue reveal is accessible and never traps impatient testers. */
+[data-type].typing{cursor:pointer;touch-action:manipulation}[data-type].typing:focus-visible{outline:2px solid #8bc9e6;outline-offset:6px}.cinema-story{white-space:pre-wrap;overflow-wrap:break-word}.janus-cinema .cinema-next,.first-contact-stage button{min-height:44px}@media(max-width:380px){.janus-splash .splash-game{font-size:clamp(28px,9vw,48px)}.janus-cinema .cinema-title{font-size:clamp(23px,7vw,34px)}}
 </style></head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -823,6 +826,7 @@ function render(){
 }
 function bind(){
   runTypewriters();setupFlashlights();addCrackOverlay();
+  document.querySelectorAll('[data-type].typing').forEach(el=>{el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label','Reveal complete dialogue');const reveal=()=>{if(!el.classList.contains('typing'))return;clearTimeout(el.__typeTimer);el.textContent=el.dataset.type||'';el.classList.remove('typing');typeDone(el)};el.addEventListener('click',reveal);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();reveal()}})});
   if(screen==='trial2')startHighWater();
   if(screen==='trial3'&&S.flags.t3phase==='playing')runCCTVSequence();
   if(S.settings?.ambience!==false&&screen!=='menu')startAmbience();
