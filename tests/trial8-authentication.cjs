@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8'),a=src.indexOf('t8Authenticate(choice){'),b=src.indexOf('finish8(o){',a);
+assert(a>=0&&b>a,'Trial VIII signal authentication missing');
+const ctx=vm.createContext({S:{flags:{t8phase:'chat',t8roomReady:true,t8personal:[]}},toast(){},save(){},render(){},document:{getElementById(){return {value:'869431'}}},fail(){}});
+vm.runInContext('this.actions=({'+src.slice(a,b)+'})',ctx);
+ctx.actions.t8Authenticate('FOUR');assert.equal(ctx.S.flags.t8authenticated,undefined,'Ren must explain the taps');
+ctx.S.flags.t8personal.push('sound');
+ctx.actions.t8Authenticate('TWO');assert.equal(ctx.S.flags.t8authenticated,undefined,'incorrect signal must fail');
+ctx.actions.t8code();assert.equal(ctx.S.flags.t8phase,'chat','new saves cannot skip signal check');
+ctx.actions.t8Authenticate('FOUR');assert.equal(ctx.S.flags.t8authenticated,true);
+ctx.actions.t8code();assert.equal(ctx.S.flags.t8phase,'order','correct code after authentication unlocks');
+ctx.S.flags={t8phase:'chat'};ctx.actions.t8code();assert.equal(ctx.S.flags.t8phase,'order','legacy saves without room intro remain compatible');
+console.log('Trial VIII peer authentication checks passed');
