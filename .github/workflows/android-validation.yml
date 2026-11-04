@@ -31,6 +31,8 @@ jobs:
           node tests/trial1-randomization.cjs
           node tests/trial10-randomization.cjs
           node tests/trial7-exploration.cjs
+          node tests/trial8-authentication.cjs
+          node tests/trial7-deduction.cjs
           node tests/trial8-exploration.cjs
           node tests/trial9-exploration.cjs
           node tests/trial11-rebuttal.cjs
