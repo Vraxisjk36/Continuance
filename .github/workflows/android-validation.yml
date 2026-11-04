@@ -45,3 +45,4 @@ jobs:
           node tests/trial12-consequences.cjs
           node tests/phase3-character-echoes.cjs
           node tests/phase3-continuity-audit.cjs
+          node tests/phase4-save-integrity.cjs
