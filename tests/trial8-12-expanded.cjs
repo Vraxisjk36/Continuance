@@ -41,4 +41,15 @@ function action(name,next,flags={}){const signature=name+'(choice){';const a=htm
  c.actions.audit12('ZERO');assert.equal(c.S.flags.t12phase,'audit');
  c.actions.audit12('BREACH');assert.equal(c.S.flags.t12phase,'final');
 }
+{
+ const src=html.indexOf('t11Ledger(choice){'),end=html.indexOf('t11Followup(i){',src);
+ assert(src>=0&&end>src,'Architect ledger and hold methods missing');
+ const c={S:{flags:{t11phase:'reckoning',t11counterEvidence:'RENEWAL'},evidence:[]},toast(){},save(){},render(){}};
+ vm.runInNewContext('this.actions=({'+html.slice(src,end)+'})',c);
+ c.actions.t11Ledger('ARCHITECT');assert.equal(c.S.flags.t11ledgerResolved,undefined,'unknown authorship cannot be assigned to Architect');
+ c.actions.t11Ledger('UNKNOWN');assert.equal(c.S.flags.t11ledgerResolved,true);
+ c.actions.t11Witness('INNOCENT');assert.equal(c.S.flags.t11witnessResolved,undefined,'hold request is not exoneration');
+ c.actions.t11Witness('HOLD');assert.equal(c.S.flags.t11witnessResolved,true);
+ assert(c.S.evidence.some(e=>e.id==='t11-ledger')&&c.S.evidence.some(e=>e.id==='t11-hold'));
+}
 console.log('Trial VIII-XII extended mechanics regression passed');
