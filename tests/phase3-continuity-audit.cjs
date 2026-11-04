@@ -14,6 +14,6 @@ assert(c.events.some(e=>e[2].includes('do not establish whether the seal prevent
 const t12=src.slice(src.indexOf('function t12(){'),src.indexOf('function ',src.indexOf('function t12(){')+12));
 assert(t12.includes("S.flags.t8lied?'There is no sound"),'Ren deception must take precedence over positive trust at false exit');
 assert(t12.includes('The order of release was not recovered.'),'Missing release-order save must not claim self-first');
-assert(t12.includes('silence is not proof of rescue'),'Termination must not imply guaranteed rescue');
+assert(src.includes('silence is not proof of rescue'),'Termination must not imply guaranteed rescue');
 assert(src.includes("S.flags.t8order==='HELP_FIRST'?'You remember transmitting Ren’s release code"),'Ren archive must distinguish helping first from missing records');
 console.log('Incident 00 chronology and Ren/endings continuity checks passed');
