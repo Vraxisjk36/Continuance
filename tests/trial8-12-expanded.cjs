@@ -52,4 +52,13 @@ function action(name,next,flags={}){const signature=name+'(choice){';const a=htm
  c.actions.t11Witness('HOLD');assert.equal(c.S.flags.t11witnessResolved,true);
  assert(c.S.evidence.some(e=>e.id==='t11-ledger')&&c.S.evidence.some(e=>e.id==='t11-hold'));
 }
+{
+ const a=html.indexOf('t11Silence(choice){'),b=html.indexOf('t11Followup(i){',a);
+ assert(a>=0&&b>a,'Trial XI dramatic response method missing');
+ const c={S:{flags:{t11phase:'reckoning',t11witnessResolved:true},evidence:[]},save(){},render(){}};
+ vm.runInNewContext('this.answer=({'+html.slice(a,b)+'}).t11Silence',c);
+ c.answer('ASK');assert.equal(c.S.flags.t11silenceAnswered,'ASK');
+ c.answer('STOP');assert.equal(c.S.flags.t11silenceAnswered,'ASK','answer cannot be overwritten');
+ assert(c.S.evidence.some(e=>e.id==='t11-silence'));
+}
 console.log('Trial VIII-XII extended mechanics regression passed');
