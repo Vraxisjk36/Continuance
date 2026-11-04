@@ -22,8 +22,16 @@ jobs:
           echo "Using Android SDK at $ANDROID_HOME"
       - name: Install dependencies
         run: npm install
-      - name: Release smoke tests
-        run: node tests/continuity-smoke.cjs
+      - name: Release smoke and stability gates
+        run: |
+          node tests/script-syntax.cjs
+          node tests/continuity-smoke.cjs
+          node tests/closed-test-source-integrity.cjs
+          node tests/phase3-character-echoes.cjs
+          node tests/phase3-continuity-audit.cjs
+          node tests/phase4-save-integrity.cjs
+          node tests/phase4-progression-integrity.cjs
+          node tests/phase4-ending-resume.cjs
       - name: Assert screenshot override disabled
         run: |
           grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
