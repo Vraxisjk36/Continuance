@@ -35,6 +35,26 @@ jobs:
         run: python3 scripts/install-android-screen-guard.py
       - name: Sync web app
         run: npx cap sync android
+      - name: Generate Continuance launcher icons
+        run: |
+          python3 -m pip install --quiet cairosvg pillow
+          python3 - <<'PY'
+          from pathlib import Path
+          import io
+          import cairosvg
+          from PIL import Image
+          source=Path('assets/continuance-icon.svg').read_bytes()
+          root=Path('android/app/src/main/res')
+          for density,size in [('mdpi',48),('hdpi',72),('xhdpi',96),('xxhdpi',144),('xxxhdpi',192)]:
+              folder=root/('mipmap-'+density)
+              folder.mkdir(parents=True,exist_ok=True)
+              raw=cairosvg.svg2png(bytestring=source,output_width=size,output_height=size)
+              icon=Image.open(io.BytesIO(raw)).convert('RGBA')
+              for filename in ('ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png'):
+                  icon.save(folder/filename)
+          for path in root.glob('values*/ic_launcher_background.xml'):
+              path.write_text('<resources><color name="ic_launcher_background">#05090e</color></resources>')
+          PY
       - name: Build debug APK
         working-directory: android
         run: |
