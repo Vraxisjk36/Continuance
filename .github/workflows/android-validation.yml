@@ -26,6 +26,7 @@ jobs:
       - name: Run progression, saves, scene and ending checks
         run: |
           node tests/script-syntax.cjs
+          node tests/closed-test-source-integrity.cjs
           node tests/continuity-smoke.cjs
           node tests/ai-resistance-audit.cjs
           node tests/trial1-randomization.cjs
