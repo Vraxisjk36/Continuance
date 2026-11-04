@@ -496,6 +496,35 @@ img,svg,canvas,video{max-width:100%}
 @media(max-width:380px){.header{grid-template-columns:minmax(50px,64px) minmax(0,1fr) minmax(75px,96px);gap:5px}.wrap{padding-left:12px;padding-right:12px}.grid3{gap:6px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+<style>
+/* Opening cinematic art direction: environmental staging instead of flat panels. */
+.janus-splash,.janus-cinema,.first-contact-stage{isolation:isolate}
+.janus-splash:before,.janus-cinema:before,.first-contact-stage:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 14%,rgba(108,168,194,.16),transparent 32%),linear-gradient(90deg,rgba(0,0,0,.85),transparent 26%,transparent 74%,rgba(0,0,0,.85)),repeating-linear-gradient(90deg,transparent 0 66px,rgba(129,161,176,.035) 67px 69px);z-index:0}
+.janus-splash:after,.janus-cinema:after,.first-contact-stage:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.10) 4px);opacity:.38;z-index:1}
+.janus-splash .splash-sequence,.janus-splash .splash-enter,.janus-cinema .cinema-content{position:relative;z-index:3}
+.janus-splash .splash-studio{animation:janusReveal 1.5s ease both}
+.janus-splash .splash-line{animation:janusReveal 1.2s .65s ease both}
+.janus-splash .splash-game{animation:janusReveal 1.5s 1s ease both;text-shadow:0 0 45px rgba(122,179,213,.28)}
+.janus-splash .splash-sub{animation:janusReveal 1.3s 1.6s ease both}
+.janus-splash .splash-enter{animation:janusReveal 1s 2s ease both}
+@keyframes janusReveal{from{opacity:0;filter:blur(12px);transform:translateY(16px)}to{opacity:1;filter:blur(0);transform:translateY(0)}}
+.first-contact-stage{position:relative;min-height:100dvh;background:#03070b;overflow-x:hidden}
+.first-contact-room{position:absolute;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 12%,#1b303b 0%,#071019 30%,#020508 78%)}
+.first-contact-ceiling{position:absolute;top:0;left:0;right:0;height:22%;background:linear-gradient(#060b0e,#15232b 60%,transparent);clip-path:polygon(0 0,100% 0,85% 100%,15% 100%)}
+.first-contact-light{position:absolute;top:11%;left:35%;width:30%;height:5px;background:#c4e6f2;box-shadow:0 0 15px 5px #7ab3ce99,0 0 110px 55px #5d8fa14d;animation:janusFlicker 9s infinite}
+.first-contact-door{position:absolute;top:25%;left:28%;width:44%;height:60%;border:8px solid #182c36;background:linear-gradient(105deg,#101e27,#03070a 60%,#13232b);box-shadow:0 0 0 2px #030609,0 0 80px #000b,inset 0 0 45px #000;opacity:.78}
+.first-contact-door:before{content:"13";position:absolute;top:14%;left:0;right:0;text-align:center;color:#7595a8;font-size:23px;letter-spacing:.3em;font-weight:800;opacity:.6}
+.first-contact-door:after{content:"";position:absolute;right:12%;top:57%;width:22px;height:5px;background:#7795a5;box-shadow:0 0 10px #9ecce777}
+.first-contact-camera{position:absolute;top:20%;right:13%;width:14px;height:14px;border-radius:50%;background:#a82427;box-shadow:0 0 13px 5px #a8242766;animation:janusFlicker 6s infinite}
+.first-contact-floor{position:absolute;bottom:0;left:-20%;width:140%;height:32%;background:repeating-linear-gradient(90deg,transparent 0 130px,#6e89900c 131px 133px),linear-gradient(0deg,#000,transparent);transform:perspective(150px) rotateX(23deg)}
+.first-contact-stage .wrap{position:relative;z-index:3}
+.first-contact-panel{background:linear-gradient(150deg,#07131ded,#02070bf2)!important;backdrop-filter:blur(12px);border:1px solid #47697c8a!important;box-shadow:0 22px 65px #000b}
+.first-contact-stage .btn{background:linear-gradient(100deg,#102535ed,#07131df5);border:1px solid #47667c;box-shadow:0 8px 22px #0009}
+.first-contact-stage .btn:active{transform:scale(.985)}
+.first-contact-dialogue{min-height:90px;white-space:pre-wrap}
+@keyframes janusFlicker{0%,93%,95%,100%{opacity:1}94%,96%{opacity:.3}}
+@media(prefers-reduced-motion:reduce){.janus-splash .splash-studio,.janus-splash .splash-line,.janus-splash .splash-game,.janus-splash .splash-sub,.janus-splash .splash-enter,.first-contact-light,.first-contact-camera{animation:none!important}}
+</style>
 </head>
 <body><div id="app"></div><div class="noise"></div>
 <script>
@@ -838,7 +867,7 @@ function firstChamberScene(){
  const selection=S.flags.firstChamberChoiceIndex;
  const response=Number.isInteger(selection)?replies[step][selection]:null;
  const x=scenes[step];
- return `<div class="screen"><div class="wrap" style="padding-top:max(64px,calc(30px + env(safe-area-inset-top)));max-width:610px"><div class="kicker">CHAMBER 01 // FIRST CONTACT</div><div class="card amber" style="margin-top:24px;padding:24px 20px"><div class="kicker">SCENE ${step+1} / 5</div><h2 style="font-size:clamp(20px,5vw,29px);line-height:1.3;margin:20px 0">${x[0]}</h2><p style="line-height:1.95;font-size:14px;color:#c3d7e7">${x[1]}</p>${response?`<div style="margin-top:22px;border-left:2px solid #5286a9;padding:12px 15px;background:#091927"><div class="kicker">THE ARCHITECT / RESPONSE</div><p style="font-size:14px;line-height:1.9;color:#d7e9f7">${response[0]}</p><p style="font-size:13px;line-height:1.8;color:#a8c3d8">${response[1]}</p></div>`:''}</div><div class="col" style="margin-top:20px">${response?`<button class="btn" style="min-height:54px" onclick="Game.firstChamberAdvance()">${step===4?'ENTER TRIAL ONE →':'CONTINUE →'}</button>`:x[2].map((label,i)=>`<button class="btn" style="text-align:left;min-height:54px;white-space:normal;line-height:1.6" onclick="Game.firstChamberChoice(${i})">${label}</button>`).join('')}</div><p class="muted center" style="margin-top:20px">LISTEN. OBSERVE. SURVIVE.</p></div></div>`;
+ return `<div class="screen first-contact-stage"><div class="first-contact-room" aria-hidden="true"><div class="first-contact-ceiling"></div><div class="first-contact-light"></div><div class="first-contact-door"></div><div class="first-contact-camera"></div><div class="first-contact-floor"></div></div><div class="wrap" style="padding-top:max(64px,calc(30px + env(safe-area-inset-top)));max-width:610px"><div class="kicker">CHAMBER 01 // FIRST CONTACT</div><div class="card amber first-contact-panel" style="margin-top:24px;padding:24px 20px"><div class="kicker">SCENE ${step+1} / 5</div><h2 style="font-size:clamp(20px,5vw,29px);line-height:1.3;margin:20px 0">${x[0]}</h2><p class="first-contact-dialogue typewrite" data-type="${esc(x[1])}" style="line-height:1.95;font-size:14px;color:#c3d7e7"></p>${response?`<div style="margin-top:22px;border-left:2px solid #5286a9;padding:12px 15px;background:#091927"><div class="kicker">THE ARCHITECT / RESPONSE</div><p class="first-contact-dialogue typewrite" data-type="${esc(response[0])}" style="font-size:14px;line-height:1.9;color:#d7e9f7"></p><p style="font-size:13px;line-height:1.8;color:#a8c3d8">${response[1]}</p></div>`:''}</div><div class="col" style="margin-top:20px">${response?`<button class="btn" style="min-height:54px" onclick="Game.firstChamberAdvance()">${step===4?'ENTER TRIAL ONE →':'CONTINUE →'}</button>`:x[2].map((label,i)=>`<button class="btn" style="text-align:left;min-height:54px;white-space:normal;line-height:1.6" onclick="Game.firstChamberChoice(${i})">${label}</button>`).join('')}</div><p class="muted center" style="margin-top:20px">LISTEN. OBSERVE. SURVIVE.</p></div></div>`;
 }
 function opening(){return `<div class="screen opening"><div class="terminal"><div class="kicker">JANUS TERMINAL // NODE 01</div><div class="diag typewrite" data-type="SUBJECT CONSCIOUSNESS CONFIRMED.
 MOTOR RESPONSE: PRESENT.
