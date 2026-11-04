@@ -43,3 +43,4 @@ jobs:
           node tests/trial11-rebuttal.cjs
           node tests/trial12-memory.cjs
           node tests/trial12-consequences.cjs
+          node tests/phase3-character-echoes.cjs
