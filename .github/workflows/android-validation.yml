@@ -22,3 +22,4 @@ jobs:
           node tests/continuity-smoke.cjs
           node tests/ai-resistance-audit.cjs
           node tests/trial1-randomization.cjs
+          node tests/trial10-randomization.cjs
