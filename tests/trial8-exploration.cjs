@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('t8Inspect(id){'),b=src.indexOf('t8code(){',a);
+assert(a>=0&&b>a,'Trial VIII room interactions missing');
+const ctx=vm.createContext({S:{flags:{}},save(){},render(){}});
+vm.runInContext('this.actions=({'+src.slice(a,b)+'})',ctx);
+ctx.actions.t8Connect();assert.notEqual(ctx.S.flags.t8roomReady,true,'room should require exploration');
+for(const id of ['terminal','wall','relay'])ctx.actions.t8Inspect(id);
+ctx.actions.t8Inspect('wall');assert.equal(ctx.S.flags.t8roomSeen.length,3,'duplicate inspections must not count');
+ctx.actions.t8Connect();assert.equal(ctx.S.flags.t8roomReady,true);assert.equal(ctx.S.flags.t8phase,'chat');
+console.log('Trial VIII exploration checks passed');

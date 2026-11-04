@@ -1,0 +1,18 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const start=src.indexOf('const T1_ALPHABET='),end=src.indexOf('function t1(){',start);
+assert(start>=0&&end>start,'Trial 1 helper region missing');
+const fragment=src.slice(start,end);
+const context=vm.createContext({S:{flags:{}},save(){},crypto:require('node:crypto').webcrypto});
+vm.runInContext(fragment+'\nthis.testAPI={alphabet:t1CipherAlphabet,lines:t1EncodedLines,known:t1KnownGlyphs,verses:T1_VERSES,glyphs:T1_GLYPHS};',context);
+const api=context.testAPI;
+const first=Array.from(api.alphabet());assert.equal(first.length,26);assert.equal(new Set(first).size,26);
+assert.deepEqual(Array.from(api.alphabet()),first,'alphabet must persist within a run');
+const decoded=Array.from(api.lines()).map(line=>Array.from(line).map(ch=>{const index=first.indexOf(ch);return index>=0?String.fromCharCode(65+index):ch}).join(''));
+assert.deepEqual(decoded,[api.verses[3],api.verses[0],api.verses[5],api.verses[2],api.verses[1],api.verses[4]].map(s=>s.toUpperCase()));
+const known=api.known();assert.equal(first[19],known.T);assert.equal(first[7],known.H);assert.equal(first[4],known.E);
+const previous=first.join('');
+context.S.flags={};const second=Array.from(api.alphabet()).join('');assert.notEqual(second,previous,'new playthrough should reshuffle');
+context.S.flags={t1words:{'0-0':'BUT'}};assert.equal(Array.from(api.alphabet()).join(''),Array.from(api.glyphs).join(''),'legacy partial saves retain original mapping');
+context.S.flags={t1found:['wall']};assert.equal(Array.from(api.alphabet()).join(''),Array.from(api.glyphs).join(''),'legacy explored rooms retain original mapping');
+console.log('Trial 1 cipher instance checks passed');

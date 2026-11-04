@@ -1,0 +1,12 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('inspectFork6(id){'),b=src.indexOf('chooseDoor6(d){',a);
+assert(a>=0&&b>a,'Trial VI corridor investigation missing');
+const ctx=vm.createContext({S:{flags:{}},save(){},render(){}});
+vm.runInContext('this.inspect=({'+src.slice(a,b)+'}).inspectFork6',ctx);
+for(const id of ['speaker','glass','speaker','plate','invalid'])ctx.inspect(id);
+assert.equal(ctx.S.flags.t6forkSeen.length,3,'unique observations only');
+assert(src.includes('forkSeen.length<3'),'new saves should investigate before door choice');
+assert(src.includes('const legacyFork=!!'),'existing saves should bypass new introduction');
+assert(src.includes('WHO GETS TO CALL IT A CHOICE?'),'narrative theme should be present');
+console.log('Trial VI corridor investigation checks passed');

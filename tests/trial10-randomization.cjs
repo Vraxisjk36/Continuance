@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const start=src.indexOf('function t10Channels(){'),end=src.indexOf('function t10(){',start);
+assert(start>=0&&end>start,'Trial X helper region missing');
+const ctx=vm.createContext({S:{flags:{}},save(){},crypto:require('node:crypto').webcrypto});
+vm.runInContext(src.slice(start,end)+'\nthis.api={channels:t10Channels,signal:t10ChannelSignal}',ctx);
+const first=Array.from(ctx.api.channels());assert.equal(first.length,6);assert.equal(new Set(first).size,6);
+assert(first.every(x=>/^[1-9]$/.test(x)));
+assert.equal(ctx.api.signal(),[3,0,5,1,4,2].map(i=>'ABCDEF'[i]+first[i]).join(' '));
+assert.deepEqual(Array.from(ctx.api.channels()),first,'save should persist digits');
+ctx.S.flags={t10phase:'order'};assert.equal(Array.from(ctx.api.channels()).join(''),'869431','legacy active puzzle remains solvable');
+assert(src.includes("if(v===t10Channels().join(''))"),'validator must use active run digits');
+console.log('Trial X channel randomization checks passed');

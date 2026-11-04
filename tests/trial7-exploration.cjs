@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('inspect7(id){'),b=src.indexOf('movePacket7(i,d){',a);
+assert(a>=0&&b>a,'Trial VII inspection action missing');
+const ctx=vm.createContext({S:{flags:{}},save(){},render(){}});
+vm.runInContext('this.inspect=({'+src.slice(a,b)+'}).inspect7',ctx);
+ctx.inspect('rack');ctx.inspect('rack');ctx.inspect('desk');ctx.inspect('invalid');ctx.inspect('shred');
+assert.equal(ctx.S.flags.t7inspect.length,3);
+assert(src.includes('inspect7.length<3'));
+assert(src.includes('const legacy7=!!(S.flags.t7packets||S.flags.t7reconstructed||S.flags.t7decision)'));
+console.log('Trial VII exploration checks passed');

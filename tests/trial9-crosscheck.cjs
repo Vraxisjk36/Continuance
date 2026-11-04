@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('crosscheck9(i,n){'),b=src.indexOf('unlock9(){',a);
+assert(a>=0&&b>a,'Trial IX cross-check actions missing');
+const ctx=vm.createContext({S:{flags:{t9phase:'crosscheck'}},toast(){},save(){},render(){}});
+vm.runInContext('this.actions=({'+src.slice(a,b)+'})',ctx);
+ctx.actions.crosscheck9(0,0);assert.equal(ctx.S.flags.t9crosscheck,undefined,'incorrect evidence cannot pass');
+ctx.actions.openArchive9();assert.equal(ctx.S.flags.t9phase,'crosscheck','cannot open before all checks');
+ctx.actions.crosscheck9(0,1);ctx.actions.crosscheck9(1,0);ctx.actions.crosscheck9(2,2);ctx.actions.crosscheck9(2,2);
+assert.equal(ctx.S.flags.t9crosscheck.length,3,'duplicate confirmations must not count');
+ctx.actions.openArchive9();assert.equal(ctx.S.flags.t9phase,'archive','all three checks unlock archive');
+assert(src.includes("(S.flags.t9observations||[]).length>=3?'crosscheck':'archive'"),'legacy progress must bypass new cross-check');
+console.log('Trial IX forensic cross-check checks passed');

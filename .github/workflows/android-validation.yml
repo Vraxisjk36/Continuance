@@ -1,8 +1,14 @@
 name: Continuance release validation
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches: [main]
+    paths:
+      - 'www/index.html'
+      - 'tests/**'
+      - '.github/workflows/android-validation.yml'
+  push:
+    branches: [main, feature/trial-instance-randomization]
     paths:
       - 'www/index.html'
       - 'tests/**'
@@ -19,5 +25,19 @@ jobs:
         run: grep -q 'const SCREENSHOT_MODE_UNLOCK_ALL=false;' www/index.html
       - name: Run progression, saves, scene and ending checks
         run: |
+          node tests/script-syntax.cjs
           node tests/continuity-smoke.cjs
           node tests/ai-resistance-audit.cjs
+          node tests/trial1-randomization.cjs
+          node tests/trial10-randomization.cjs
+          node tests/trial6-corridor.cjs
+          node tests/narrative-continuity.cjs
+          node tests/trial7-exploration.cjs
+          node tests/trial8-authentication.cjs
+          node tests/trial8-12-expanded.cjs
+          node tests/trial7-deduction.cjs
+          node tests/trial8-exploration.cjs
+          node tests/trial9-exploration.cjs
+          node tests/trial9-crosscheck.cjs
+          node tests/trial11-rebuttal.cjs
+          node tests/trial12-memory.cjs

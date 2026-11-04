@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('inspect9(id){'),b=src.indexOf('pick9(x){',a);
+assert(a>=0&&b>a,'Trial IX archive inspection missing');
+const ctx=vm.createContext({S:{flags:{}},save(){},render(){}});
+vm.runInContext('this.inspect=({'+src.slice(a,b)+'}).inspect9',ctx);
+for(const id of ['cabinet','mirror','mirror','desk','invalid'])ctx.inspect(id);
+assert.equal(ctx.S.flags.t9observations.length,3,'three unique observations required');
+assert(src.includes('observations.length<3'),'new Trial IX saves should investigate');
+assert(src.includes('const oldProgress=!!(S.flags.t9pick||S.flags.t9phase||S.flags.t9choice||S.completed?.includes(9))'),'legacy Trial IX progress must bypass the intro');
+console.log('Trial IX exploration checks passed');
