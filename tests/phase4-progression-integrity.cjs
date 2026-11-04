@@ -1,0 +1,18 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('www/index.html','utf8');
+const a=src.indexOf('function fail(t){'),b=src.indexOf('function lifeHTML()',a);
+assert(a>=0&&b>a,'life and completion functions missing');
+const store=[];
+const ctx={S:{lives:2,maxLives:5,pressure:0,completed:[],trial:1,flags:{},protocols:{JANUS:{}},crossProtocol:{}},save(){store.push(1)},fx(){},architect(){},vib(){},document:{body:{classList:{add(){},remove(){}}}},setTimeout(){},crypto:{getRandomValues(a){a.fill(7)}},Uint8Array,Date};
+vm.createContext(ctx);vm.runInContext(src.slice(a,b)+'this.fail=fail;this.complete=complete;',ctx);
+ctx.fail('test');assert.equal(ctx.S.lives,1);assert.equal(ctx.S.pressure,1);
+for(let i=0;i<10;i++)ctx.fail('test');assert.equal(ctx.S.lives,0,'life counter must never be negative');assert.equal(ctx.S.pressure,4,'pressure must cap at four');
+ctx.complete(1);ctx.complete(1);assert.equal(ctx.S.completed.length,1,'trial completion must be idempotent');assert.equal(ctx.S.trial,2);
+for(let n=2;n<=12;n++)ctx.complete(n);
+assert.equal(ctx.S.trial,13);assert.equal(ctx.S.completed.length,12);assert.equal(ctx.S.protocols.JANUS.completed,true);
+assert(ctx.S.flags.completionReceipt.startsWith('JANUS-'));const receipt=ctx.S.flags.completionReceipt;ctx.complete(12);assert.equal(ctx.S.flags.completionReceipt,receipt,'completion receipt must not regenerate');
+assert(store.length>12,'progress must be persisted');
+assert(src.includes("if(!SCREENSHOT_MODE_UNLOCK_ALL&&n>Math.max(1,Number(S.trial)||1))return;"),'trial entry must not bypass progression');
+assert(src.includes("chooseDifficulty(d){S.difficulty=d;save();"),'difficulty choice must persist');
+assert(src.includes("setDifficulty(d){S.difficulty=d;save()}"),'settings difficulty must persist');
+console.log('Phase IV life bounds, pressure, 12-trial progression, receipt and difficulty persistence checks passed');
