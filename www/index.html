@@ -789,6 +789,7 @@ document.addEventListener('keydown',event=>{
 
 document.addEventListener('copy',e=>{if(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed)&&!['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))e.preventDefault()},true);
 document.addEventListener('cut',e=>{if(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed)&&!['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))e.preventDefault()},true);
+document.addEventListener('paste',e=>{if(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed)&&document.body.dataset.screen?.startsWith('trial'))e.preventDefault()},true);
 function render(){
   let old=document.querySelector('.screen'), keepScroll=old?old.scrollTop:0;
   clearInterval(window.__waterTimer);clearTimeout(window.__cctvTimer);
