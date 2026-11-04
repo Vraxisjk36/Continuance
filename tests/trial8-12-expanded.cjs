@@ -1,6 +1,6 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync('www/index.html','utf8');
-function action(name,next,flags={}){const a=html.search(new RegExp('\\\\b'+name+'\\\\([^)]*\\\\)\\\\{')),b=html.indexOf(next+'(',a);assert(a>=0&&b>a,name+' method missing or misplaced');const ctx={S:{flags,evidence:[]},save(){},render(){},toast(){},fail(){},profileAdd(){},complete(){},document:{getElementById(){return {value:'869431'}}}};vm.runInNewContext('this.actions=({'+html.slice(a,b)+'})',ctx);return ctx;}
+function action(name,next,flags={}){const signature=name+'(choice){';const a=html.indexOf(signature),b=html.indexOf(next+'(',a);assert(a>=0&&b>a,name+' method missing or misplaced');const ctx={S:{flags,evidence:[]},save(){},render(){},toast(){},fail(){},profileAdd(){},complete(){},document:{getElementById(){return {value:'869431'}}}};vm.runInNewContext('this.actions=({'+html.slice(a,b)+'})',ctx);return ctx;}
 {
  const c=action('t8Confess','t8Personal',{t8phase:'chat',t8msgs:[]});
  c.actions.t8Confess('CAR');assert.equal(c.S.flags.t8confession,'CAR');assert(c.S.flags.t8confessionReply.includes('brother'));
