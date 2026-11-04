@@ -52,4 +52,36 @@ test('All twelve trial renderers available',()=>{
   }
 });
 
+test('Trial VIII peer authentication and numeric input are accessible',()=>{
+  q.getState().flags.t8phase='chat';
+  q.getState().flags.t8roomReady=true;
+  const out=q.t8();
+  assert.match(out,/aria-label="Six digit peer relay code/);
+  assert.match(out,/PEER AUTHENTICATION/);
+  assert.match(out,/LIVE LINK \/ RELAY FORENSICS/);
+});
+test('Trial IX requires a selected memory and preserves archive input labels',()=>{
+  q.getState().flags.t9phase='attempts';
+  assert.match(q.t9(),/disabled[^>]*onclick="Game.verify9\(\)"/);
+  q.getState().flags.t9pick='III';
+  assert.doesNotMatch(q.t9(),/disabled[^>]*onclick="Game.verify9\(\)"/);
+  q.getState().flags.t9phase='archive';
+  assert.match(q.t9(),/aria-label="First memory reminder word"/);
+});
+test('Trial X witness code field uses numeric entry',()=>{
+  q.getState().flags.t10phase='order';
+  assert.match(q.t10(),/aria-label="Six reconstructed channel digits"/);
+});
+test('Trial XI cannot submit fewer than three contradictions',()=>{
+  q.getState().flags.t11phase='claims';
+  q.getState().flags.t11records=[0,1,2,3,4,5];
+  assert.match(q.t11(),/disabled[^>]*onclick="Game.prove11\(\)"/);
+  q.getState().flags.t11picks=['A','B','C'];
+  assert.doesNotMatch(q.t11(),/disabled[^>]*onclick="Game.prove11\(\)"/);
+});
+test('Trial XII final decision warns about irreversible consequences',()=>{
+  q.getState().flags.t12phase='final';
+  assert.match(q.t12(),/final, irreversible decision/);
+});
+
 console.log('CONTINUANCE smoke suite complete.');
