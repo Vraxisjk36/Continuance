@@ -47,3 +47,4 @@ jobs:
           node tests/phase3-continuity-audit.cjs
           node tests/phase4-save-integrity.cjs
           node tests/phase4-progression-integrity.cjs
+          node tests/phase4-ending-resume.cjs
