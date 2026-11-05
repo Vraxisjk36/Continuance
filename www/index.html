@@ -962,8 +962,9 @@ function t1CipherAlphabet(){
   return S.flags.t1cipherAlphabet;
 }
 function t1EncodedLines(){
+  const order=t1SourceOrder();
   const glyphs=t1CipherAlphabet();
-  return t1SourceOrder().map(i=>T1_VERSES[i].toUpperCase().replace(/[A-Z]/g,ch=>glyphs[ch.charCodeAt(0)-65]));
+  return order.map(i=>T1_VERSES[i].toUpperCase().replace(/[A-Z]/g,ch=>glyphs[ch.charCodeAt(0)-65]));
 }
 function t1KnownGlyphs(){const a=t1CipherAlphabet();return {'T':a[19],'H':a[7],'E':a[4]}}
 
