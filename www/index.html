@@ -378,7 +378,7 @@ body[data-screen="trial4"] .card:active{transform:translateY(2px)}
 .splash-line{width:45px;height:1px;background:#8b978e;margin:27px auto;opacity:0;animation:studioReveal 1s ease 2.7s forwards}
 .splash-game{font:600 clamp(29px,8vw,57px)/1.1 Georgia,serif;letter-spacing:clamp(.08em,1.2vw,.18em);color:#dde3e7;text-shadow:0 0 36px rgba(201,218,194,.25);opacity:0;transform:translateY(9px);animation:gameReveal 2s ease 3s forwards;overflow-wrap:anywhere}
 .splash-sub{color:#919b91;font:9px/1.8 ui-monospace,monospace;letter-spacing:.17em;margin-top:23px;opacity:0;animation:studioReveal 1.6s ease 4.2s forwards}
-.splash-enter{position:absolute;z-index:3;bottom:max(8vh,45px);left:50%;transform:translateX(-50%);min-width:160px;min-height:48px;background:transparent;border:1px solid #5d6a61;color:#d7dfd2;font:11px ui-monospace,monospace;letter-spacing:.24em;opacity:0;animation:studioReveal 1s ease 5.1s forwards}
+.splash-enter{position:fixed;z-index:100;bottom:calc(96px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);min-width:180px;min-height:54px;padding:14px 24px;background:#0b1b27;border:1px solid #8abbd9;border-radius:8px;color:#e8f4ff;font:12px ui-monospace,monospace;letter-spacing:.2em;opacity:1;visibility:visible;pointer-events:auto;box-shadow:0 0 26px #0009}
 .splash-enter span{margin-left:12px}
 @keyframes splashSweep{0%{transform:translateX(-65%) rotate(-30deg);opacity:0}18%{opacity:1}78%{opacity:1}100%{transform:translateX(52%) rotate(17deg);opacity:.3}}
 @keyframes splashHaze{0%,20%{opacity:0}70%,100%{opacity:1}}
