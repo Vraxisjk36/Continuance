@@ -382,6 +382,9 @@ body[data-screen="trial4"] .card:active{transform:translateY(2px)}
 .janus-splash{min-height:100dvh;cursor:pointer;touch-action:manipulation}
 .janus-splash .splash-enter{position:absolute;bottom:max(36px,calc(env(safe-area-inset-bottom,0px) + 32px));left:50%;z-index:200;opacity:1;visibility:visible;pointer-events:auto}
 .janus-splash:focus-visible{outline:2px solid #8abbd9;outline-offset:-5px}
+.janus-splash .splash-game{font-size:clamp(23px,6.3vw,48px);letter-spacing:.075em;overflow-wrap:normal;word-break:keep-all;white-space:nowrap;max-width:100%}
+.janus-splash .splash-sequence{padding-inline:12px}
+.janus-splash .splash-enter{position:fixed;bottom:max(24px,calc(env(safe-area-inset-bottom,0px) + 24px));left:50%;transform:translateX(-50%);z-index:999}
 .splash-enter span{margin-left:12px}
 @keyframes splashSweep{0%{transform:translateX(-65%) rotate(-30deg);opacity:0}18%{opacity:1}78%{opacity:1}100%{transform:translateX(52%) rotate(17deg);opacity:.3}}
 @keyframes splashHaze{0%,20%{opacity:0}70%,100%{opacity:1}}
@@ -926,6 +929,22 @@ const T1_VERSES=["The walls remember every name","The ones who left were not the
 // Each new run receives a persistent shuffled substitution alphabet.
 // Older saves retain their original alphabet to preserve puzzle progress.
 const T1_SOURCE_ORDER=[3,0,5,2,1,4];
+function t1SourceOrder(){
+  if(Array.isArray(S.flags.t1sourceOrder)&&S.flags.t1sourceOrder.length===6)return S.flags.t1sourceOrder;
+  const legacy=!!(S.flags.t1cipherAlphabet||S.flags.t1order||S.flags.t1words||S.flags.t1decoded||S.flags.t1found?.length||S.completed?.includes(1));
+  const order=[...T1_SOURCE_ORDER];
+  if(!legacy){
+    const bytes=new Uint32Array(6);
+    if(globalThis.crypto?.getRandomValues)globalThis.crypto.getRandomValues(bytes);
+    else for(let i=0;i<6;i++)bytes[i]=Math.floor(Math.random()*0xffffffff);
+    for(let i=5;i>0;i--){const j=bytes[i]%(i+1);[order[i],order[j]]=[order[j],order[i]]}
+    if(order.every((v,i)=>v===i)) [order[0],order[1]]=[order[1],order[0]];
+  }
+  S.flags.t1sourceOrder=order;
+  S.flags.t1order=[...order];
+  save();
+  return order;
+}
 function t1CipherAlphabet(){
   if(!S.flags.t1cipherAlphabet){
     const glyphs=[...T1_GLYPHS];
@@ -944,12 +963,12 @@ function t1CipherAlphabet(){
 }
 function t1EncodedLines(){
   const glyphs=t1CipherAlphabet();
-  return T1_SOURCE_ORDER.map(i=>T1_VERSES[i].toUpperCase().replace(/[A-Z]/g,ch=>glyphs[ch.charCodeAt(0)-65]));
+  return t1SourceOrder().map(i=>T1_VERSES[i].toUpperCase().replace(/[A-Z]/g,ch=>glyphs[ch.charCodeAt(0)-65]));
 }
 function t1KnownGlyphs(){const a=t1CipherAlphabet();return {'T':a[19],'H':a[7],'E':a[4]}}
 
 function t1(){
-  let found=S.flags.t1found||[],ready=found.length>=3||S.flags.t1cipher,order=S.flags.t1order||[3,0,5,2,1,4];
+  let found=S.flags.t1found||[],ready=found.length>=3||S.flags.t1cipher,order=S.flags.t1order||t1SourceOrder();
   let lines=t1EncodedLines();
   let inspect=!ready?`<div class="t1-direction">EXPLORE THE ROOM <span>${found.length} / 5 DETAILS DISCOVERED</span></div><div class="flashlight-stage ${S.penalties?.lowLight?'lowlight':''}" id="t1room">
       <button class="room-object obj-intercom" aria-label="Inspect intercom" onclick="Game.inspectT1('intercom')"><i></i><span class="small">●</span></button>
