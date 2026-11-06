@@ -479,6 +479,7 @@ body[data-screen="trial4"] .card:active{transform:translateY(2px)}
 /* Mobile stability pass: keep all interactive content reachable. */
 html,body,#app{width:100%;min-width:0;overflow-x:hidden}
 .screen{min-height:100svh;min-height:100dvh;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.janus-splash{position:relative;min-height:100svh;min-height:100dvh}.janus-splash .splash-enter{position:absolute;bottom:max(45px,calc(env(safe-area-inset-bottom) + 24px));left:50%;transform:translateX(-50%)}
 .wrap{padding-bottom:max(120px,calc(env(safe-area-inset-bottom) + 90px))}
 button,input,textarea,select{max-width:100%;touch-action:manipulation}
 button{min-height:44px}
@@ -560,7 +561,7 @@ const KEY='continuance_standalone_v1';
 const DEFAULT={started:false,trial:1,lives:5,maxLives:5,completed:[],protocol:null,activeProtocol:'JANUS',protocols:{JANUS:{unlocked:true,started:false,completed:false,ending:null},COXE:{unlocked:false,started:false,completed:false,ending:null}},crossProtocol:{continuanceCycles:0,janusEnding:null,trial13Complete:false},story:{memoryAwareness:0,subject00Knowledge:0,janusKnowledge:0,independence:0,architectKnowsRemember:false,knowsVoss:false,knowsOperator13:false,knowsPreviousRuns:false,knowsArchitectOrigin:false,subject18Trust:0,subject18Alive:null,subject18Betrayed:false},penalties:{lowLight:false,shortTime:false},flags:{},pressure:0,evidence:[],architect:'',intercomLog:[],profile:{trust:0,defiance:0,empathy:0,pragmatism:0,curiosity:0,assistance:0,hostility:0},settings:{textSpeed:24,haptics:true,ambience:true,reduceMotion:false,subtitles:true},difficulty:null};
 let S=load(); let screen='splash';
 function load(){try{let x=Object.assign({},DEFAULT,JSON.parse(localStorage.getItem(KEY)||'{}'));x.flags=x.flags||{};x.evidence=x.evidence||[];x.intercomLog=x.intercomLog||[];x.profile=Object.assign({},DEFAULT.profile,x.profile||{});x.settings=Object.assign({},DEFAULT.settings,x.settings||{});x.protocols=Object.assign({},DEFAULT.protocols,x.protocols||{});x.protocols.JANUS=Object.assign({},DEFAULT.protocols.JANUS,x.protocols.JANUS||{});x.protocols.COXE=Object.assign({},DEFAULT.protocols.COXE,x.protocols.COXE||{});x.crossProtocol=Object.assign({},DEFAULT.crossProtocol,x.crossProtocol||{});x.story=Object.assign({},DEFAULT.story,x.story||{});x.activeProtocol=x.activeProtocol||'JANUS';return x}catch(e){return JSON.parse(JSON.stringify(DEFAULT))}}
-function save(){if(window.__introReplayActive)return;localStorage.setItem(KEY,JSON.stringify(S));try{window.AndroidScreenGuard?.setSecure(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed))}catch(e){}}
+function save(){if(window.__introReplayActive)return;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){console.warn('Save storage unavailable',e);window.__saveStorageFailed=true}try{window.AndroidScreenGuard?.setSecure(!(S.completed?.includes(12)||S.protocols?.JANUS?.completed))}catch(e){}}
 function vib(p){try{if(S.settings?.haptics!==false&&navigator.vibrate)navigator.vibrate(p)}catch(e){}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
@@ -648,7 +649,7 @@ function addCrackOverlay(){
 
 
 function startHighWater(){
-  if(!S.flags.t2start){S.flags.t2start=Date.now();save()}
+  clearInterval(window.__waterTimer);if(!S.flags.t2start){S.flags.t2start=Date.now();save()}
   const total=(S.difficulty==='EASY'?420:S.difficulty==='HARD'?240:330);
   const tick=()=>{
     if(screen!=='trial2'||S.completed.includes(2))return;
@@ -802,7 +803,7 @@ const BETWEEN_CHAPTERS=[
 ];
 function cinematicScene(o){let {eyebrow='',title='',body='',next='',action='CONTINUE',skip='',onSkip='',index=0,total=0}=o;return shell(`<main class="janus-cinema"><div class="cinema-atmosphere" aria-hidden="true"><div class="cinema-light"></div><div class="cinema-door"></div></div><section class="cinema-content"><div class="cinema-top"><span>${esc(eyebrow)}</span><span>SUBJECT 13</span></div>${title?`<h1 class="cinema-title">${esc(title)}</h1>`:''}<div class="cinema-story typewrite" data-type="${esc(body)}" data-reveal="cinemaAdvance"></div><div class="cinema-actions"><button id="cinemaAdvance" class="cinema-next reveal-after-type" onclick="${next}">${esc(action)} <span aria-hidden="true">→</span></button>${skip?`<button class="cinema-skip" onclick="${onSkip}">${esc(skip)}</button>`:''}</div>${total?`<div class="cinema-track" aria-label="Scene ${index+1} of ${total}">${Array.from({length:total},(_,i)=>`<i class="${i<=index?'active':''}"></i>`).join('')}</div>`:''}</section></main>`)}
 function betweenTrial(n){let v=BETWEEN_TRIALS[n]||BETWEEN_TRIALS[1],pages=BETWEEN_CHAPTERS[n-1]||BETWEEN_CHAPTERS[0],step=Math.min(4,Math.max(0,Number(S.flags?.['betweenStep'+n]||0))),choice=S.flags?.['betweenChoice'+n];if(step<4)return cinematicScene({eyebrow:'JANUS / INTERVAL '+String(n).padStart(2,'0'),title:v[0],body:pages[step],next:'Game.nextBetween('+n+')',index:step,total:5,skip:'SKIP SCENE',onSkip:'Game.finishBetween('+n+')'});if(choice)return cinematicScene({eyebrow:'JANUS / INTERVAL '+String(n).padStart(2,'0'),title:v[0],body:v[choice===1?5:6],next:'Game.finishBetween('+n+')',action:'ENTER THE NEXT CHAMBER',index:4,total:5});return shell(`<main class="janus-cinema"><div class="cinema-atmosphere" aria-hidden="true"><div class="cinema-light"></div><div class="cinema-door"></div></div><section class="cinema-content"><div class="cinema-top"><span>JANUS / INTERVAL ${String(n).padStart(2,'0')}</span><span>SUBJECT 13</span></div><h1 class="cinema-title">${esc(v[0])}</h1><p class="cinema-story">${esc(pages[4])}</p><div class="cinema-choices"><button onclick="Game.chooseBetween(${n},1)">${esc(v[3])}</button><button onclick="Game.chooseBetween(${n},2)">${esc(v[4])}</button></div><button class="cinema-skip" onclick="Game.finishBetween(${n})">SKIP SCENE</button></section></main>`)}
-function setScreen(x){screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0}
+function setScreen(x){screen=x;render();let sc=document.querySelector('.screen');if(sc)sc.scrollTop=0;window.scrollTo(0,0)}
 function narrativeInterlude(n){let f=S.flags,step=f['interlude'+n]||0,warning=!!f.t1memory,hidden=!!f.t1tap,record=!!f.t2record,precise=!!f.t3precision;
 let pages=n===1?[
 "The door opens when you press the plate beneath the handle. You were pulling it. The speaker says, ‘You did that last time.’ You ask what he means. He doesn't answer.",
@@ -1339,11 +1340,11 @@ render();
 
 /* Ensure the opening cannot strand players behind a hidden ENTER button. */
 (function mobileSplashGuard(){
- const reveal=()=>{if(screen!=='splash')return;const b=document.querySelector('.splash-enter');if(b){b.style.opacity='1';b.style.visibility='visible';b.style.pointerEvents='auto';b.style.position='relative';b.style.zIndex='20';}};
+ const reveal=()=>{if(screen!=='splash')return;const b=document.querySelector('.splash-enter');if(b){b.style.opacity='1';b.style.visibility='visible';b.style.pointerEvents='auto';b.style.zIndex='20';}};
  setTimeout(reveal,1800);
  setTimeout(reveal,6000);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)reveal()});
- window.addEventListener('pageshow',reveal);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden){reveal();if(screen==='trial2'&&!S.completed.includes(2))startHighWater()}});
+ window.addEventListener('pageshow',()=>{reveal();if(screen==='trial2'&&!S.completed.includes(2))startHighWater()});
 })();
 
 })();
