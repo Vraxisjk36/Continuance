@@ -664,18 +664,10 @@ function addCrackOverlay(){
 
 
 function startHighWater(){
-  if(!S.flags.t2start){S.flags.t2start=Date.now();save()}
-  const total=(S.difficulty==='EASY'?420:S.difficulty==='HARD'?240:330);
-  const tick=()=>{
-    if(screen!=='trial2'||S.completed.includes(2))return;
-    let elapsed=(Date.now()-S.flags.t2start)/1000, pct=Math.min(100,elapsed/total*100);
-    let fill=document.getElementById('waterFill');if(fill)fill.style.height=pct+'%';
-    let st=document.getElementById('waterStatus');if(st)st.textContent=pct<20?'ANKLE HEIGHT':pct<42?'KNEE HEIGHT':pct<64?'WAIST HEIGHT':pct<82?'CHEST HEIGHT':'NECK HEIGHT';
-    
-    
-    
-    if(elapsed>=total){Game.drown2();return}
-  };tick();window.__waterTimer=setInterval(tick,500)
+ clearInterval(window.__waterTimer);
+ if(!S.flags.t2started||S.completed.includes(2))return;
+ const tick=()=>{if(screen!=='trial2'||S.completed.includes(2))return;const remain=Math.max(0,600-Math.floor((Date.now()-S.flags.t2started)/1000));const el=document.getElementById('t2clock');if(el)el.textContent=String(Math.floor(remain/60)).padStart(2,'0')+':'+String(remain%60).padStart(2,'0');const fill=document.getElementById('waterFill');if(fill)fill.style.height=((600-remain)/6)+'%';if(remain===0)Game.drown2()};
+ tick();window.__waterTimer=setInterval(tick,500);
 }
 function runCCTVSequence(){
   clearTimeout(window.__cctvTimer);let step=0;
@@ -1003,11 +995,41 @@ function t1(){
   return shell(`<div class="t1-ui">${header(1,'THE INSCRIPTION')}<main class="wrap">${inspect}${cipher}</main></div>`);
 }
 
+
+function t2Shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function t2NewPuzzle(phase){
+ const digits=t2Shuffle([1,2,3,4,5,6,7]),answer=digits.join('');
+ if(phase===1){
+  const all=[];function perm(a,b){if(!b.length){all.push(a.join(''));return}for(let i=0;i<b.length;i++)perm([...a,b[i]],b.filter((_,j)=>j!==i))}perm([],[1,2,3,4,5,6,7]);
+  let pool=all,clues=[],tries=t2Shuffle(all.filter(x=>x!==answer));
+  for(const guess of tries){if(pool.length===1||clues.length>=12)break;let exact=[...guess].filter((d,i)=>d===answer[i]).length;let next=pool.filter(x=>[...x].filter((d,i)=>d===guess[i]).length===exact);if(next.length>=pool.length)continue;clues.push({guess,exact});pool=next}
+  return {phase,answer,clues,attempts:0};
+ }
+ if(phase===2){
+  let start=1+Math.floor(Math.random()*8),step=2+Math.floor(Math.random()*6);
+  let seq=Array.from({length:7},(_,i)=>(start+i*step)%10);
+  return {phase,answer:seq.join(''),start,step,attempts:0};
+ }
+ const choices=t2Shuffle([answer,...Array.from({length:11},()=>t2Shuffle(digits).join(''))].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,8);
+ if(!choices.includes(answer))choices[0]=answer;
+ let conditions=[];
+ const tests=[];
+ for(let i=0;i<7;i++)tests.push({label:'POSITION '+(i+1)+' IS '+answer[i],fn:v=>v[i]===answer[i]});
+ for(let i=0;i<6;i++)tests.push({label:'POSITION '+(i+1)+' IS GREATER THAN POSITION '+(i+2),fn:v=>Number(v[i])>Number(v[i+1]),expected:Number(answer[i])>Number(answer[i+1])});
+ let remain=choices;
+ for(const t of t2Shuffle(tests)){if(remain.length===1)break;let next=remain.filter(v=>t.fn(v)=== (t.expected===undefined?true:t.expected));if(next.length<remain.length){conditions.push(t.label+(t.expected===false?' — FALSE':' — TRUE'));remain=next}}
+ return {phase,answer,choices:t2Shuffle(choices),conditions,attempts:0};
+}
+function t2Ensure(){if(!S.flags.t2phase)S.flags.t2phase=1;if(!S.flags.t2puzzle||S.flags.t2puzzle.phase!==S.flags.t2phase){S.flags.t2puzzle=t2NewPuzzle(S.flags.t2phase);S.flags.t2started=0;save()}return S.flags.t2puzzle}
 function t2(){
-let f=S.flags,exam=f.t2exam||[],found=id=>exam.includes(id),solved=S.completed.includes(2);
-const info=[['intake','INTAKE MANIFOLD','The first valve is stamped 7. Its arrow points to the FILTER. A scratched note: START WHERE THE WATER ENTERS.'],['filter','FILTER HOUSING','Stamped 2. The filter feeds the PRESSURE REGULATOR, never the drain.'],['regulator','PRESSURE REGULATOR','Stamped 9. A brass arrow points from the regulator to the BYPASS.'],['bypass','BYPASS CONTROL','Stamped 4. The bypass redirects flow to the RESERVOIR.'],['reservoir','RESERVOIR GAUGE','Stamped 1. An engraved line runs from the reservoir to the RELEASE VALVE. A folded corner of paper protrudes behind the gauge. Inspect again to retrieve it.'],['release','RELEASE VALVE','Stamped 8. Its outlet leads to the FINAL DRAIN.'],['drain','FINAL DRAIN','Stamped 3. A warning: THIS MUST BE THE LAST CONTROL.']];
-return shell(`${header(2,'HIGH WATER')}<main class="wrap t2-chamber"><div class="t2-intro"><div class="kicker">JANUS // CHAMBER 02</div><h2>THE SYSTEM OBEYS.</h2><p>The door locks behind you. Cold water spreads across your ankles. Seven controls sit behind a protective grille. A keypad blinks above them. Scratched into the glass is a height mark and a date. Beside it, in smaller writing: I THOUGHT HE WOULD OPEN IT FOR HER.</p><p class="speaker">“The water is following a route. Learn it, or drown inside it.” A pause. “Someone once asked me to stop the test. I could not tell whether they were asking for themselves.”</p></div>
-<div class="water-room"><div id="waterFill" class="water-fill"></div><div class="water-content"><div class="row" style="justify-content:space-between"><div class="kicker">HYDRAULIC SYSTEM</div><div id="waterStatus" class="water-status">ANKLE HEIGHT</div></div><p class="muted">Inspect each component to trace the direction of flow. Seven stamped digits form the exit code in the same order.</p><div class="t2-controls">${info.map(([id,title,body],i)=>`<button class="t2-control ${found(id)?'seen':''}" onclick="Game.t2Inspect('${id}')"><span class="t2-controlnum">${String(i+1).padStart(2,'0')}</span><b>${title}</b><span>${found(id)?body:'TAP TO INSPECT'}</span></button>`).join('')}</div><div class="t2-logic"><div class="kicker">CONTROL SEQUENCE</div><p>Start at the intake manifold. Follow the arrows described when you inspect each component. The final drain must be last. Record the seven stamped digits in order. The small numbers beside each control are interface labels, not the stamped digits.</p><div class="t2-progress" role="status" aria-live="polite">${exam.length} / 7 COMPONENTS INSPECTED</div>${f.t2record?`<p class="t2-secret">${esc(f.t2recordNote)}</p>`:''}</div><input id="a2new" class="input code-seven" inputmode="numeric" pattern="[0-9]*" maxlength="7" autocomplete="off" aria-label="Seven-digit hydraulic flow sequence" placeholder="_ _ _ _ _ _ _"><button class="btn" style="margin-top:10px" onclick="Game.answerHighWater()">SUBMIT SEQUENCE</button></div></div>${solved?solvedButton(2,'CONTINUE'):''}</main>`)}
+ const p=t2Ensure(),ph=S.flags.t2phase,started=!!S.flags.t2started,done=S.completed.includes(2);
+ const descriptions=['','Compare previous access attempts. Each record reports how many digits are in the EXACT correct position. Every code uses digits 1–7 exactly once.','Find the rule behind a seven-number progression. Values wrap around after 9 to 0. Reconstruct the full sequence.','Eliminate candidate codes using the statements. Every statement is verified against the correct code.'];
+ let content='';
+ if(ph===1)content='<div class="t2-clues">'+p.clues.map(c=>'<div class="card"><strong>'+c.guess+'</strong> — '+c.exact+' correctly positioned</div>').join('')+'</div>';
+ if(ph===2)content='<div class="card"><div class="kicker">RECOVERED MACHINE CYCLE</div><h2>'+p.answer.slice(0,2)+' · ? · ? · ? · ? · ?</h2><p>Each next digit adds the SAME amount, wrapping after 9. Determine the increment and fill all seven positions. The first two digits are confirmed.</p></div>';
+ if(ph===3)content='<div class="card"><div class="kicker">VALIDATION RULES</div>'+p.conditions.map(c=>'<p>'+c+'</p>').join('')+'</div><div class="t2-clues">'+p.choices.map(c=>'<div class="card">'+c+'</div>').join('')+'</div>';
+ return shell(`${header(2,'HIGH WATER')}<main class="wrap t2-chamber"><div class="kicker">JANUS // CHAMBER 02</div><h2>THREE LOCKS. ONE EXIT.</h2><p>Water gathers beneath the sealed door. The Architect watches the access terminal. “Three locks. Ten minutes each. Failure costs you a life. A reset changes the code.”</p><div class="card"><div class="kicker">LOCK ${ph} OF 3</div><h2>${['','DEDUCTION','SEQUENCE','ELIMINATION'][ph]}</h2><p>${descriptions[ph]}</p><div id="t2clock" role="timer" aria-live="off" style="font-size:28px;font-weight:bold;margin:12px 0">${started?'10:00':'READY — 10:00'}</div>${!started&&!done?'<button class="btn" onclick="Game.t2Begin()">BEGIN PHASE '+ph+'</button>':''}</div>${started&&!done?'<div class="water-room"><div id="waterFill" class="water-fill"></div><div class="water-content">'+content+'<label for="a2new" class="kicker">ENTER SEVEN-DIGIT CODE</label><input id="a2new" class="input code-seven" inputmode="numeric" maxlength="7" autocomplete="off" placeholder="7 DIGITS"><button class="btn" onclick="Game.answerHighWater()">UNLOCK PHASE '+ph+'</button><p class="muted">Wrong guesses do not cost a life. The 10-minute deadline does. Your solved phases remain saved.</p></div></div>':'<p class="muted">The countdown begins only when you choose BEGIN PHASE.</p>'}${done?solvedButton(2,'CONTINUE'):''}</main>`);
+}
 function witnessNotebook(){let notes=S.flags.t3personalNotes||'',entries=(S.evidence||[]).filter(e=>String(e.id||'').startsWith('t3-'));return `<div class="card amber" style="margin-top:18px"><div class="kicker">PERSONAL CASE JOURNAL // SUBJECT 13</div><p class="muted">Your private deductions are never marked right or wrong. Saved locally on this device.</p><textarea id="witnessPersonalNotes" class="textarea input" rows="7" maxlength="10000" placeholder="Timeline, contradictions, suspects, possible cause of death…" oninput="Game.saveWitnessNotes(this.value)">${esc(notes)}</textarea><div class="kicker" style="margin-top:16px">RECORDED CASE MATERIAL</div>${entries.length?entries.map(e=>`<div style="padding:10px 0;border-bottom:1px solid #4a3a27"><b>${esc(e.title)}</b><p class="muted">${esc(e.text)}</p></div>`).join(''):'<p class="muted">No official evidence filed yet. Examine the room and question witnesses.</p>'}</div>`}
 
 const CASE3=[
@@ -1419,8 +1441,9 @@ openIntercom(){
 closeIntercom(){document.querySelector('.overlay.intercom-overlay')?.remove()},
 sendIntercom(){let el=document.getElementById('intercomInput'),q=el?.value.trim();if(!q)return;logIntercom('YOU',q);let r=architectReply(q);logIntercom('ARCHITECT',r);let h=document.querySelector('.intercom-history');if(h){h.innerHTML+=`<div class="intercom-line you"><b>YOU:</b> ${esc(q)}</div><div class="intercom-line arch"><b>ARCHITECT:</b> ${esc(r)}</div>`;h.scrollTop=h.scrollHeight}el.value='';fx('speaker');vib(25)},
 inspectT2(id){let a=S.flags.t2found||[];if(!a.includes(id))a.push(id);S.flags.t2found=a;S.flags['t2'+id.replace('c','clue')]=true;profileAdd('curiosity');save();fx('tap');render()},
-answerHighWater(){let v=(document.getElementById('a2new')?.value||'').replace(/\D/g,'');if(v==='7294183'&&(S.flags.t2exam||[]).length===7){complete(2);S.flags.t2solved=true;if(!S.evidence.some(x=>x.id==='t2-highwater'))S.evidence.push({id:'t2-highwater',title:'TRIAL II // HIGH WATER',text:'Traced seven connected hydraulic controls from intake to final drain. Final sequence: 7294183.'});save();fx('door');architect('You found the difference between possessing numbers and understanding their order.')}else{S.flags.t2start=(S.flags.t2start||Date.now())-7000;profileAdd('pragmatism');save();fx('fail');toast('ACCESS DENIED // WATER SURGE');render()}},
-drown2(){clearInterval(window.__waterTimer);S.flags.t2start=Date.now();save();fail('Breathe while you still can. The room is resetting.');render()},
+t2Begin(){t2Ensure();S.flags.t2started=Date.now();save();render()},
+answerHighWater(){const p=t2Ensure(),v=(document.getElementById('a2new')?.value||'').replace(/\D/g,'');if(v.length!==7){toast('ENTER ALL SEVEN DIGITS');return}if(v!==p.answer){S.flags.t2puzzle.attempts++;save();toast('CODE REJECTED — CHECK THE CLUES');return}S.flags.t2phase++;S.flags.t2started=0;if(S.flags.t2phase>3){complete(2);S.flags.t2solved=true;S.evidence=S.evidence||[];if(!S.evidence.some(x=>x.id==='t2-highwater'))S.evidence.push({id:'t2-highwater',title:'TRIAL II // HIGH WATER',text:'Three independent numerical locks cleared under pressure.'});architect('Three locks. Three proofs. You did not guess your way out.')}else{S.flags.t2puzzle=t2NewPuzzle(S.flags.t2phase);architect('Lock released. The next chamber seal is waiting.')}save();fx('door');render()},
+drown2(){clearInterval(window.__waterTimer);if(!S.flags.t2started||S.completed.includes(2))return;S.flags.t2puzzle=t2NewPuzzle(S.flags.t2phase||1);S.flags.t2started=0;fail('Time expired. One life lost. This lock has been reset with a different code.');save();render()},
 startCCTV(){S.flags.t3phase='playing';S.flags.t3mistakes=0;S.flags.t3answers=[];save();render()},
 answerWitness(v){let qs=[true,false,false,true,false],q=S.flags.t3q||0,a=S.flags.t3answers||[];a.push(v);S.flags.t3answers=a;if(v!==qs[q])S.flags.t3mistakes=(S.flags.t3mistakes||0)+1;S.flags.t3q=q+1;save();render()},
 answerSecondFigure(v){S.flags.t3secondFigure=v;S.flags.t3phase='phone';if(v)profileAdd('trust');else profileAdd('defiance');save();render()},
