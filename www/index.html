@@ -529,6 +529,9 @@ button{overflow-wrap:anywhere}
 @media(max-width:520px){.row>input,.row>select,.row>textarea{flex:1 1 180px}.row>.btn{flex:1 1 120px;width:auto!important}.t2-controls{min-width:0}.t2-control{min-width:0}}
 @media(max-width:390px){.header{grid-template-columns:42px minmax(0,1fr) 80px}.lives{font-size:8px}.trialname{overflow-wrap:anywhere}}
 
+
+/* Cinematic scene presentation, without altering trial answers or progression. */
+.cine-layout{max-width:760px;margin-inline:auto}.cine-stage{animation:cine-in .32s ease both}.cine-nav{display:flex;gap:8px;overflow-x:auto;padding:10px 0 16px;scrollbar-width:none}.cine-nav button{flex:1 0 auto;min-height:48px;padding:10px 12px;background:#10283b;border:1px solid #34516b;color:#d3e5f1;border-radius:10px;font-size:12px}.cine-nav button[aria-selected=true]{background:#23516e;border-color:#91c3e5;color:white}.cine-panel[hidden]{display:none!important}.cine-hero{min-height:150px;border:1px solid #31516c;border-radius:14px;padding:22px;background:radial-gradient(circle at 80% 5%,#2b5473,transparent 55%),linear-gradient(135deg,#0d2031,#08121e);display:flex;flex-direction:column;justify-content:end;margin:12px 0;box-shadow:inset 0 0 45px #020914}.cine-hero small{letter-spacing:.16em;color:#9bc7e4}.cine-hero h2{font-size:clamp(23px,6vw,36px);line-height:1.1;margin:10px 0}.cine-stage .storybox p{line-height:1.55;margin:8px 0}.cine-stage .btn{min-height:48px;white-space:normal}.cine-stage .t11-records{display:grid;gap:8px}.cine-stage .case3-locations{display:grid;gap:8px}.cine-stage .card{margin:12px 0}.cine-dialogue{max-height:35dvh;overflow-y:auto;display:grid;gap:6px}.cine-dialogue>div{border:1px solid #31516b;background:#11293c;padding:10px 13px!important;border-radius:10px;animation:cine-in .25s ease both}.cine-dialogue>div:nth-child(even){margin-left:15px;background:#1a3040}@keyframes cine-in{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@media(max-width:420px){.cine-hero{min-height:125px;padding:15px}.cine-nav button{font-size:11px}}
 </style>
 <style>
 @keyframes sceneFade{from{opacity:0;filter:brightness(0);transform:translateY(14px)}to{opacity:1;filter:brightness(1);transform:none}}
@@ -896,9 +899,59 @@ function render(){
   const a=document.getElementById('app');
   try { a.innerHTML = screen==='splash'?splash():screen==='loading'?loadingScreen():screen==='menu'?menu():screen==='protocols'?protocolHub():screen==='difficulty'?difficultyScreen():screen==='prologue'?prologue():screen==='opening'?opening():screen==='firstChamber'?firstChamberScene():screen==='corridor'?corridor():screen==='t1to2'?trialOneToTwo():screen.startsWith('interlude')?narrativeInterlude(Number(screen.replace('interlude',''))):screen==='settings'?settings():screen==='archive'?archiveScreen():screen.startsWith('between')?betweenTrial(Number(screen.replace('between',''))):screen.startsWith('arrival')?arrival(Number(screen.replace('arrival',''))):trial(Number(screen.replace('trial',''))); } catch(err) { console.error('Continuance screen recovery',screen,err); screen='menu'; document.body.dataset.screen='menu'; a.innerHTML='<div class="screen" style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center"><h1>CONTINUANCE</h1><p>The current screen could not be loaded. Your saved progress has not been erased.</p><button style="min-height:52px;padding:14px 22px;background:#153b58;color:white;border:1px solid #78b8d9;border-radius:8px" onclick="location.reload()">REOPEN GAME</button><button style="min-height:52px;margin-top:12px;padding:14px 22px;background:#153b58;color:white;border:1px solid #78b8d9;border-radius:8px" onclick="Game.home()">MAIN MENU</button></div>'; }
   if(window.__introReplayActive){a.insertAdjacentHTML('beforeend',`<button aria-label="Exit cinematic replay" onclick="Game.exitIntroReplay()" style="position:fixed;z-index:9999;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));border:1px solid #6587a0;background:#06121ee8;color:#d7e8f5;padding:12px 16px;border-radius:8px;min-height:44px;font-size:12px">✕ EXIT REPLAY</button>`)}
+  try { cinematicPresentation(); } catch(err) { console.error('Cinematic presentation recovery',screen,err); }
   try { bind(); } catch(err) { console.error('Continuance screen bindings',screen,err); }
   let now=document.querySelector('.screen');if(now&&keepScroll>0)requestAnimationFrame(()=>{now.scrollTop=keepScroll});
 }
+
+/* Reorganise dense trial screens into navigable scenes. Original controls stay intact. */
+function cinematicPresentation(){
+ const main=document.querySelector('.screen main.wrap');if(!main)return;
+ const make=(names,groups,title)=>{
+  main.classList.add('cine-layout','cine-stage');
+  const hero=document.createElement('div');hero.className='cine-hero';
+  hero.innerHTML='<small>JANUS // INTERACTIVE CHAMBER</small><h2>'+title+'</h2>';
+  const nav=document.createElement('div');nav.className='cine-nav';nav.setAttribute('role','tablist');
+  const panels=names.map(()=>{const p=document.createElement('section');p.className='cine-panel';return p});
+  for(let i=0;i<names.length;i++)for(const node of groups[i])if(node&&node.parentNode===main)panels[i].appendChild(node);
+  const key='cine:'+screen+':'+(S.flags.case3phase||S.flags.t8phase||'');
+  const selected=window.__cinemaTabs?.[key]||0;
+  const activate=(n)=>{panels.forEach((p,i)=>p.hidden=i!==n);[...nav.children].forEach((b,i)=>b.setAttribute('aria-selected',String(i===n)));window.__cinemaTabs=window.__cinemaTabs||{};window.__cinemaTabs[key]=n;};
+  names.forEach((name,i)=>{const btn=document.createElement('button');btn.type='button';btn.textContent=name;btn.setAttribute('role','tab');btn.onclick=()=>{activate(i);main.closest('.screen')?.scrollTo({top:0,behavior:'smooth'})};nav.appendChild(btn)});
+  main.prepend(hero,nav,...panels);activate(Math.min(selected,names.length-1));
+ };
+ if(screen==='trial3'&&S.flags.case3phase==='investigate'){
+  const stage=main.querySelector('.case3-stage');if(!stage)return;
+  const loc=stage.querySelector('.case3-locations');if(!loc)return;
+  const btns=[...stage.querySelectorAll('button')];
+  const first=btns.find(b=>b.textContent.includes('INTERROGATE ELIAS'));
+  const witness=btns.find(b=>b.textContent.includes('INTERVIEW OTHER'));
+  const report=btns.find(b=>b.textContent.includes('PREPARE FINAL'));
+  const scene=document.createElement('section');scene.className='cine-panel';
+  while(stage.firstChild&&stage.firstChild!==loc)scene.appendChild(stage.firstChild);
+  const evidence=document.createElement('section');evidence.className='cine-panel';
+  while(loc.nextSibling&&loc.nextSibling!==first)evidence.appendChild(loc.nextSibling);
+  const people=document.createElement('section');people.className='cine-panel';
+  for(const b of [first,witness,report])if(b)people.appendChild(b);
+  const nav=document.createElement('div');nav.className='cine-nav';nav.setAttribute('role','tablist');
+  const panels=[scene,loc,evidence,people];loc.classList.add('cine-panel');
+  const labels=['SCENE','LOCATIONS','EVIDENCE','CONTACTS'];
+  const key='cine:trial3:investigate',initial=window.__cinemaTabs?.[key]||0;
+  const activate=n=>{panels.forEach((p,i)=>p.hidden=i!==n);[...nav.children].forEach((b,i)=>b.setAttribute('aria-selected',String(i===n)));window.__cinemaTabs=window.__cinemaTabs||{};window.__cinemaTabs[key]=n;};
+  labels.forEach((label,i)=>{let b=document.createElement('button');b.textContent=label;b.setAttribute('role','tab');b.onclick=()=>{activate(i);stage.closest('.screen')?.scrollTo({top:0,behavior:'smooth'})};nav.appendChild(b)});
+  stage.prepend(nav,...panels);activate(Math.min(initial,3));main.classList.add('cine-layout','cine-stage');
+ }
+ if(screen==='trial8'&&(S.flags.t8phase||'chat')==='chat'){
+  const children=[...main.children],find=selector=>children.findIndex(x=>x.matches?.(selector));
+  const human=find('.t8-human'),person=find('.card:not(.amber)'),auth=children.findIndex(x=>x.textContent?.includes('PEER AUTHENTICATION')&&x.classList?.contains('card')),forensics=children.findIndex(x=>x.textContent?.includes('RELAY FORENSICS')&&x.classList?.contains('card'));
+  if(human<0||auth<0||forensics<0)return;
+  const groups=[children.slice(0,human),children.slice(human,auth),children.slice(auth,forensics),children.slice(forensics)];
+  make(['LIVE LINK','TALK TO REN','VERIFY PEER','RELAY CODE'],groups,'THE OTHER SUBJECT');
+  const link=main.querySelector('.cine-panel .card:not(.amber)');
+  if(link&&link.style.maxHeight){link.classList.add('cine-dialogue');link.style.maxHeight='35dvh'}
+ }
+}
+
 function bind(){
   if(screen==='splash'){
     const title=document.querySelector('.janus-splash');
