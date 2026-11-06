@@ -15,10 +15,12 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify Java 21
+        run: java -version
       - name: Check Android SDK
         run: |
           echo "ANDROID_HOME=$ANDROID_HOME"
