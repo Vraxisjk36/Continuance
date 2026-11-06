@@ -4,7 +4,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const s=fs.readFileSync('www/index.html','utf8');
 const checks=[
   ['Trial 1 exposes a fixed cipher alphabet',/const T1_GLYPHS=\[/.test(s)&&/const T1_VERSES=\[/.test(s)],
-  ['Trial 2 has extractable numbered components',s.includes('INTAKE MANIFOLD')&&s.includes('PRESSURE REGULATOR')],
+  ['Trial 2 generates three distinct numerical locks',s.includes('function t2NewPuzzle(phase)')&&s.includes('function t2Ensure()')&&s.includes('t2Begin()')],
   ['Trial 3 contains a case investigation',s.includes('function t3()')&&s.includes('DR. MARA VOSS')],
   ['Trial 7 includes timestamped records',s.includes('function t7()')&&s.includes('21:12:51')],
   ['Trial 10 includes frequency signal data',s.includes('function t10()')&&s.includes('94.7')],
