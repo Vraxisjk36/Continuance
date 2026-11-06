@@ -492,6 +492,15 @@ input,textarea,select{font-size:max(16px,1em)}
 @media(max-width:520px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.header{min-width:0}.header>*{min-width:0}.row{flex-wrap:wrap}.splash-enter{min-height:48px}}
 @media(max-width:360px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}.header{grid-template-columns:42px minmax(0,1fr) 76px}.wrap{padding-left:10px;padding-right:10px}}
 @media(prefers-reduced-motion:reduce){.splash-enter{animation:none!important;opacity:1!important;visibility:visible!important}}
+
+/* Second mobile pass: protect keyboard access and prevent horizontal overflow. */
+.screen,.wrap,.card,.storybox,.objective,.water-room,.t2-chamber{min-width:0;max-width:100%}
+input,textarea,select{min-width:0}
+img,video,canvas,svg{max-width:100%;height:auto}
+pre,.report{max-width:100%;overflow-wrap:anywhere;white-space:pre-wrap}
+button{overflow-wrap:anywhere}
+@media(max-width:520px){.row>input,.row>select,.row>textarea{flex:1 1 180px}.row>.btn{flex:1 1 120px;width:auto!important}.t2-controls{min-width:0}.t2-control{min-width:0}}
+@media(max-width:390px){.header{grid-template-columns:42px minmax(0,1fr) 80px}.lives{font-size:8px}.trialname{overflow-wrap:anywhere}}
 </style>
 <style>
 @keyframes sceneFade{from{opacity:0;filter:brightness(0);transform:translateY(14px)}to{opacity:1;filter:brightness(1);transform:none}}
@@ -1353,6 +1362,23 @@ playSequence(){let seq=S.flags.t6seq2?[3,1,6,2,5]:[1,4,2];S.flags.t6expected=seq
 movePacket(i,d){let p=S.flags.packets||[['A','21:11:32','DIRECTOR','The Board approved twelve simulations. No physical exposure.'],['C','21:14:08','JANUS/ETHICS','You are describing persistence as if it were a measurable organ.'],['F','21:19:44','00','Not persistence. Continuance. The choice to proceed after utility collapses.'],['B','21:12:51','00','A simulation preserves one fatal variable: the subject knows there is an outside.'],['E','21:17:03','DIRECTOR','Then remove yourself from the model. You are contaminating the study.'],['D','21:15:26','00','I will enter the sequence before the cognitive copy is finalized.']];p=p.map(x=>[...x]);let j=i+d;if(j<0||j>=p.length)return;[p[i],p[j]]=[p[j],p[i]];S.flags.packets=p;save();render()},answer7(){let p=S.flags.packets||[];if(p.map(x=>x[0]).join('')==='ABCDEF'){complete(7);save();render();architect('Chronology does not establish truth.')}else fail('You reconstructed a conversation that never occurred.')},answer8(){if(document.getElementById('a8').value.trim().toUpperCase()==='BOTH'){complete(8);save();render();architect('Categories become less useful near the truth.')}else fail('You separated roles the registry deliberately overlapped.')},pickSample(x){let a=S.flags.samplePicks||[];a=a.includes(x)?a.filter(y=>y!==x):[...a,x];S.flags.samplePicks=a;save();render()},answer9(){let a=S.flags.samplePicks||[];if(a.length===2&&a.includes('A')&&a.includes('C')){complete(9);save();render();architect('That handwriting proves proximity. Nothing more.')}else fail('Similarity is not identity. Compare habits, not letters.')},answer10(){S.flags.architectDisconnected=true;complete(10);S.architect='';save();render();vib([80,40,150])},addSelfSig(){let n=S.flags.selfSig||0;let limit=Math.min(S.lives,S.protocol==='ATROPHY'?3:4);if(n<limit&&n+(S.flags.archSig?1:0)<4){S.flags.selfSig=n+1;save();render()}},addArchSig(){let n=S.flags.selfSig||0;if(!S.flags.archSig&&n<4){S.flags.archSig=true;save();render()}},answer11(){let self=S.flags.selfSig||0,arch=!!S.flags.archSig;if(self+(arch?1:0)!==4)return;S.lives=Math.max(0,S.lives-self);S.flags.architectSacrificed=arch;complete(11);save();render()},answer12(){let v=document.getElementById('why').value.trim();if(v.length<2)return;S.flags.continuanceAnswer=v;S.flags.t12phase='exit';save();render()},leave12(){S.flags.ending='leave';complete(12);save();render()},stay12(){S.flags.t12phase='more';save();render()},finish12(){let v=document.getElementById('finalWhy').value.trim();if(!v)return;S.flags.finalAnswer=v;S.flags.trial13=true;S.flags.ending='stay';complete(12);save();render()}
 };
 render();
+
+/* When the software keyboard appears, keep the active answer field reachable. */
+(function mobileKeyboardAccess(){
+ let pending=0;
+ document.addEventListener('focusin',e=>{
+  if(!e.target.matches('input,textarea,select'))return;
+  clearTimeout(pending);
+  pending=setTimeout(()=>{
+   if(document.activeElement!==e.target)return;
+   e.target.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'});
+  },300);
+ });
+ window.visualViewport?.addEventListener('resize',()=>{
+  const el=document.activeElement;
+  if(el?.matches?.('input,textarea,select'))el.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
+ });
+})();
 
 /* Ensure the opening cannot strand players behind a hidden ENTER button. */
 (function mobileSplashGuard(){
