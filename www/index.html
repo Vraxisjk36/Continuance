@@ -1610,4 +1610,23 @@ render();
 
 })();
 </script>
+<script>
+/* Independent mobile boot watchdog: survives a failure in the main game script. */
+(function(){
+  var checks=0;
+  function recover(){
+    var app=document.getElementById('app');
+    if(!app)return;
+    var hasUI=!!app.querySelector('.screen');
+    var splash=!!app.querySelector('.janus-splash');
+    if(splash && window.Game && typeof window.Game.finishSplash==='function'){
+      try{window.Game.finishSplash();return}catch(e){console.error('Boot watchdog splash',e)}
+    }
+    if(!hasUI||splash){
+      app.innerHTML='<main class="screen" style="min-height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:28px;text-align:center;background:#06121e;color:#e7f3fc"><h1>CONTINUANCE</h1><p>Opening the game took longer than expected. Your progress is safe.</p><button style="min-height:52px;padding:14px 24px;background:#1b4766;color:white;border:1px solid #8cc8ed;border-radius:8px" onclick="location.reload()">RETRY OPENING GAME</button></main>';
+    }
+  }
+  setTimeout(recover,9000);
+})();
+</script>
 </body></html>
