@@ -20,11 +20,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
       - name: Install dependencies
-        run: npm ci
-      - name: Sync playable web app to Android
-        run: npx cap sync android
+        run: npm install --no-audit --no-fund
+      - name: Generate Android project and sync playable game
+        run: |
+          npx cap add android
+          npx cap sync android
       - name: Build unsigned debug APK
         working-directory: android
         run: bash ./gradlew assembleDebug --no-daemon
