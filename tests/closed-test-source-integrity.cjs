@@ -8,7 +8,7 @@ for(let n=1;n<=12;n++)assert(app.includes('function t'+n+'(){'),'Missing Trial '
 const checks=[
  ['Trial 5 evidence connections',app.includes('four connections unlock the confrontation')],
  ['Trial 6 permanent route warning',app.includes('IRREVERSIBLE ROUTE CHOICE')],
- ['Trial 7 legacy save compatibility',app.includes('S.flags.t7verified||(!S.flags.t7inspect&&!S.flags.t7packets)')],
+ ['Trial 7 requires verified evidence before final decision',app.includes('S.flags.t7verified?`<div class="moral">')],
  ['Trial 8 live peer authentication',app.includes('authenticate the live peer using the wall taps')],
  ['Trial 9 memory verification gate',app.includes('VERIFY SELECTED MEMORY')],
  ['Trial 10 missing witness channel',app.includes('reconstruct its meaning from independent witness records')],
