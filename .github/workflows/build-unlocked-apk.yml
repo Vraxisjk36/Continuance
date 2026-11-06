@@ -1,0 +1,36 @@
+name: Build unlocked trial QA APK
+on:
+  push:
+    branches:
+      - test/all-trials-unlocked-apk
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Sync playable web app to Android
+        run: npx cap sync android
+      - name: Build unsigned debug APK
+        working-directory: android
+        run: bash ./gradlew assembleDebug --no-daemon
+      - name: Upload installable QA APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Continuance-all-trials-unlocked-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
